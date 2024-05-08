@@ -35,3 +35,18 @@ out/
 
 ### VS Code ###
 .vscode/
+
+#log
+/logs
+*.log
+app_*.log.gz
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# .yml .properties
+*.yml
+*.properties
