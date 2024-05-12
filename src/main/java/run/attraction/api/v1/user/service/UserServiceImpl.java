@@ -7,10 +7,10 @@ import run.attraction.api.v1.user.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Override
-    public boolean existsByUserId(Long userId) {
-        return userRepository.existsById(userId);
-    }
+  @Override
+  public boolean existsByUserId(Long userId) {
+    return userRepository.existsById(userId);
+  }
 }
