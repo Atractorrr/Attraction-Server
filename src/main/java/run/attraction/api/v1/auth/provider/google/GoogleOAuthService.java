@@ -3,17 +3,19 @@ package run.attraction.api.v1.auth.provider.google;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import java.time.LocalDate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import run.attraction.api.v1.auth.exception.GoogleApiException;
+import run.attraction.api.v1.auth.exception.GoogleApiCodeException;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
 import run.attraction.api.v1.user.Role;
 import run.attraction.api.v1.user.User;
 
+@Slf4j
 @Component
 public class GoogleOAuthService implements OAuthService {
 
@@ -37,12 +39,14 @@ public class GoogleOAuthService implements OAuthService {
     var requestBody = googleOAuth.getTokenRequestBody(code);
     RestClient restClient = RestClient.create(tokenUrl);
 
+    log.info("code = {}", code);
+
     return restClient.post()
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         .body(requestBody)
         .retrieve()
         .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-          throw new GoogleApiException(response.getStatusCode(), response.getHeaders());
+          throw new GoogleApiCodeException(response.getStatusCode(), response.getHeaders());
         })
         .toEntity(OAuthToken.class)
         .getBody();
@@ -51,13 +55,12 @@ public class GoogleOAuthService implements OAuthService {
   @Override
   public String getResponseBody(String accessToken) {
     String userInfoUri = googleOAuth.getUserInfoUri();
-
     RestClient restClient = RestClient.create(userInfoUri);
     return restClient.get()
         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
         .retrieve()
         .onStatus(HttpStatusCode::is4xxClientError, (req, rep) -> {
-          throw new GoogleApiException(rep.getStatusCode(), rep.getHeaders());
+          throw new GoogleApiCodeException(rep.getStatusCode(), rep.getHeaders());
         })
         .body(String.class);
   }

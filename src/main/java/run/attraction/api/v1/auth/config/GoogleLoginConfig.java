@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import run.attraction.api.v1.auth.config.properties.GoogleLoginProperties;
 import run.attraction.api.v1.auth.provider.google.GoogleOAuth;
-import run.attraction.api.v1.auth.provider.google.GoogleOAuthService;
 
 @Configuration
 @RequiredArgsConstructor
