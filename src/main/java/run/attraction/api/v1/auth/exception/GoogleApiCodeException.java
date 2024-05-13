@@ -8,7 +8,7 @@ public class GoogleApiException extends IllegalArgumentException {
   private final HttpHeaders headers;
 
   public GoogleApiException(HttpStatusCode status, HttpHeaders headers) {
-    super("Google API 통신 에러");
+    super("[Google API 통신 에러] 유효하지 않은 code 값 입니다.");
     this.headers = headers;
   }
 
