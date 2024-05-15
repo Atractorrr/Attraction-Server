@@ -3,11 +3,11 @@ package run.attraction.api.v1.auth.controller;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.auth.provider.AuthProvider;
 import run.attraction.api.v1.auth.provider.google.GoogleOAuthService;
@@ -15,6 +15,7 @@ import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AuthTestController {
 
   /*
@@ -38,8 +39,8 @@ public class AuthTestController {
 
   @GetMapping("/api/v1/auth/user")
   public String getUserProfile(@Param("code") String code) {
-    final OAuthToken tokens = googleOAuthService.getToken(code);
-    final String responseBody = googleOAuthService.getResponseBody(tokens.getAccess_token());
+    final OAuthToken token = googleOAuthService.getToken(code);
+    final String responseBody = googleOAuthService.getResponseBody(token.getAccess_token());
     JsonElement element = JsonParser.parseString(responseBody);
     return element.getAsJsonObject().get("email").getAsString() + " / " + element.getAsJsonObject().get("picture")
         .getAsString();

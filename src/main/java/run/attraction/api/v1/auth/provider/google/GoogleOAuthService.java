@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import run.attraction.api.v1.auth.exception.GoogleApiAccessTokenException;
 import run.attraction.api.v1.auth.exception.GoogleApiCodeException;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
@@ -60,7 +61,7 @@ public class GoogleOAuthService implements OAuthService {
         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
         .retrieve()
         .onStatus(HttpStatusCode::is4xxClientError, (req, rep) -> {
-          throw new GoogleApiCodeException(rep.getStatusCode(), rep.getHeaders());
+          throw new GoogleApiAccessTokenException(rep.getStatusCode(), rep.getHeaders());
         })
         .body(String.class);
   }

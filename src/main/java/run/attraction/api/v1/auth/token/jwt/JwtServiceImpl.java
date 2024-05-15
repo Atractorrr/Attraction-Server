@@ -1,5 +1,8 @@
 package run.attraction.api.v1.auth.token.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -10,8 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import run.attraction.api.v1.auth.token.exception.InvalidTokenException;
+import run.attraction.api.v1.auth.token.exception.TokenExpirationException;
 import run.attraction.api.v1.user.User;
 
 @Component
@@ -48,6 +52,40 @@ public class JwtServiceImpl implements JwtService {
         .signWith(getSignInKey(), SignatureAlgorithm.HS256)
         .compact();
   }
+
+  @Override
+  public String extractEmailFromToken(String token) {
+    try {
+      Claims claims = extractClaims(token);
+      return claims.getSubject();
+    } catch (ExpiredJwtException e) {
+      throw new TokenExpirationException("만료된 토큰입니다.");
+    } catch (JwtException | NullPointerException exception) {
+      throw new InvalidTokenException("토큰이 유효하지 않습니다.");
+    }
+  }
+
+  @Override
+  public long getExpireTimeFromToken(String token) {
+    try {
+      final Claims claims = extractClaims(token);
+      return claims.getExpiration().getTime();
+    } catch (ExpiredJwtException exception) {
+      throw new TokenExpirationException("만료된 토큰 입니다.");
+    } catch (JwtException | NullPointerException exception) {
+      throw new InvalidTokenException("토큰이 유효하지 않습니다.");
+    }
+  }
+
+  public Claims extractClaims(String token) {
+    return Jwts
+        .parserBuilder()
+        .setSigningKey(getSignInKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+  }
+
 
   // jwt Header 설정
   // type : Jwt

@@ -1,6 +1,21 @@
 package run.attraction.api.v1.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,9 +23,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDate;
-import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -87,7 +99,14 @@ public class User implements UserDetails {
     this.role = role;
   }
 
-  public void addExtraDetails(List<String> interests, LocalDate birthDate, LocalDate userExpiration, Integer jobCode) {
+  public void addExtraDetails(UserValidator userValidator,
+                              String nickName, List<String> interests, LocalDate birthDate,
+                              LocalDate userExpiration, Integer jobCode) {
+    if (userValidator.isSpecialPatternInNickname(nickName)) {
+      throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
+    }
+
+    this.nickName = nickName;
     this.interests.addAll(getInterestFromString(interests));
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;

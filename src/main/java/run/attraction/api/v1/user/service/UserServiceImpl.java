@@ -13,4 +13,6 @@ public class UserServiceImpl implements UserService {
   public boolean existsByUserId(Long userId) {
     return userRepository.existsById(userId);
   }
+
+
 }

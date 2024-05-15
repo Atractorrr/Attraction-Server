@@ -7,10 +7,13 @@ import lombok.Getter;
 public class LoginResponseDto {
   private Long userId;
   private boolean hasExtraDetails;
+  private String accessToken;
 
   @Builder
-  private LoginResponseDto(Long userId, boolean hasExtraDetails) {
+  private LoginResponseDto(Long userId, boolean hasExtraDetails, String accessToken) {
     this.userId = userId;
     this.hasExtraDetails = hasExtraDetails;
+    this.accessToken = accessToken;
   }
 }
+

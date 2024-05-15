@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
+import run.attraction.api.v1.auth.token.LogoutAccessToken;
 import run.attraction.api.v1.auth.token.RefreshToken;
 import run.attraction.api.v1.auth.token.jwt.JwtService;
+import run.attraction.api.v1.auth.token.repository.LogoutAccessTokenRepository;
 import run.attraction.api.v1.auth.token.repository.RefreshTokenRepository;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
@@ -17,12 +19,13 @@ import run.attraction.api.v1.user.repository.UserRepository;
 public class AuthProviderAndTokenHelper {
   private final JwtService jwtService;
   private final RefreshTokenRepository refreshTokenRepository;
+  private final LogoutAccessTokenRepository logoutAccessTokenRepository;
   private final UserRepository userRepository;
 
   @Transactional
-  public Optional<UserTokenDto> getTokenAndRegisterUserByAuthUser(User authUser){
+  public Optional<UserTokenDto> getTokenAndRegisterUserByAuthUser(User authUser) {
     final Optional<User> findUser = userRepository.findByEmail(authUser.getEmail());
-    if (findUser.isPresent()){
+    if (findUser.isPresent()) {
       return Optional.empty();
     }
     userRepository.save(authUser);
@@ -54,5 +57,24 @@ public class AuthProviderAndTokenHelper {
         .user(user)
         .token(refreshToken)
         .build();
+  }
+
+  public void saveAccessTokenAndDeleteRefreshToken(final String accessToken) {
+    System.out.println(1111111);
+    String userEmail = jwtService.extractEmailFromToken(accessToken);
+    saveLogoutAccessToken(accessToken);
+    refreshTokenRepository.findTokenByUserEmail(userEmail)
+        .ifPresent(this::deleteRefreshToken);
+  }
+
+  private void saveLogoutAccessToken(final String accessToken) {
+    final long expireTimeFromToken = jwtService.getExpireTimeFromToken(accessToken);
+    final LogoutAccessToken logoutAccessToken = LogoutAccessToken.builder().id(accessToken)
+        .expiration(expireTimeFromToken).build();
+    logoutAccessTokenRepository.save(logoutAccessToken);
+  }
+
+  private void deleteRefreshToken(RefreshToken refreshToken) {
+    refreshTokenRepository.delete(refreshToken);
   }
 }

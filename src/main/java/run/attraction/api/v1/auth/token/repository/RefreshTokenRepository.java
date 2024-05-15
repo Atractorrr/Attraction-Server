@@ -7,6 +7,9 @@ import run.attraction.api.v1.user.User;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
   Optional<RefreshToken> findTokenByUser(User user);
+
   Optional<RefreshToken> findByToken(String refreshToken);
+
+  Optional<RefreshToken> findTokenByUserEmail(String userEmail);
 
 }
