@@ -3,12 +3,14 @@ package run.attraction.api.v1.introduction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +41,11 @@ public class Newsletter {
   @Builder.Default
   private List<Article> articles = new ArrayList<>();
 
-  @Enumerated(EnumType.STRING)
+
   @Column(nullable = false)
-  private UploadDays uploadDays;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
+  private List<UploadDays> uploadDays;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
