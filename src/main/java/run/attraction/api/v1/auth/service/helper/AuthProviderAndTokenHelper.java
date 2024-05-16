@@ -25,25 +25,26 @@ public class AuthProviderAndTokenHelper {
   private final UserRepository userRepository;
 
   @Transactional
-  public Optional<UserTokenDto> getTokenAndRegisterUserByAuthUser(User authUser) {
+  public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
     final Optional<User> findUser = userRepository.findByEmail(authUser.getEmail());
     if (findUser.isPresent()) {
-      return Optional.empty();
+      return getToken(findUser.get(), true);
     }
     userRepository.save(authUser);
-    return getToken(authUser);
+    return getToken(authUser, false);
   }
 
-  public Optional<UserTokenDto> getToken(User preparedJoinUser) {
+  public UserTokenDto getToken(User preparedJoinUser, boolean isUserBefore) {
     final String accessToken = jwtService.generateAccessToken(preparedJoinUser, new Date(System.nanoTime()));
     final String refreshToken = jwtService.generateRefreshToken(preparedJoinUser, new Date(System.nanoTime()));
 
     renewRefreshToken(preparedJoinUser, refreshToken);
-    return Optional.of(UserTokenDto.builder()
+    return UserTokenDto.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
         .id(preparedJoinUser.getId())
-        .build());
+        .isUserBefore(isUserBefore)
+        .build();
   }
 
   private void renewRefreshToken(User user, String refreshToken) {
