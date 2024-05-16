@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.auth.token.exception.InvalidTokenException;
 import run.attraction.api.v1.auth.token.exception.TokenExpirationException;
@@ -60,7 +61,7 @@ public class JwtServiceImpl implements JwtService {
       return claims.getSubject();
     } catch (ExpiredJwtException e) {
       throw new TokenExpirationException("만료된 토큰입니다.");
-    } catch (JwtException | NullPointerException exception) {
+    } catch (JwtException | NullPointerException e) {
       throw new InvalidTokenException("토큰이 유효하지 않습니다.");
     }
   }
@@ -70,9 +71,9 @@ public class JwtServiceImpl implements JwtService {
     try {
       final Claims claims = extractClaims(token);
       return claims.getExpiration().getTime();
-    } catch (ExpiredJwtException exception) {
+    } catch (ExpiredJwtException e) {
       throw new TokenExpirationException("만료된 토큰 입니다.");
-    } catch (JwtException | NullPointerException exception) {
+    } catch (JwtException | NullPointerException e) {
       throw new InvalidTokenException("토큰이 유효하지 않습니다.");
     }
   }
@@ -84,6 +85,18 @@ public class JwtServiceImpl implements JwtService {
         .build()
         .parseClaimsJws(token)
         .getBody();
+  }
+
+  @Override
+  public boolean isTokenValid(String token, UserDetails userDetails) {
+    try {
+      final String email = extractEmailFromToken(token);
+      return email.equals(userDetails.getUsername());
+    } catch (ExpiredJwtException e) {
+      throw new TokenExpirationException("만료된 토큰 입니다.");
+    } catch (JwtException | NullPointerException e) {
+      throw new InvalidTokenException("토큰이 유효하지 않습니다.");
+    }
   }
 
 

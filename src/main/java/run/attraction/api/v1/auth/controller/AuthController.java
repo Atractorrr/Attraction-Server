@@ -1,5 +1,6 @@
 package run.attraction.api.v1.auth.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -63,10 +64,16 @@ public class AuthController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/logout")
-  public ResponseEntity<?> logout(@RequestParam String accessToken, HttpServletResponse response) {
-    System.out.println(accessToken);
+//  @GetMapping("/logout")
+//  public ResponseEntity<?> logout(@RequestParam String accessToken, HttpServletResponse response) {
+//    authService.logout(accessToken);
+//    cookieTokenSetter.expireCookieToken(response);
+//    return ResponseEntity.ok().build();
+//  }
 
+  @GetMapping("/logout")
+  public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    final String accessToken = cookieTokenSetter.getBearerTokenFromRequest(request);
     authService.logout(accessToken);
     cookieTokenSetter.expireCookieToken(response);
     return ResponseEntity.ok().build();
