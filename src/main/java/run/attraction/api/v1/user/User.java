@@ -119,15 +119,9 @@ public class User implements UserDetails {
         .toList();
   }
 
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-
-    /*
-     *  추후 세팅
-     */
-    return null;
-
+    return role.getAuthorities();
   }
 
   @Override

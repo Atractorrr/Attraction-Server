@@ -2,6 +2,7 @@ package run.attraction.api.v1.auth.token.jwt;
 
 import io.jsonwebtoken.Claims;
 import java.util.Date;
+import org.springframework.security.core.userdetails.UserDetails;
 import run.attraction.api.v1.user.User;
 
 public interface JwtService {
@@ -14,4 +15,6 @@ public interface JwtService {
   Claims extractClaims(String token);
 
   long getExpireTimeFromToken(String token);
+
+  boolean isTokenValid(String token, UserDetails userDetails);
 }
