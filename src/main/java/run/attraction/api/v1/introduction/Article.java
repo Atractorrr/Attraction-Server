@@ -34,9 +34,23 @@ public class Article {
   private String contentUrl;
 
   @Column(nullable = false)
+  private String content;
+
+  @Column(nullable = false)
   private int readingTime;
 
   @Column(nullable = false)
   private Date receivedAt;
 
+  @Column(nullable = false)
+  private int readPercentage = 0;
+
+  public Article(Long id, String title, String thumbnail, String content, String contentUrl, int readingTime) {
+    this.id = id;
+    this.title = title;
+    this.thumbnail = thumbnail;
+    this.content = content;
+    this.contentUrl = contentUrl;
+    this.readingTime = readingTime;
+  }
 }
