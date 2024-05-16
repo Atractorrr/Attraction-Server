@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Date;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,7 @@ import run.attraction.api.v1.auth.service.AuthService;
 import run.attraction.api.v1.auth.service.dto.ReissueTokenResponseDto;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
 import run.attraction.api.v1.auth.service.dto.join.JoinRequestDto;
+import run.attraction.api.v1.auth.service.dto.login.FirstLoginResponseDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginRequestDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginResponseDto;
 import run.attraction.api.v1.auth.token.CookieTokenSetter;
@@ -34,25 +34,21 @@ public class AuthController {
   private final CookieTokenSetter cookieTokenSetter;
 
   @PostMapping("/login")
-  public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto,
-                                                HttpServletResponse response) {
-    final Optional<UserTokenDto> userTokenDtoOptional =
-        authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
-
-    if (userTokenDtoOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-    final UserTokenDto userTokenDto = userTokenDtoOptional.get();
+  public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
+                                 HttpServletResponse response) {
+    final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
 
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
 
-    final LoginResponseDto responseDto = LoginResponseDto.builder()
+    if (userTokenDto.isUserBefore()) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponseDto(userTokenDto.getAccessToken()));
+    }
+
+    return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .userId(userTokenDto.getId())
         .hasExtraDetails(false)
         .accessToken(userTokenDto.getAccessToken())
-        .build();
-
-    return ResponseEntity.ok(responseDto);
+        .build());
   }
 
   @GetMapping("/join/username-duplicate")

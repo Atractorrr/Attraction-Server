@@ -1,7 +1,6 @@
 package run.attraction.api.v1.auth.service;
 
 import java.util.Date;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class AuthService {
   private final AuthProviderAndTokenHelper authProviderAndTokenHelper;
   private final UserValidator userValidator;
 
-  public Optional<UserTokenDto> login(String provider, final String code) {
+  public UserTokenDto login(String provider, final String code) {
     final User authUser = authProvider.getUserProfileByCode(provider, code);
     return authProviderAndTokenHelper.getTokenAndRegisterUserByAuthUser(authUser);
   }
