@@ -7,7 +7,9 @@ import java.util.NoSuchElementException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -48,5 +50,11 @@ public class IntroductionExceptionHandler {
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<Map<String, String>> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
     return buildResponseEntity(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Map<String, String>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex,WebRequest request) {
+    return buildResponseEntity(ErrorMessages.REQUEST_PARAMETER_MISSING.getViewName() + ex.getParameterName(), request.getDescription(false), HttpStatus.BAD_REQUEST);
   }
 }
