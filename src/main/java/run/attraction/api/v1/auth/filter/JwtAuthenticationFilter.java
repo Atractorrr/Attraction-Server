@@ -39,6 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+    // 헤더가 없거나 Bearer 토큰을 가지고 있지 않을때 ( 로그인 첫 시도 )
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
     final String accessToken = authHeader.substring(7);
 
     // 체크 사항 1 ) 로그아웃된 access Token으로 접근할때

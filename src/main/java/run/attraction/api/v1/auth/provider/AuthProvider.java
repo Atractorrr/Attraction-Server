@@ -1,10 +1,9 @@
 package run.attraction.api.v1.auth.provider;
 
+import java.util.List;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
 import run.attraction.api.v1.user.User;
-
-import java.util.List;
 
 public class AuthProvider {
 
@@ -14,7 +13,7 @@ public class AuthProvider {
     this.OAuthServices = OAuthServices;
   }
 
-  public User getUserProfileByCode(String provider, String code) {
+  public User getUserProfileByCode(String provider, final String code) {
     OAuthService oAuthService = getOAuthService(provider);
     final OAuthToken token = oAuthService.getToken(code);
     final String responseBody = oAuthService.getResponseBody(token.getAccess_token());
@@ -23,11 +22,11 @@ public class AuthProvider {
 
   private OAuthService getOAuthService(String provider) {
     return OAuthServices.stream()
-                        .filter(service -> service.getServiceName().equals(provider))
-                        .findAny()
-                        .orElseThrow(() -> {
-                          throw new IllegalStateException("일치하는 API가 없습니다.");
-                        });
+        .filter(service -> service.getServiceName().equals(provider))
+        .findAny()
+        .orElseThrow(() -> {
+          throw new IllegalStateException("일치하는 API가 없습니다.");
+        });
   }
 
 }

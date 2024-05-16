@@ -1,7 +1,9 @@
 package run.attraction.api.v1.auth.service;
 
+import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.auth.provider.AuthProvider;
@@ -12,6 +14,7 @@ import run.attraction.api.v1.auth.service.helper.JoinHelper;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.UserValidator;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,7 +25,7 @@ public class AuthService {
   private final AuthProviderAndTokenHelper authProviderAndTokenHelper;
   private final UserValidator userValidator;
 
-  public Optional<UserTokenDto> login(String provider, String code) {
+  public Optional<UserTokenDto> login(String provider, final String code) {
     final User authUser = authProvider.getUserProfileByCode(provider, code);
     return authProviderAndTokenHelper.getTokenAndRegisterUserByAuthUser(authUser);
   }
@@ -43,6 +46,10 @@ public class AuthService {
 
   public void logout(String accessToken) {
     authProviderAndTokenHelper.saveAccessTokenAndDeleteRefreshToken(accessToken);
+  }
+
+  public UserTokenDto reissueToken(String refreshToken, Date issuedAt) {
+    return authProviderAndTokenHelper.reissueToken(refreshToken, issuedAt);
   }
 
 }

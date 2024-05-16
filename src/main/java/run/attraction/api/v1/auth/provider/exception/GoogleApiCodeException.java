@@ -1,4 +1,4 @@
-package run.attraction.api.v1.auth.exception;
+package run.attraction.api.v1.auth.provider.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
