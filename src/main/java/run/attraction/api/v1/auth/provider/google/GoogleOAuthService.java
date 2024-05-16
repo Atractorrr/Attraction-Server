@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import run.attraction.api.v1.auth.exception.GoogleApiAccessTokenException;
-import run.attraction.api.v1.auth.exception.GoogleApiCodeException;
+import run.attraction.api.v1.auth.provider.exception.GoogleApiAccessTokenException;
+import run.attraction.api.v1.auth.provider.exception.GoogleApiCodeException;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
 import run.attraction.api.v1.user.Role;
@@ -35,12 +35,10 @@ public class GoogleOAuthService implements OAuthService {
   }
 
   @Override
-  public OAuthToken getToken(String code) {
+  public OAuthToken getToken(final String code) {
     String tokenUrl = googleOAuth.getTokenUrl();
     var requestBody = googleOAuth.getTokenRequestBody(code);
     RestClient restClient = RestClient.create(tokenUrl);
-
-    log.info("code = {}", code);
 
     return restClient.post()
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)

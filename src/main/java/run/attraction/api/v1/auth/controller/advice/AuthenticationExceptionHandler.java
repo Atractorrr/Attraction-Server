@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import run.attraction.api.v1.auth.exception.GoogleApiAccessTokenException;
-import run.attraction.api.v1.auth.exception.GoogleApiCodeException;
+import run.attraction.api.v1.auth.provider.exception.GoogleApiAccessTokenException;
+import run.attraction.api.v1.auth.provider.exception.GoogleApiCodeException;
 
 @ControllerAdvice
 public class AuthenticationExceptionHandler {
