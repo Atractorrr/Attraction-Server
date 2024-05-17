@@ -28,32 +28,27 @@ public class IntroductionController {
   private final IntroductionService introductionService;
 
   @GetMapping("/{newsletterId}")
-  public ResponseEntity<?>  getNewsletter(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId) {
+  public ResponseEntity<Map<String, Object>>  getNewsletter(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId) {
       NewsletterResponse newsletter = introductionService.getNewsletter(newsletterId);
-
-      return ResponseEntity.ok(newsletter);
+      return buildResponse(HttpStatus.OK, newsletter);
   }
 
   @GetMapping("/{newsletterId}/articles/prev")
   public ResponseEntity<Map<String, Object>> getArticles(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId, @RequestParam @Min(1) int size) {
     List<PreviousArticleResponse> previousArticles = introductionService.getPreviousArticles(newsletterId, size);
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("status", HttpStatus.OK.value());
-    response.put("data", previousArticles);
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return buildResponse(HttpStatus.OK, previousArticles);
   }
 
   @GetMapping("/{newsletterId}/related")
   public ResponseEntity<Map<String, Object>> getRelated(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId, @RequestParam @Min(1) int size) {
-
     List<NewslettersByCategoryResponse> newsletters = introductionService.getRelatedNewslettersByCategory(newsletterId, size);
+    return buildResponse(HttpStatus.OK, newsletters);
+  }
 
+  private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, Object data) {
     Map<String, Object> response = new HashMap<>();
-    response.put("status", HttpStatus.OK.value());
-    response.put("data", newsletters);
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    response.put("status", status.value());
+    response.put("data", data);
+    return new ResponseEntity<>(response, status);
   }
 }
