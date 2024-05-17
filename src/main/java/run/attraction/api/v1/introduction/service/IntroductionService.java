@@ -25,7 +25,7 @@ public class IntroductionService {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
 
-    return new NewsletterResponse(newsletter);
+    return NewsletterResponse.from(newsletter);
   }
 
   public List<PreviousArticleResponse> getPreviousArticles(Long newsletterId, int size) {
@@ -35,7 +35,7 @@ public class IntroductionService {
 
     return previousArticles.stream()
         .limit(size)
-        .map(PreviousArticleResponse::new)
+        .map(PreviousArticleResponse::from)
         .collect(Collectors.toList());
   }
 
@@ -57,7 +57,7 @@ public class IntroductionService {
     List<Newsletter> newsletters = newsletterRepository.findByCategoryAndIdNotWithOffset(category.name(), newsletterId, size, 0);
 
     return newsletters.stream()
-        .map(NewslettersByCategoryResponse::new)
+        .map(NewslettersByCategoryResponse::from)
         .collect(Collectors.toList());
   }
 
@@ -68,7 +68,7 @@ public class IntroductionService {
     List<Newsletter> newsletters = newsletterRepository.findByCategoryAndIdNotWithOffset(category.name(), newsletterId, size, offset);
 
     return newsletters.stream()
-        .map(NewslettersByCategoryResponse::new)
+        .map(NewslettersByCategoryResponse::from)
         .collect(Collectors.toList());
   }
 }

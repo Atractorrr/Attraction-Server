@@ -14,8 +14,8 @@ public record NewsletterResponse(
     String subscribeLink,
     String thumbnail
 ) {
-  public NewsletterResponse(Newsletter newsletter) {
-    this(
+  public static NewsletterResponse from(Newsletter newsletter) {
+    return new NewsletterResponse(
         newsletter.getName(),
         newsletter.getDescription(),
         newsletter.getUploadDays(),

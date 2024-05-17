@@ -8,8 +8,8 @@ public record NewslettersByCategoryResponse(
     String name,
     String description
 ) {
-  public NewslettersByCategoryResponse(Newsletter newsletter) {
-    this(
+  public static NewslettersByCategoryResponse from(Newsletter newsletter) {
+    return new NewslettersByCategoryResponse(
         newsletter.getId(),
         newsletter.getThumbnail(),
         newsletter.getName(),

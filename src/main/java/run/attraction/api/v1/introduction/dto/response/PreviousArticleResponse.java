@@ -10,8 +10,8 @@ public record PreviousArticleResponse(
     String content,
     int readingTime
 ) {
-  public PreviousArticleResponse(Article article) {
-    this(
+  public static PreviousArticleResponse from(Article article) {
+    return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
         article.getThumbnail(),
