@@ -54,7 +54,7 @@ class IntroductionControllerTest {
         .subscriptionLink("http://www.technewsletter.com/subscribe")
         .thumbnail("http://www.technewsletter.com/thumbnail.jpg")
         .build();
-    NewsletterResponse mockResponse = new NewsletterResponse(newsletter);
+    NewsletterResponse mockResponse = NewsletterResponse.from(newsletter);
     given(introductionService.getNewsletter(newsletterId)).willReturn(mockResponse);
 
     mockMvc.perform(get("/api/v1/newsletters/{newsletterId}", newsletterId)
@@ -112,8 +112,8 @@ class IntroductionControllerTest {
     Article article2 = new Article(2L, "Healthy Living Tips", "http://healthinsights.com/thumbnails/healthyliving.jpg", "content2", "http://healthinsights.com/articles/healthyliving", 3);
 
     List<PreviousArticleResponse> articles = Arrays.asList(
-        new PreviousArticleResponse(article1),
-        new PreviousArticleResponse(article2)
+        PreviousArticleResponse.from(article1),
+        PreviousArticleResponse.from(article2)
     );
 
     Mockito.when(introductionService.getPreviousArticles(1L, 2))
