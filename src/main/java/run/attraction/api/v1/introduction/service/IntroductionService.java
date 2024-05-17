@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.introduction.Article;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
@@ -21,6 +22,7 @@ public class IntroductionService {
 
   private final NewsletterRepository newsletterRepository;
 
+  @Transactional(readOnly = true)
   public NewsletterResponse getNewsletter(Long newsletterId) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
@@ -28,6 +30,7 @@ public class IntroductionService {
     return NewsletterResponse.from(newsletter);
   }
 
+  @Transactional(readOnly = true)
   public List<PreviousArticleResponse> getPreviousArticles(Long newsletterId, int size) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
@@ -39,6 +42,7 @@ public class IntroductionService {
         .collect(Collectors.toList());
   }
 
+  @Transactional(readOnly = true)
   public List<NewslettersByCategoryResponse> getRelatedNewslettersByCategory(Long newsletterId, int size) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
