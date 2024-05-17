@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.introduction.dto.response.NewsletterResponse;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
 import run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse;
 import run.attraction.api.v1.introduction.service.IntroductionService;
 
@@ -40,6 +41,18 @@ public class IntroductionController {
     Map<String, Object> response = new HashMap<>();
     response.put("status", HttpStatus.OK.value());
     response.put("data", previousArticles);
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/{newsletterId}/related")
+  public ResponseEntity<Map<String, Object>> getRelated(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId, @RequestParam @Min(1) int size) {
+
+    List<NewslettersByCategoryResponse> newsletters = introductionService.getRelatedNewslettersByCategory(newsletterId, size);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("status", HttpStatus.OK.value());
+    response.put("data", newsletters);
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
