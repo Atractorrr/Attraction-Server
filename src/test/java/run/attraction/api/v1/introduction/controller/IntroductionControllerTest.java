@@ -28,6 +28,7 @@ import run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.service.IntroductionService;
 
+//TODO: getRelated 테스트 코드 추가해줘야함
 @WebMvcTest(IntroductionController.class)
 class IntroductionControllerTest {
   @Autowired
