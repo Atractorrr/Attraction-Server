@@ -9,11 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import run.attraction.api.v1.auth.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +19,7 @@ import run.attraction.api.v1.auth.filter.JwtAuthenticationFilter;
 public class SecurityConfig {
 
   private final AuthenticationProvider authenticationProvider;
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,8 +38,8 @@ public class SecurityConfig {
 
             //테스트를 위해 모두 허가
             req.anyRequest().permitAll())
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//        .authenticationProvider(authenticationProvider)
+//        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 

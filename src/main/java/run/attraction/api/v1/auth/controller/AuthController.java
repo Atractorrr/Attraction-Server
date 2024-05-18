@@ -62,7 +62,7 @@ public class AuthController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/logout")
+  @PostMapping("/logout")
   public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
     final String accessToken = cookieTokenSetter.getBearerTokenFromRequest(request);
     authService.logout(accessToken);
