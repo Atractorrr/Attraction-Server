@@ -5,8 +5,6 @@ import run.attraction.api.v1.user.User;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, String> {
   boolean existsByNickName(String nickName);
-
-  Optional<User> findByEmail(String email);
 }

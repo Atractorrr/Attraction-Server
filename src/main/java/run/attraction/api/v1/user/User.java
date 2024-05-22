@@ -31,11 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  private Long id;
-
-  @Column(name = "email", length = 50)
+  @Column(name = "email", length = 100)
   private String email;
 
   @Column(name = "profile_img")
@@ -66,7 +62,7 @@ public class User implements UserDetails {
 
   @ElementCollection(targetClass = Interest.class)
   @Enumerated(EnumType.STRING)
-  @JoinTable(name = "interests", joinColumns = @JoinColumn(name = "user_id"))
+  @JoinTable(name = "interests", joinColumns = @JoinColumn(name = "email"))
   private Set<Interest> interests = new HashSet<>();
 
   @Column(name = "birth_date")
@@ -75,12 +71,11 @@ public class User implements UserDetails {
   @Column(name = "user_expiration")
   private LocalDate userExpiration;
 
-  @Column(name = "job_code")
-  private Integer jobCode;
+  @Column(name = "occupation")
+  private Occupation occupation;
 
   @Builder
   private User(
-      String nickName,
       String email,
       String profileImg,
       String backgroundImg,
@@ -89,7 +84,6 @@ public class User implements UserDetails {
       boolean isDeleted,
       Role role
   ) {
-    this.nickName = nickName;
     this.email = email;
     this.profileImg = profileImg;
     this.backgroundImg = backgroundImg;
@@ -101,7 +95,7 @@ public class User implements UserDetails {
 
   public void addExtraDetails(UserValidator userValidator,
                               String nickName, List<String> interests, LocalDate birthDate,
-                              LocalDate userExpiration, Integer jobCode) {
+                              LocalDate userExpiration, String occupation) {
     if (userValidator.isSpecialPatternInNickname(nickName)) {
       throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
     }
@@ -110,7 +104,7 @@ public class User implements UserDetails {
     this.interests.addAll(getInterestFromString(interests));
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;
-    this.jobCode = jobCode;
+    this.occupation = Occupation.valueOf(occupation);
   }
 
   private static List<Interest> getInterestFromString(List<String> interests) {
