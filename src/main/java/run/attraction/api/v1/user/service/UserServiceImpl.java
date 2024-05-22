@@ -10,8 +10,8 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 
   @Override
-  public boolean existsByUserId(Long userId) {
-    return userRepository.existsById(userId);
+  public boolean existsById(String email) {
+    return userRepository.existsById(email);
   }
 
 
