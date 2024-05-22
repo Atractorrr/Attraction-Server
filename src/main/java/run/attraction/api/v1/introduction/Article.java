@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class Article {
 
   @Id
@@ -41,9 +43,6 @@ public class Article {
 
   @Column(nullable = false)
   private Date receivedAt;
-
-  @Column(nullable = false)
-  private int readPercentage = 0;
 
   public Article(Long id, String title, String thumbnail, String content, String contentUrl, int readingTime) {
     this.id = id;
