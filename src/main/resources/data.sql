@@ -1,64 +1,94 @@
 SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE TABLE article;
+TRUNCATE TABLE admin_article;
 TRUNCATE TABLE newsletter;
 TRUNCATE TABLE in_box;
 TRUNCATE TABLE read_box;
 SET FOREIGN_KEY_CHECKS=1;
 
+INSERT INTO newsletter (id, newsletter_email, name, description, category, main_link, subscribe_link, thumbnail_url, is_deleted, created_at, update_at) VALUES
+    (1, 'techweekly@example.com', 'Tech Weekly', 'Weekly newsletter about the latest in tech.', 'IT_TECH', 'http://techweekly.com', 'http://techweekly.com/subscribe', 'http://techweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (2, 'healthinsights@example.com', 'Health Insights', 'Daily health tips and news.', 'HEALTH_MEDICINE', 'http://healthinsights.com', 'http://healthinsights.com/subscribe', 'http://healthinsights.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (3, 'financedaily@example.com', 'Finance Daily', 'Daily updates on the stock market.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financedaily.com', 'http://financedaily.com/subscribe', 'http://financedaily.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (4, 'gadgetworld@example.com', 'Gadget World', 'Latest news on gadgets and electronics.', 'IT_TECH', 'http://gadgetworld.com', 'http://gadgetworld.com/subscribe', 'http://gadgetworld.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (5, 'healthwellness@example.com', 'Health and Wellness', 'Health and wellness tips.', 'HEALTH_MEDICINE', 'http://healthwellness.com', 'http://healthwellness.com/subscribe', 'http://healthwellness.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (6, 'investmentweekly@example.com', 'Investment Weekly', 'Weekly investment tips and news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://investmentweekly.com', 'http://investmentweekly.com/subscribe', 'http://investmentweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (7, 'techinnovations@example.com', 'Tech Innovations', 'Innovations and breakthroughs in tech.', 'IT_TECH', 'http://techinnovations.com', 'http://techinnovations.com/subscribe', 'http://techinnovations.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (8, 'fitnessdaily@example.com', 'Fitness Daily', 'Daily fitness routines and tips.', 'HEALTH_MEDICINE', 'http://fitnessdaily.com', 'http://fitnessdaily.com/subscribe', 'http://fitnessdaily.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (9, 'marketwatch@example.com', 'Market Watch', 'Daily market insights and analysis.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://marketwatch.com', 'http://marketwatch.com/subscribe', 'http://marketwatch.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (10, 'techtoday@example.com', 'Tech Today', 'Today’s top tech news.', 'IT_TECH', 'http://techtoday.com', 'http://techtoday.com/subscribe', 'http://techtoday.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (11, 'nutritionguide@example.com', 'Nutrition Guide', 'Guides to better nutrition.', 'HEALTH_MEDICINE', 'http://nutritionguide.com', 'http://nutritionguide.com/subscribe', 'http://nutritionguide.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (12, 'cryptocorner@example.com', 'Crypto Corner', 'All about cryptocurrency.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://cryptocorner.com', 'http://cryptocorner.com/subscribe', 'http://cryptocorner.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (13, 'futuretech@example.com', 'Future Tech', 'Future tech trends and predictions.', 'IT_TECH', 'http://futuretech.com', 'http://futuretech.com/subscribe', 'http://futuretech.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (14, 'mentalhealth@example.com', 'Mental Health', 'Mental health awareness and tips.', 'HEALTH_MEDICINE', 'http://mentalhealthmatters.com', 'http://mentalhealthmatters.com/subscribe', 'http://mentalhealthmatters.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (15, 'financeinsights@example.com', 'Finance Insights', 'Insights into financial markets.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financeinsights.com', 'http://financeinsights.com/subscribe', 'http://financeinsights.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (16, 'techtrends@example.com', 'Tech Trends', 'Current trends in technology.', 'IT_TECH', 'http://techtrends.com', 'http://techtrends.com/subscribe', 'http://techtrends.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (17, 'healthyliving@example.com', 'Healthy Living', 'Tips for a healthier lifestyle.', 'HEALTH_MEDICINE', 'http://healthyliving.com', 'http://healthyliving.com/subscribe', 'http://healthyliving.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (18, 'stocksandbonds@example.com', 'Stocks and Bonds', 'News on stocks and bonds.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://stocksandbonds.com', 'http://stocksandbonds.com/subscribe', 'http://stocksandbonds.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (19, 'techreview@example.com', 'Tech Review', 'In-depth tech reviews.', 'IT_TECH', 'http://techreview.com', 'http://techreview.com/subscribe', 'http://techreview.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (20, 'medicalnewstoday@example.com', 'Medical News Today', 'Latest in medical news.', 'HEALTH_MEDICINE', 'http://medicalnewstoday.com', 'http://medicalnewstoday.com/subscribe', 'http://medicalnewstoday.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (21, 'financeweekly@example.com', 'Finance Weekly', 'Weekly financial news and tips.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financeweekly.com', 'http://financeweekly.com/subscribe', 'http://financeweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (22, 'gadgetupdates@example.com', 'Gadget Updates', 'Updates on the latest gadgets.', 'IT_TECH', 'http://gadgetupdates.com', 'http://gadgetupdates.com/subscribe', 'http://gadgetupdates.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (23, 'healthdigest@example.com', 'Health Digest', 'Daily health news and articles.', 'HEALTH_MEDICINE', 'http://healthdigest.com', 'http://healthdigest.com/subscribe', 'http://healthdigest.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (24, 'cryptoweekly@example.com', 'Crypto Weekly', 'Weekly cryptocurrency news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://cryptoweekly.com', 'http://cryptoweekly.com/subscribe', 'http://cryptoweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (25, 'technews@example.com', 'Tech News', 'Daily tech news updates.', 'IT_TECH', 'http://technews.com', 'http://technews.com/subscribe', 'http://technews.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (26, 'wellnessweekly@example.com', 'Wellness Weekly', 'Weekly wellness tips.', 'HEALTH_MEDICINE', 'http://wellnessweekly.com', 'http://wellnessweekly.com/subscribe', 'http://wellnessweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (27, 'investmentdaily@example.com', 'Investment Daily', 'Daily investment tips and news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://investmentdaily.com', 'http://investmentdaily.com/subscribe', 'http://investmentdaily.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (28, 'innovationinsights@example.com', 'Innovation Insights', 'Insights into the latest tech innovations.', 'IT_TECH', 'http://innovationinsights.com', 'http://innovationinsights.com/subscribe', 'http://innovationinsights.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (29, 'healthyhabits@example.com', 'Healthy Habits', 'Habits for a healthier life.', 'HEALTH_MEDICINE', 'http://healthyhabits.com', 'http://healthyhabits.com/subscribe', 'http://healthyhabits.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (30, 'financialtimes@example.com', 'Financial Times', 'Financial news and market analysis.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financialtimes.com', 'http://financialtimes.com/subscribe', 'http://financialtimes.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22');
 
-INSERT INTO newsletter (id, name, description, category, main_link, subscription_link, thumbnail) VALUES
-      (1, 'Tech Weekly', 'Weekly newsletter about the latest in tech.', 'IT_TECH', 'http://techweekly.com', 'http://techweekly.com/subscribe', 'http://techweekly.com/thumbnail.jpg'),
-      (2, 'Health Insights', 'Daily health tips and news.', 'HEALTH_MEDICINE', 'http://healthinsights.com', 'http://healthinsights.com/subscribe', 'http://healthinsights.com/thumbnail.jpg'),
-      (3, 'Finance Daily', 'Daily updates on the stock market.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financedaily.com', 'http://financedaily.com/subscribe', 'http://financedaily.com/thumbnail.jpg'),
-      (4, 'Gadget World', 'Latest news on gadgets and electronics.', 'IT_TECH', 'http://gadgetworld.com', 'http://gadgetworld.com/subscribe', 'http://gadgetworld.com/thumbnail.jpg'),
-      (5, 'Health and Wellness', 'Health and wellness tips.', 'HEALTH_MEDICINE', 'http://healthwellness.com', 'http://healthwellness.com/subscribe', 'http://healthwellness.com/thumbnail.jpg'),
-      (6, 'Investment Weekly', 'Weekly investment tips and news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://investmentweekly.com', 'http://investmentweekly.com/subscribe', 'http://investmentweekly.com/thumbnail.jpg'),
-      (7, 'Tech Innovations', 'Innovations and breakthroughs in tech.', 'IT_TECH', 'http://techinnovations.com', 'http://techinnovations.com/subscribe', 'http://techinnovations.com/thumbnail.jpg'),
-      (8, 'Fitness Daily', 'Daily fitness routines and tips.', 'HEALTH_MEDICINE', 'http://fitnessdaily.com', 'http://fitnessdaily.com/subscribe', 'http://fitnessdaily.com/thumbnail.jpg'),
-      (9, 'Market Watch', 'Daily market insights and analysis.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://marketwatch.com', 'http://marketwatch.com/subscribe', 'http://marketwatch.com/thumbnail.jpg'),
-      (10, 'Tech Today', 'Today’s top tech news.', 'IT_TECH', 'http://techtoday.com', 'http://techtoday.com/subscribe', 'http://techtoday.com/thumbnail.jpg'),
-      (11, 'Nutrition Guide', 'Guides to better nutrition.', 'HEALTH_MEDICINE', 'http://nutritionguide.com', 'http://nutritionguide.com/subscribe', 'http://nutritionguide.com/thumbnail.jpg'),
-      (12, 'Crypto Corner', 'All about cryptocurrency.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://cryptocorner.com', 'http://cryptocorner.com/subscribe', 'http://cryptocorner.com/thumbnail.jpg'),
-      (13, 'Future Tech', 'Future tech trends and predictions.', 'IT_TECH', 'http://futuretech.com', 'http://futuretech.com/subscribe', 'http://futuretech.com/thumbnail.jpg'),
-      (14, 'Mental Health', 'Mental health awareness and tips.', 'HEALTH_MEDICINE', 'http://mentalhealthmatters.com', 'http://mentalhealthmatters.com/subscribe', 'http://mentalhealthmatters.com/thumbnail.jpg'),
-      (15, 'Finance Insights', 'Insights into financial markets.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financeinsights.com', 'http://financeinsights.com/subscribe', 'http://financeinsights.com/thumbnail.jpg'),
-      (16, 'Tech Trends', 'Current trends in technology.', 'IT_TECH', 'http://techtrends.com', 'http://techtrends.com/subscribe', 'http://techtrends.com/thumbnail.jpg'),
-      (17, 'Healthy Living', 'Tips for a healthier lifestyle.', 'HEALTH_MEDICINE', 'http://healthyliving.com', 'http://healthyliving.com/subscribe', 'http://healthyliving.com/thumbnail.jpg'),
-      (18, 'Stocks and Bonds', 'News on stocks and bonds.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://stocksandbonds.com', 'http://stocksandbonds.com/subscribe', 'http://stocksandbonds.com/thumbnail.jpg'),
-      (19, 'Tech Review', 'In-depth tech reviews.', 'IT_TECH', 'http://techreview.com', 'http://techreview.com/subscribe', 'http://techreview.com/thumbnail.jpg'),
-      (20, 'Medical News Today', 'Latest in medical news.', 'HEALTH_MEDICINE', 'http://medicalnewstoday.com', 'http://medicalnewstoday.com/subscribe', 'http://medicalnewstoday.com/thumbnail.jpg'),
-      (21, 'Finance Weekly', 'Weekly financial news and tips.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financeweekly.com', 'http://financeweekly.com/subscribe', 'http://financeweekly.com/thumbnail.jpg'),
-      (22, 'Gadget Updates', 'Updates on the latest gadgets.', 'IT_TECH', 'http://gadgetupdates.com', 'http://gadgetupdates.com/subscribe', 'http://gadgetupdates.com/thumbnail.jpg'),
-      (23, 'Health Digest', 'Daily health news and articles.', 'HEALTH_MEDICINE', 'http://healthdigest.com', 'http://healthdigest.com/subscribe', 'http://healthdigest.com/thumbnail.jpg'),
-      (24, 'Crypto Weekly', 'Weekly cryptocurrency news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://cryptoweekly.com', 'http://cryptoweekly.com/subscribe', 'http://cryptoweekly.com/thumbnail.jpg'),
-      (25, 'Tech News', 'Daily tech news updates.', 'IT_TECH', 'http://technews.com', 'http://technews.com/subscribe', 'http://technews.com/thumbnail.jpg'),
-      (26, 'Wellness Weekly', 'Weekly wellness tips.', 'HEALTH_MEDICINE', 'http://wellnessweekly.com', 'http://wellnessweekly.com/subscribe', 'http://wellnessweekly.com/thumbnail.jpg'),
-      (27, 'Investment Daily', 'Daily investment tips and news.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://investmentdaily.com', 'http://investmentdaily.com/subscribe', 'http://investmentdaily.com/thumbnail.jpg'),
-      (28, 'Innovation Insights', 'Insights into the latest tech innovations.', 'IT_TECH', 'http://innovationinsights.com', 'http://innovationinsights.com/subscribe', 'http://innovationinsights.com/thumbnail.jpg'),
-      (29, 'Healthy Habits', 'Habits for a healthier life.', 'HEALTH_MEDICINE', 'http://healthyhabits.com', 'http://healthyhabits.com/subscribe', 'http://healthyhabits.com/thumbnail.jpg'),
-      (30, 'Financial Times', 'Financial news and market analysis.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://financialtimes.com', 'http://financialtimes.com/subscribe', 'http://financialtimes.com/thumbnail.jpg'),
-      (31, 'Tech Buzz', 'Buzz in the tech world.', 'IT_TECH', 'http://techbuzz.com', 'http://techbuzz.com/subscribe', 'http://techbuzz.com/thumbnail.jpg'),
-      (32, 'Mind and Body', 'Wellness tips for mind and body.', 'HEALTH_MEDICINE', 'http://mindandbody.com', 'http://mindandbody.com/subscribe', 'http://mindandbody.com/thumbnail.jpg'),
-      (33, 'Market Trends', 'Trends in the financial markets.', 'BUSINESS_FINANCIAL_TECHNOLOGY', 'http://markettrends.com', 'http://markettrends.com/subscribe', 'http://markettrends.com/thumbnail.jpg'),
-      (34, 'Tech Insights', 'Insights into the tech industry.', 'IT_TECH', 'http://techinsights.com', 'http://techinsights.com/subscribe', 'http://techinsights.com/thumbnail.jpg'),
-      (35, 'Fitness Focus', 'Focus on fitness and health.', 'HEALTH_MEDICINE', 'http://fitnessfocus.com', 'http://fitnessfocus.com/subscribe', 'http://fitnessfocus.com/thumbnail.jpg');
-
-INSERT INTO article (id, newsletter_id, title, thumbnail, content, content_url, reading_time, received_at) VALUES
-   (4, 1, 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', "content test1", 'http://techweekly.com/articles/trends2024', 5, '2024-05-01'),
-   (5, 2, 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', "content test2", 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02'),
-   (6, 3, 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', "content test3", 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03'),
-   (7, 4, 'Latest Gadgets', 'http://gadgetworld.com/thumbnails/latestgadgets.jpg', "content test4", 'http://gadgetworld.com/articles/latestgadgets', 2, '2024-01-01'),
-   (8, 5, 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', "content test5", 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01'),
-   (9, 5, 'test article', 'http://test.com/thumbnails/wellnesstips.jpg', "content test6", 'http://test.com/articles/wellnesstips', 10, '2024-07-01');
-
+-- Newsletter Upload Days 데이터 삽입
 INSERT INTO newsletter_upload_days (newsletter_id, upload_days) VALUES
-    (1, 'MON'),
-    (2, 'FRI'),
-    (2, 'TUE'),
-    (2, 'THU'),
-    (3, 'WED'),
-    (4, 'WED'),
-    (5, 'WED');
+   (1, 'MON'), (1, 'WED'), (1, 'FRI'),
+   (2, 'TUE'), (2, 'THU'),
+   (3, 'MON'), (3, 'WED'), (3, 'FRI'),
+   (4, 'THU'),
+   (5, 'WED'),
+   (6, 'MON'),
+   (7, 'TUE'),
+   (8, 'MON'), (8, 'FRI'),
+   (9, 'WED'), (9, 'FRI'),
+   (10, 'TUE'), (10, 'THU'),
+   (11, 'MON'),
+   (12, 'FRI'),
+   (13, 'WED'),
+   (14, 'THU'),
+   (15, 'TUE'), (15, 'THU'),
+   (16, 'FRI'),
+   (17, 'MON'),
+   (18, 'WED'),
+   (19, 'THU'),
+   (20, 'TUE'),
+   (21, 'MON'),
+   (22, 'TUE'),
+   (23, 'MON'), (23, 'WED'), (23, 'FRI'),
+   (24, 'THU'),
+   (25, 'FRI'),
+   (26, 'THU'),
+   (27, 'MON'), (27, 'FRI'),
+   (28, 'WED'),
+   (29, 'THU'),
+   (30, 'MON');
+
+INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, create_at) VALUES
+     (1, 'techweekly@example.com', 'user1@example.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1', "a",  false, '2024-05-01'),
+     (2, 'techweekly@example.com', 'userTest@example.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1' , "b", false, '2024-05-02'),
+     (3, 'healthinsights@example.com', 'user2@example.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
+     (4, 'financedaily@example.com', 'user3@example.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01'),
+     (5, 'gadgetworld@example.com', 'user4@example.com', 'Latest Gadgets', 'http://gadgetworld.com/thumbnails/latestgadgets.jpg', 'http://gadgetworld.com/articles/latestgadgets', 2, '2024-01-01', 'content test4' ,"e", false, '2024-05-01'),
+     (6, 'healthwellness@example.com', 'user5@example.com', 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01', 'content test5',"f", false, '2024-05-01'),
+     (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g", false, '2024-05-01');
+
+INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, create_at) VALUES
+     (1, 'techweekly@example.com', 'user1@example.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1',  "a",false, '2024-05-01'),
+     (2, 'techweekly@example.com', 'userTest@example.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1', "b" , false, '2024-05-02'),
+     (3, 'healthinsights@example.com', 'user2@example.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
+     (4, 'financedaily@example.com', 'user3@example.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3',  "d", false, '2024-05-01'),
+     (5, 'gadgetworld@example.com', 'user4@example.com', 'Latest Gadgets', 'http://gadgetworld.com/thumbnails/latestgadgets.jpg', 'http://gadgetworld.com/articles/latestgadgets', 2, '2024-01-01', 'content test4',  "e", false, '2024-05-01'),
+     (6, 'healthwellness@example.com', 'user5@example.com', 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01', 'content test5',"f", false, '2024-05-01'),
+     (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g",false, '2024-05-01');
+
 
 -- InBox 데이터 삽입
 INSERT INTO in_box (user_id, article_id) VALUES
