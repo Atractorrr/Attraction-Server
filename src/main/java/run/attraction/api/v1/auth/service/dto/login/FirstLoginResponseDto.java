@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class FirstLoginResponseDto {
-  private Long userId;
+  private String email;
   private boolean hasExtraDetails;
   private String accessToken;
 
   @Builder
-  private FirstLoginResponseDto(Long userId, boolean hasExtraDetails, String accessToken) {
-    this.userId = userId;
+  private FirstLoginResponseDto(String email, boolean hasExtraDetails, String accessToken) {
+    this.email = email;
     this.hasExtraDetails = hasExtraDetails;
     this.accessToken = accessToken;
   }

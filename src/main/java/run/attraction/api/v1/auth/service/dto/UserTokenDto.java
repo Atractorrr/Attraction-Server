@@ -7,14 +7,14 @@ import lombok.Getter;
 public class UserTokenDto {
   private String accessToken;
   private String refreshToken;
-  private Long id;
+  private String email;
   private boolean isUserBefore;
 
   @Builder
-  private UserTokenDto(String accessToken, String refreshToken, Long id, boolean isUserBefore) {
+  private UserTokenDto(String accessToken, String refreshToken, String email, boolean isUserBefore) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
-    this.id = id;
+    this.email = email;
     this.isUserBefore = isUserBefore;
   }
 }

@@ -71,6 +71,7 @@ public class User implements UserDetails {
   @Column(name = "user_expiration")
   private LocalDate userExpiration;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "occupation")
   private Occupation occupation;
 
@@ -95,7 +96,7 @@ public class User implements UserDetails {
 
   public void addExtraDetails(UserValidator userValidator,
                               String nickName, List<String> interests, LocalDate birthDate,
-                              LocalDate userExpiration, String occupation) {
+                              LocalDate userExpiration, Occupation occupation) {
     if (userValidator.isSpecialPatternInNickname(nickName)) {
       throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
     }
@@ -104,7 +105,11 @@ public class User implements UserDetails {
     this.interests.addAll(getInterestFromString(interests));
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;
-    this.occupation = Occupation.valueOf(occupation);
+    this.occupation = occupation;
+  }
+  public void renewUpdateAtAndExpirationAt(LocalDate updateAt,LocalDate userExpiration){
+    this.updateAt = updateAt;
+    this.userExpiration = userExpiration;
   }
 
   private static List<Interest> getInterestFromString(List<String> interests) {
