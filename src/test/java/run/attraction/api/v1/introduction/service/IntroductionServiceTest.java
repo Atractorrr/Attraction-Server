@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import run.attraction.api.v1.introduction.Article;
+import run.attraction.api.v1.archive.AdminArticle;
+import run.attraction.api.v1.archive.Article;
+import run.attraction.api.v1.archive.repository.AdminArticleRepository;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.dto.response.NewsletterResponse;
@@ -26,6 +29,8 @@ class IntroductionServiceTest {
 
   @Mock
   private NewsletterRepository newsletterRepository;
+  @Mock
+  private AdminArticleRepository adminArticleRepository;
 
   @InjectMocks
   private IntroductionService introductionService;
@@ -36,6 +41,7 @@ class IntroductionServiceTest {
   private Newsletter newsletter;
   private List<Newsletter> newsletters;
   private List<Article> articles;
+  private List<AdminArticle> adminArticles;
 
   @BeforeEach
   void setUp() {
@@ -44,42 +50,99 @@ class IntroductionServiceTest {
     size = 2;
     category = Category.IT_TECH;
 
-    Article article1 = new Article(1L, "Tech Trends 2024", "http://techweekly.com/thumbnails/trends2024.jpg", "content1", "http://techweekly.com/articles/trends2024", 5);
-    Article article2 = new Article(2L, "Healthy Living Tips", "http://healthinsights.com/thumbnails/healthyliving.jpg", "content1", "http://healthinsights.com/articles/healthyliving", 3);
-    List<Article> articles = Arrays.asList(article1, article2);
+    Article article1 = Article.builder()
+        .id(1L)
+        .newsletterEmail("newsletter@techweekly.com")
+        .userEmail("user@techweekly.com")
+        .title("Tech Trends 2024")
+        .thumbnailUrl("http://techweekly.com/thumbnails/trends2024.jpg")
+        .contentUrl("http://techweekly.com/articles/trends2024")
+        .readingTime(5)
+        .contentSummary("Overview of tech trends in 2024")
+        .isDeleted(false)
+        .receivedAt(LocalDate.of(2024, 6, 7))
+        .createAt(LocalDate.now())
+        .build();
+
+    Article article2 = Article.builder()
+        .id(2L)
+        .newsletterEmail("newsletter@healthinsights.com")
+        .userEmail("user@healthinsights.com")
+        .title("Healthy Living Tips")
+        .thumbnailUrl("http://healthinsights.com/thumbnails/healthyliving.jpg")
+        .contentUrl("http://healthinsights.com/articles/healthyliving")
+        .readingTime(3)
+        .contentSummary("Tips for a healthier lifestyle")
+        .isDeleted(false)
+        .receivedAt(LocalDate.of(2024, 4, 1))
+        .createAt(LocalDate.now())
+        .build();
+
+    articles = Arrays.asList(article1, article2);
+
+    AdminArticle adminArticle1 = AdminArticle.builder()
+        .id(1L)
+        .newsletterEmail("newsletter@techweekly.com")
+        .userEmail("user@techweekly.com")
+        .title("Tech Trends 2024")
+        .thumbnailUrl("http://techweekly.com/thumbnails/trends2024.jpg")
+        .contentUrl("http://techweekly.com/articles/trends2024")
+        .readingTime(5)
+        .contentSummary("Overview of tech trends in 2024")
+        .isDeleted(false)
+        .receivedAt(LocalDate.of(2024, 6, 7))
+        .createAt(LocalDate.now())
+        .build();
+
+    AdminArticle adminArticle2 = AdminArticle.builder()
+        .id(2L)
+        .newsletterEmail("newsletter@healthinsights.com")
+        .userEmail("user@healthinsights.com")
+        .title("Healthy Living Tips")
+        .thumbnailUrl("http://healthinsights.com/thumbnails/healthyliving.jpg")
+        .contentUrl("http://healthinsights.com/articles/healthyliving")
+        .readingTime(3)
+        .contentSummary("Tips for a healthier lifestyle")
+        .isDeleted(false)
+        .receivedAt(LocalDate.of(2024, 4, 1))
+        .createAt(LocalDate.now())
+        .build();
+
+    adminArticles = Arrays.asList(adminArticle1, adminArticle2);
 
     newsletter = Newsletter.builder()
         .id(newsletterId)
         .name("Test Newsletter")
+        .newsletterEmail("newsletter@healthinsights.com")
         .description("Description")
         .category(category)
         .mainLink("http://example.com")
-        .subscriptionLink("http://example.com/subscribe")
-        .thumbnail("http://example.com/thumbnail.jpg")
-        .articles(articles)
+        .subscribeLink("http://example.com/subscribe")
+        .thumbnailUrl("http://example.com/thumbnail.jpg")
         .build();
+
     newsletters = List.of(
         Newsletter.builder()
             .id(2L)
             .name("Test Newsletter 2")
+            .newsletterEmail("newsletter@techweekly.com")
             .description("Description")
             .category(category)
             .mainLink("http://example.com")
-            .subscriptionLink("http://example.com/subscribe")
-            .thumbnail("http://example.com/thumbnail.jpg")
+            .subscribeLink("http://example.com/subscribe")
+            .thumbnailUrl("http://example.com/thumbnail.jpg")
             .build(),
         Newsletter.builder()
             .id(3L)
             .name("Test Newsletter 3")
+            .newsletterEmail("newsletter@techweekly.com2")
             .description("Description")
             .category(category)
             .mainLink("http://example.com")
-            .subscriptionLink("http://example.com/subscribe")
-            .thumbnail("http://example.com/thumbnail.jpg")
+            .subscribeLink("http://example.com/subscribe")
+            .thumbnailUrl("http://example.com/thumbnail.jpg")
             .build()
     );
-
-
   }
 
   @Test
@@ -112,7 +175,9 @@ class IntroductionServiceTest {
   @Test
   void getPreviousArticles() {
     // Given
+    String newsletterEmail = newsletter.getNewsletterEmail();
     when(newsletterRepository.findById(newsletterId)).thenReturn(Optional.of(newsletter));
+    when(adminArticleRepository.findByNewsletterEmail(newsletterEmail)).thenReturn(Optional.of(adminArticles));
 
     // When
     List<PreviousArticleResponse> result = introductionService.getPreviousArticles(newsletterId, size);
@@ -121,6 +186,7 @@ class IntroductionServiceTest {
     assertNotNull(result);
     assertEquals(size, result.size());
     verify(newsletterRepository, times(1)).findById(newsletterId);
+    verify(adminArticleRepository, times(1)).findByNewsletterEmail(newsletterEmail);
   }
 
   @Test
@@ -141,8 +207,8 @@ class IntroductionServiceTest {
   void getRelatedNewslettersByCategory_whenCountLessThanOrEqualToSize() {
     // Given
     when(newsletterRepository.findById(newsletterId)).thenReturn(Optional.of(newsletter));
-    when(newsletterRepository.countByCategoryAndIdNot(category, newsletterId)).thenReturn(2);
-    when(newsletterRepository.findByCategoryAndIdNotWithOffset(category.name(), newsletterId, size, 0)).thenReturn(newsletters);
+    when(newsletterRepository.countByCategoryAndIdNot(newsletterId, category)).thenReturn(2);
+    when(newsletterRepository.findByCategoryAndIdNotWithOffset(newsletterId, category.name(),  size, 0)).thenReturn(newsletters);
 
     // When
     List<NewslettersByCategoryResponse> result = introductionService.getRelatedNewslettersByCategory(newsletterId, size);
@@ -151,16 +217,16 @@ class IntroductionServiceTest {
     assertNotNull(result);
     assertEquals(2, result.size());
     verify(newsletterRepository, times(1)).findById(newsletterId);
-    verify(newsletterRepository, times(1)).countByCategoryAndIdNot(category, newsletterId);
-    verify(newsletterRepository, times(1)).findByCategoryAndIdNotWithOffset(category.name(), newsletterId, size, 0);
+    verify(newsletterRepository, times(1)).countByCategoryAndIdNot(newsletterId, category);
+    verify(newsletterRepository, times(1)).findByCategoryAndIdNotWithOffset(newsletterId, category.name(), size, 0);
   }
 
   @Test
   void getRelatedNewslettersByCategory_whenCountGreaterThanSize() {
     // Given
     when(newsletterRepository.findById(newsletterId)).thenReturn(Optional.of(newsletter));
-    when(newsletterRepository.countByCategoryAndIdNot(category, newsletterId)).thenReturn(10);
-    when(newsletterRepository.findByCategoryAndIdNotWithOffset(eq(category.name()), eq(newsletterId), eq(size), anyInt())).thenReturn(newsletters);
+    when(newsletterRepository.countByCategoryAndIdNot(newsletterId, category)).thenReturn(10);
+    when(newsletterRepository.findByCategoryAndIdNotWithOffset(eq(newsletterId), eq(category.name()), eq(size), anyInt())).thenReturn(newsletters);
 
     // When
     List<NewslettersByCategoryResponse> result = introductionService.getRelatedNewslettersByCategory(newsletterId, size);
@@ -169,8 +235,8 @@ class IntroductionServiceTest {
     assertNotNull(result);
     assertEquals(2, result.size());
     verify(newsletterRepository, times(1)).findById(newsletterId);
-    verify(newsletterRepository, times(1)).countByCategoryAndIdNot(category, newsletterId);
-    verify(newsletterRepository, times(1)).findByCategoryAndIdNotWithOffset(eq(category.name()), eq(newsletterId), eq(size), anyInt());
+    verify(newsletterRepository, times(1)).countByCategoryAndIdNot(newsletterId, category);
+    verify(newsletterRepository, times(1)).findByCategoryAndIdNotWithOffset(eq(newsletterId), eq(category.name()), eq(size), anyInt());
   }
 
   @Test
@@ -185,7 +251,5 @@ class IntroductionServiceTest {
     // Then
     assertEquals(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName(), exception.getMessage());
     verify(newsletterRepository, times(1)).findById(newsletterId);
-    verify(newsletterRepository, times(0)).countByCategoryAndIdNot(any(Category.class), anyLong());
-    verify(newsletterRepository, times(0)).findByCategoryAndIdNotWithOffset(anyString(), anyLong(), anyInt(), anyInt());
   }
 }

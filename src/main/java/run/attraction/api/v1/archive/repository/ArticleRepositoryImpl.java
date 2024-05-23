@@ -9,11 +9,11 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import run.attraction.api.v1.archive.QArticle;
 import run.attraction.api.v1.archive.QReadBox;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
 import run.attraction.api.v1.introduction.Category;
-import run.attraction.api.v1.introduction.QArticle;
 
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
@@ -39,7 +39,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     BooleanExpression predicate = readBox.userId.eq(userId);
 
     if (isNotNullAndNotEmpty(category)) {
-      predicate = predicate.and(article.newsletter.category.eq(Category.valueOf(category)));
+      predicate = predicate.and(null);
     }
     if (isHideRead) {
       predicate = predicate.and(readBox.percentage.notIn(100));
