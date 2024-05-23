@@ -40,7 +40,6 @@ public class Article {
   @Column(nullable = false)
   private int readingTime;
 
-
   @Column(nullable = false, length = 200)
   private String contentSummary;
 
