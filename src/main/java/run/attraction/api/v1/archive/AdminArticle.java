@@ -46,6 +46,9 @@ public class AdminArticle {
     @Column(nullable = false,  length = 100)
     private String contentSummary;
 
+    @Column(nullable = false, length = 30)
+    private String newsletterNickname;
+
     @Column(nullable = false)
     boolean isDeleted = false;
 
