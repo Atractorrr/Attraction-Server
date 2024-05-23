@@ -33,15 +33,16 @@ public class Userinit {
 
     private void init() {
       final User user = User.builder()
-          .email("test@naver.com")
+          .email("test@gmail.com")
           .profileImg("test_profile_img")
           .backgroundImg("test_background_img")
           .createdAt(LocalDate.now())
-          .modifiedAt(LocalDate.now())
+          .updateAt(LocalDate.now())
           .role(Role.USER)
           .build();
 
       userRepository.save(user);
+
       log.info("user email = {}", user.getEmail());
     }
   }

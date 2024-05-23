@@ -43,8 +43,8 @@ public class User implements UserDetails {
   @Column(name = "created_at")
   private LocalDate createdAt;
 
-  @Column(name = "modified_at")
-  private LocalDate modifiedAt;
+  @Column(name = "update_at")
+  private LocalDate updateAt;
 
   @Column(name = "is_deleted")
   @ColumnDefault("false")
@@ -71,6 +71,7 @@ public class User implements UserDetails {
   @Column(name = "user_expiration")
   private LocalDate userExpiration;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "occupation")
   private Occupation occupation;
 
@@ -80,7 +81,7 @@ public class User implements UserDetails {
       String profileImg,
       String backgroundImg,
       LocalDate createdAt,
-      LocalDate modifiedAt,
+      LocalDate updateAt,
       boolean isDeleted,
       Role role
   ) {
@@ -88,14 +89,14 @@ public class User implements UserDetails {
     this.profileImg = profileImg;
     this.backgroundImg = backgroundImg;
     this.createdAt = createdAt;
-    this.modifiedAt = modifiedAt;
+    this.updateAt = updateAt;
     this.isDeleted = isDeleted;
     this.role = role;
   }
 
   public void addExtraDetails(UserValidator userValidator,
                               String nickName, List<String> interests, LocalDate birthDate,
-                              LocalDate userExpiration, String occupation) {
+                              LocalDate userExpiration, Occupation occupation) {
     if (userValidator.isSpecialPatternInNickname(nickName)) {
       throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
     }
@@ -104,7 +105,11 @@ public class User implements UserDetails {
     this.interests.addAll(getInterestFromString(interests));
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;
-    this.occupation = Occupation.valueOf(occupation);
+    this.occupation = occupation;
+  }
+  public void renewUpdateAtAndExpirationAt(LocalDate updateAt,LocalDate userExpiration){
+    this.updateAt = updateAt;
+    this.userExpiration = userExpiration;
   }
 
   private static List<Interest> getInterestFromString(List<String> interests) {

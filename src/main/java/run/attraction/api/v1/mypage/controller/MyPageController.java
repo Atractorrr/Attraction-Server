@@ -12,16 +12,16 @@ import run.attraction.api.v1.mypage.service.dto.UserDetaiilDto;
 import run.attraction.api.v1.mypage.service.dto.UserDetailsResponseDto;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Slf4j
 public class MyPageController {
 
   private final MypageService mypageService;
 
-  @GetMapping("/{memberId}")
-  public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("memberId") Long memberId) {
-    final UserDetaiilDto userDetails = mypageService.getUserDetails(memberId);
+  @GetMapping("/{email}")
+  public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("email") String email) {
+    final UserDetaiilDto userDetails = mypageService.getUserDetails(email);
     return ResponseEntity.ok(new UserDetailsResponseDto(userDetails));
   }
 

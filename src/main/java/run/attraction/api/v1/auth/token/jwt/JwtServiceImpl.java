@@ -113,7 +113,7 @@ public class JwtServiceImpl implements JwtService {
   // Id, NickName, Role 담기
   private Map<String, Object> createClaims(User user) {
     Map<String, Object> claims = new HashMap<>();
-    claims.put("id", user.getId());
+    claims.put("id", user.getEmail());
     claims.put("role", user.getRole());
     return claims;
   }

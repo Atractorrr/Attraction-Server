@@ -7,19 +7,17 @@ import lombok.Getter;
 import run.attraction.api.v1.user.Interest;
 
 public record UserDetaiilDto (
-  Long id,
+  String email,
   String name,
   String profileImg,
   String backgroundImg,
-  String email,
   Set<Interest> categories
 ){
   public UserDetaiilDto{
-    Objects.requireNonNull(id);
+    Objects.requireNonNull(email);
     Objects.requireNonNull(name);
     Objects.requireNonNull(profileImg);
     Objects.requireNonNull(backgroundImg);
-    Objects.requireNonNull(email);
     Objects.requireNonNull(categories);
   }
 }
