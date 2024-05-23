@@ -10,7 +10,7 @@ import run.attraction.api.v1.mypage.service.user.MyPageUserService;
 public class MypageService {
   private final MyPageUserService myPageUserService;
 
-  public UserDetaiilDto getUserDetails(Long memberId){
-    return myPageUserService.getUserDetails(memberId);
+  public UserDetaiilDto getUserDetails(String email){
+    return myPageUserService.getUserDetails(email);
   }
 }

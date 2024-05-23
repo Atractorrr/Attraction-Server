@@ -45,15 +45,18 @@ public class AuthController {
     }
 
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
-        .userId(userTokenDto.getId())
+        .email(userTokenDto.getEmail())
         .hasExtraDetails(false)
         .accessToken(userTokenDto.getAccessToken())
         .build());
   }
 
   @GetMapping("/join/username-duplicate")
-  public boolean checkNicknameDuplication(@Valid @RequestParam String nickname) {
-    return authService.checkNicknameDuplication(nickname);
+  public ResponseEntity<?> checkNicknameDuplication(@Valid @RequestParam String nickname) {
+    if(authService.checkNicknameDuplication(nickname)){
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임 입니다.");
+    };
+    return ResponseEntity.ok().build();
   }
 
   @PostMapping("/join")

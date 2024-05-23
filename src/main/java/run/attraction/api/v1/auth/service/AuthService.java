@@ -34,12 +34,13 @@ public class AuthService {
   }
 
   public void join(JoinRequestDto joinRequestDto) {
-    joinHelper.joinUser(userValidator, joinRequestDto.getUserId(),
+    joinHelper.joinUser(userValidator,
+        joinRequestDto.getEmail(),
         joinRequestDto.getNickName(),
         joinRequestDto.getInterest(),
         joinRequestDto.getBirthDate(),
         joinRequestDto.getUserExpiration(),
-        joinRequestDto.getJobCode(),
+        joinRequestDto.getOccupation(),
         joinRequestDto.isAdPolices());
   }
 

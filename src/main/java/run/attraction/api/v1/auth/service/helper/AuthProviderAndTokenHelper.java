@@ -1,5 +1,6 @@
 package run.attraction.api.v1.auth.service.helper;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import run.attraction.api.v1.auth.token.repository.LogoutAccessTokenRepository;
 import run.attraction.api.v1.auth.token.repository.RefreshTokenRepository;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
+import run.attraction.api.v1.user.service.UserServiceImpl;
 
 @Component
 @RequiredArgsConstructor
@@ -23,12 +25,17 @@ public class AuthProviderAndTokenHelper {
   private final RefreshTokenRepository refreshTokenRepository;
   private final LogoutAccessTokenRepository logoutAccessTokenRepository;
   private final UserRepository userRepository;
+  private final UserServiceImpl userService;
 
   @Transactional
   public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
-    final Optional<User> findUser = userRepository.findByEmail(authUser.getEmail());
+    final Optional<User> findUser = userRepository.findById(authUser.getEmail());
     if (findUser.isPresent()) {
-      return getToken(findUser.get(), true);
+      User user = findUser.get();
+      if (user.getUpdateAt().isBefore(LocalDate.now())){
+        userService.updateUserExpiration(user,LocalDate.now());
+      }
+      return getToken(user, true);
     }
     userRepository.save(authUser);
     return getToken(authUser, false);
@@ -42,7 +49,7 @@ public class AuthProviderAndTokenHelper {
     return UserTokenDto.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
-        .id(preparedJoinUser.getId())
+        .email(preparedJoinUser.getEmail())
         .isUserBefore(isUserBefore)
         .build();
   }
@@ -63,7 +70,6 @@ public class AuthProviderAndTokenHelper {
   }
 
   public void saveAccessTokenAndDeleteRefreshToken(final String accessToken) {
-    System.out.println(1111111);
     String userEmail = jwtService.extractEmailFromToken(accessToken);
     saveLogoutAccessToken(accessToken);
     refreshTokenRepository.findTokenByUserEmail(userEmail)
@@ -90,7 +96,7 @@ public class AuthProviderAndTokenHelper {
     return UserTokenDto.builder()
         .accessToken(accessToken)
         .refreshToken(reissueToken)
-        .id(user.getId())
+        .email(user.getEmail())
         .build();
   }
 

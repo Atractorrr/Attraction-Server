@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,15 +40,18 @@ public class Article {
   @Column(nullable = false)
   private int readingTime;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 200)
   private String contentSummary;
 
+  @Column(nullable = false, length = 30)
+  private String newsletterNickname;
+  
   @Column(nullable = false)
   boolean isDeleted = false;
 
   @Column(nullable = false)
-  private Date receivedAt;
+  private LocalDate receivedAt;
 
   @Column(nullable = false)
-  LocalDate createAt;
+  private LocalDate createAt;
 }
