@@ -2,7 +2,7 @@ package run.attraction.api.v1.auth.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("spring.security.oauth2.client")
+@ConfigurationProperties(prefix = "spring.security.oauth2.client")
 public class GoogleLoginProperties {
 
   private final Provider provider;

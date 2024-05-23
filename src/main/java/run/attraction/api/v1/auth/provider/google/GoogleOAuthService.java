@@ -75,7 +75,7 @@ public class GoogleOAuthService implements OAuthService {
         .profileImg(profileImg)
         .backgroundImg(null)
         .createdAt(LocalDate.now())
-        .modifiedAt(LocalDate.now())
+        .updateAt(LocalDate.now())
         .role(Role.USER)
         .build();
   }

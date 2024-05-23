@@ -9,27 +9,29 @@ import lombok.Getter;
 @Getter
 @NotNull
 public class JoinRequestDto {
-  private Long userId;
+  private String email;
   private String nickName;
   private List<String> interest;
-  private LocalDate birthDate;
+  private String birthDate;
   private int userExpiration;
-  private int jobCode;
+  private String occupation;
   private boolean adPolices;
 
   @Builder
-  public JoinRequestDto(Long userId, String nickName,
+  private JoinRequestDto(String email,
+                        String nickName,
                         List<String> interest,
-                        LocalDate birthDate,
+                        String birthDate,
                         int userExpiration,
-                        int jobCode,
+                        String occupation,
                         boolean adPolices) {
-    this.userId = userId;
+    this.email = email;
     this.nickName = nickName;
     this.interest = interest;
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;
-    this.jobCode = jobCode;
+    this.occupation = occupation;
     this.adPolices = adPolices;
   }
 }
+
