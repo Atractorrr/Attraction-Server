@@ -11,7 +11,7 @@ public record NewslettersByCategoryResponse(
   public static NewslettersByCategoryResponse from(Newsletter newsletter) {
     return new NewslettersByCategoryResponse(
         newsletter.getId(),
-        newsletter.getThumbnail(),
+        newsletter.getThumbnailUrl(),
         newsletter.getName(),
         newsletter.getDescription()
     );

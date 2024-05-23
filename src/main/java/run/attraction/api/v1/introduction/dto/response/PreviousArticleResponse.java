@@ -1,22 +1,22 @@
 package run.attraction.api.v1.introduction.dto.response;
 
-import run.attraction.api.v1.introduction.Article;
+import run.attraction.api.v1.archive.AdminArticle;
 
 public record PreviousArticleResponse(
     Long id,
     String title,
     String thumbnail,
     String contentUrl,
-    String content,
+    String contentSummary,
     int readingTime
 ) {
-  public static PreviousArticleResponse from(Article article) {
+  public static PreviousArticleResponse from(AdminArticle article) {
     return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
-        article.getThumbnail(),
+        article.getThumbnailUrl(),
         article.getContentUrl(),
-        article.getContent(),
+        article.getContentSummary(),
         article.getReadingTime()
     );
   }

@@ -21,8 +21,8 @@ public record NewsletterResponse(
         newsletter.getUploadDays(),
         newsletter.getCategory(),
         newsletter.getMainLink(),
-        newsletter.getSubscriptionLink(),
-        newsletter.getThumbnail()
+        newsletter.getSubscribeLink(),
+        newsletter.getThumbnailUrl()
     );
   }
 }
