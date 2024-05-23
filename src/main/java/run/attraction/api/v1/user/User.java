@@ -43,8 +43,8 @@ public class User implements UserDetails {
   @Column(name = "created_at")
   private LocalDate createdAt;
 
-  @Column(name = "modified_at")
-  private LocalDate modifiedAt;
+  @Column(name = "update_at")
+  private LocalDate updateAt;
 
   @Column(name = "is_deleted")
   @ColumnDefault("false")
@@ -80,7 +80,7 @@ public class User implements UserDetails {
       String profileImg,
       String backgroundImg,
       LocalDate createdAt,
-      LocalDate modifiedAt,
+      LocalDate updateAt,
       boolean isDeleted,
       Role role
   ) {
@@ -88,7 +88,7 @@ public class User implements UserDetails {
     this.profileImg = profileImg;
     this.backgroundImg = backgroundImg;
     this.createdAt = createdAt;
-    this.modifiedAt = modifiedAt;
+    this.updateAt = updateAt;
     this.isDeleted = isDeleted;
     this.role = role;
   }
