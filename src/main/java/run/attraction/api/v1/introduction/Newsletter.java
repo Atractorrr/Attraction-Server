@@ -1,7 +1,5 @@
 package run.attraction.api.v1.introduction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -10,9 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,17 +26,14 @@ public class Newsletter {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 20)
+  @Column(nullable = false, length = 100)
+  private String newsletterEmail;
+
+  @Column(nullable = false, length = 30)
   private String name;
 
   @Column(nullable = false)
   private String description;
-
-  @OneToMany(mappedBy = "newsletter", cascade = CascadeType.ALL)
-  @JsonIgnore
-  @Builder.Default
-  private List<Article> articles = new ArrayList<>();
-
 
   @Column(nullable = false)
   @ElementCollection
@@ -55,8 +48,17 @@ public class Newsletter {
   private String mainLink;
 
   @Column(nullable = false)
-  private String subscriptionLink;
+  private String subscribeLink;
 
   @Column(nullable = false)
-  private String thumbnail;
+  private String thumbnailUrl;
+
+  @Column(nullable = false)
+  private boolean isDeleted;
+
+  @Column(nullable = false)
+  private LocalDate createdAt;
+
+  @Column(nullable = false)
+  private LocalDate updateAt;
 }
