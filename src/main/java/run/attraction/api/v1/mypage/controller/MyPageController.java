@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.mypage.service.MypageService;
-import run.attraction.api.v1.mypage.service.dto.UserDetaiilDto;
+import run.attraction.api.v1.mypage.service.dto.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.UserDetailsResponseDto;
 
 @RestController
@@ -21,7 +21,7 @@ public class MyPageController {
 
   @GetMapping("/{email}")
   public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("email") String email) {
-    final UserDetaiilDto userDetails = mypageService.getUserDetails(email);
+    final UserDetailDto userDetails = mypageService.getUserDetails(email);
     return ResponseEntity.ok(new UserDetailsResponseDto(userDetails));
   }
 
