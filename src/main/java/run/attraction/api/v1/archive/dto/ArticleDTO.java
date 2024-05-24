@@ -1,8 +1,9 @@
 package run.attraction.api.v1.archive.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import java.util.Date;
-import run.attraction.api.v1.introduction.Article;
+import java.time.LocalDate;
+import run.attraction.api.v1.archive.Article;
+import run.attraction.api.v1.introduction.Newsletter;
 
 public record ArticleDTO(
     Long id,
@@ -10,24 +11,22 @@ public record ArticleDTO(
     String thumbnail,
     String contentUrl,
     int readingTime,
-    Date receivedAt,
+    LocalDate receivedAt,
     int percentage,
     NewsletterDTO newsletter
 ) {
   @QueryProjection
-  public ArticleDTO(Article article, int percentage) {
+  public ArticleDTO(Article article, int percentage, Newsletter newsletter) {
     this(
         article.getId(),
         article.getTitle(),
-        article.getThumbnail(),
+        article.getThumbnailUrl(),
         article.getContentUrl(),
         article.getReadingTime(),
         article.getReceivedAt(),
         percentage,
-        new NewsletterDTO(article.getNewsletter())
+        new NewsletterDTO(newsletter)
     );
   }
-
-
 }
 

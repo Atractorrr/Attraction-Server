@@ -21,11 +21,11 @@ public class ArchiveController {
 
   private final ArchiveService archiveService;
 
-  @GetMapping("/api/v1/user/{userId}/articles")
-  public ResponseEntity<ApiResponse<Page<ArticleDTO>>> getUserArticles(@PathVariable Long userId, UserArticlesRequest request) {
+  @GetMapping("/api/v1/user/{userEmail}/articles")
+  public ResponseEntity<ApiResponse<Page<ArticleDTO>>> getUserArticles(@PathVariable String userEmail, UserArticlesRequest request) {
 
-    request.setUserId(userId);
-    Page<ArticleDTO> articles = archiveService.findArticlesByUserId(request.getUserId(), request);
+    request.setUserEmail(userEmail);
+    Page<ArticleDTO> articles = archiveService.findArticlesByUserId(request.getUserEmail(), request);
     ApiResponse<Page<ArticleDTO>> response = ApiResponse.from(HttpStatus.OK, "성공", articles);
 
     return ResponseEntity.ok(response);

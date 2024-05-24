@@ -17,7 +17,7 @@ public record NewsletterDTO(
         newsletter.getId(),
         newsletter.getName(),
         newsletter.getCategory(),
-        newsletter.getThumbnail()
+        newsletter.getThumbnailUrl()
     );
   }
 
@@ -26,7 +26,7 @@ public record NewsletterDTO(
         newsletter.getId(),
         newsletter.getName(),
         newsletter.getCategory(),
-        newsletter.getThumbnail()
+        newsletter.getThumbnailUrl()
     );
   }
 }
