@@ -91,13 +91,13 @@ INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_ur
 
 
 -- InBox 데이터 삽입
-INSERT INTO in_box (user_id, article_id) VALUES
-     (1, 4),
-     (1, 5),
-     (1, 6),
-     (1, 7),
-     (1, 8),
-     (1, 9);
+INSERT INTO in_box (user_email, article_id) VALUES
+     ("test@gmail.com", 4),
+     ("test@gmail.com", 5),
+     ("test@gmail.com", 6),
+     ("test@gmail.com", 7),
+     ("test@gmail.com", 8),
+     ("test@gmail.com", 9);
 
 -- Readbox 데이터 삽입
 INSERT INTO read_box (user_email, article_id, percentage) VALUES
@@ -105,6 +105,6 @@ INSERT INTO read_box (user_email, article_id, percentage) VALUES
    ("test@gmail.com", 5, 60),
    ("test@gmail.com", 6, 70),
    ("test@gmail.com", 7, 80),
-   ("test@gmail.com", 8, 100),
-   ("test@gmail.com", 9, 100);
+   ("test@gmail.com", 8, 77),
+   ("test@gmail.com", 9, 66);
 
