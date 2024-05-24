@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,8 +35,8 @@ public class ReadBox {
   @Column(nullable = false)
   private int percentage;
 
-
-  private Date updateAt;
+  @Setter
+  private LocalDate readDate;
 
   @QueryProjection
   public ReadBox(Long id, Long articleId, String userEmail, int percentage) {
