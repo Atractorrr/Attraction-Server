@@ -22,7 +22,7 @@ public class InBox {
   private Long id;
 
   @Column(nullable = false)
-  private Long userId;
+  private String userEmail;
 
   @Column(nullable = false)
   private Long articleId;

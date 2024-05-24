@@ -28,7 +28,7 @@ public class ReadBox {
   private Long articleId;
 
   @Column(nullable = false)
-  private Long userId;
+  private String userEmail;
 
   @Setter
   @Column(nullable = false)
@@ -38,10 +38,10 @@ public class ReadBox {
   private Date updateAt;
 
   @QueryProjection
-  public ReadBox(Long id, Long articleId, Long userId, int percentage) {
+  public ReadBox(Long id, Long articleId, String userEmail, int percentage) {
     this.id = id;
     this.articleId = articleId;
-    this.userId = userId;
+    this.userEmail = userEmail;
     this.percentage = percentage;
   }
 }
