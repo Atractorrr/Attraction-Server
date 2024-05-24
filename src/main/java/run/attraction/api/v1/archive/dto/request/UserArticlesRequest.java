@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserArticlesRequest {
-  private  Long userId;
+  private  String userEmail;
   private  int page = 0;
   private  int size = 20;
   private  String[] sort = {"receivedAt","asc"};
