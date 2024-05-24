@@ -9,16 +9,16 @@ import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
-public class MyPageUserSeriveImpl implements MyPageUserService {
+public class MypageUserServiceImpl implements MypageUserService {
   private final UserRepository userRepository;
 
   public UserDetailDto getUserDetails(String email) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
-    final UserDetailDto userDetailDto = getUserDetaiilDto(user);
+    final UserDetailDto userDetailDto = getUserDetailDto(user);
     return userDetailDto;
   }
 
-  private static UserDetailDto getUserDetaiilDto(User user) {
+  private static UserDetailDto getUserDetailDto(User user) {
     return new UserDetailDto(
         user.getEmail(),
         user.getNickName(),

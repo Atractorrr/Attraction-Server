@@ -15,7 +15,7 @@ import run.attraction.api.v1.mypage.service.dto.UserDetailsResponseDto;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Slf4j
-public class MyPageController {
+public class MypageController {
 
   private final MypageService mypageService;
 
