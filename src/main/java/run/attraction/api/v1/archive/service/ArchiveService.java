@@ -20,7 +20,7 @@ public class ArchiveService {
   final private ArticleRepository articleRepository;
 
   @Transactional(readOnly = true)
-  public Page<ArticleDTO> findArticlesByUserId(Long userId, UserArticlesRequest request) {
+  public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
 
     String ASC = "asc";
     String HIDE_READ_TRUE = "true";
@@ -30,6 +30,6 @@ public class ArchiveService {
     Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(ASC) ? Sort.Order.asc(request.getSort()[0]) : Sort.Order.desc(request.getSort()[0]));
     Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sortObj);
 
-    return articleRepository.findArticlesByUserId(userId, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
+    return articleRepository.findArticlesByUserEmail(userEmail, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
   }
 }

@@ -13,30 +13,31 @@ import run.attraction.api.v1.archive.QArticle;
 import run.attraction.api.v1.archive.QReadBox;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
-import run.attraction.api.v1.introduction.Category;
+import run.attraction.api.v1.introduction.QNewsletter;
 
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
   private final JPAQueryFactory queryFactory;
   private final QArticle article = QArticle.article;
   private final QReadBox readBox = QReadBox.readBox;
+  private final QNewsletter newsletter = QNewsletter.newsletter;
 
   public ArticleRepositoryImpl(EntityManager em) {
     this.queryFactory = new JPAQueryFactory(em);
   }
 
   @Override
-  public Page<ArticleDTO> findArticlesByUserId(Long userId, String category, Boolean isHideRead, String search,
+  public Page<ArticleDTO> findArticlesByUserEmail(String userEmail, String category, Boolean isHideRead, String search,
                                                Pageable pageable) {
-    BooleanExpression predicate = buildPredicate(userId, category, isHideRead, search);
+    BooleanExpression predicate = buildPredicate(userEmail, category, isHideRead, search);
     List<ArticleDTO> articles = getArticles(predicate, pageable);
     Long total = getTotal(predicate);
 
     return new PageImpl<>(articles, pageable, total);
   }
 
-  private BooleanExpression buildPredicate(Long userId, String category, boolean isHideRead, String search) {
-    BooleanExpression predicate = readBox.userId.eq(userId);
+  private BooleanExpression buildPredicate(String userEmail, String category, boolean isHideRead, String search) {
+    BooleanExpression predicate = readBox.userEmail.eq(userEmail);
 
     if (isNotNullAndNotEmpty(category)) {
       predicate = predicate.and(null);
@@ -57,9 +58,10 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
   private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable) {
     JPAQuery<ArticleDTO> articles = queryFactory
-        .select(new QArticleDTO(this.article, readBox.percentage))
+        .select(new QArticleDTO(this.article, readBox.percentage, newsletter))
         .from(this.article)
         .join(readBox).on(this.article.id.eq(readBox.articleId))
+        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.newsletterEmail))
         .where(predicate)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
