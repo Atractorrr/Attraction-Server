@@ -115,7 +115,7 @@ INSERT  INTO users (email,profile_img,background_img,created_at,update_at,is_del
     ("user2@gmail.com","profileImgUrl2","backgroundImgUrl2","2024-04-17","2024-04-29",FALSE,"USER","RYU","1999-05-22","2024-10-17","MARKETING"),
     ("user3@gmail.com","profileImgUrl3","backgroundImgUrl3","2024-05-01","2024-05-02",FALSE,"USER","KANG","1996-11-18","2025-05-01","PRODUCTION");
 
--- interests 데이터 삽입
+-- Interest 데이터 삽입
 INSERT INTO interests (email, interests) VALUES
     ("user1@gmail.com","LOCAL_TRAVEL"),
     ("user1@gmail.com","TREND_LIFE"),
@@ -126,3 +126,16 @@ INSERT INTO interests (email, interests) VALUES
     ("user3@gmail.com","HEALTH_MEDICINE"),
     ("user3@gmail.com","LOCAL_TRAVEL"),
     ("user3@gmail.com","IT_TECH");
+
+-- Readbox 데이터 삽입 (완독한 경우 추가)
+INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
+    ("user1@gmail.com","2024-04-20", 1, 100),
+    ("user1@gmail.com","2024-04-20", 2, 100),
+    ("user1@gmail.com",NULL, 3, 70),
+    ("user1@gmail.com",NULL, 4, 70),
+    ("user1@gmail.com","2024-04-20", 5, 100),
+    ("user1@gmail.com","2024-04-29", 6, 100),
+    ("user2@gmail.com","2024-05-02", 2, 100),
+    ("user2@gmail.com","2024-05-01", 4, 100),
+    ("user2@gmail.com",NULL, 5, 70),
+    ("user2@gmail.com",NULL, 6, 50);
