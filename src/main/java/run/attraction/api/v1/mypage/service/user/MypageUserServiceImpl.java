@@ -3,7 +3,7 @@ package run.attraction.api.v1.mypage.service.user;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.mypage.service.dto.UserDetailDto;
+import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
 
