@@ -139,3 +139,19 @@ INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
     ("user2@gmail.com","2024-05-01", 4, 100),
     ("user2@gmail.com",NULL, 5, 70),
     ("user2@gmail.com",NULL, 6, 50);
+
+-- 마이페이지 최근 읽은 아티클 조회 Test용
+
+INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, create_at) VALUES
+    (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1', "a",  false, '2024-05-01'),
+    (9, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1' , "b", false, '2024-05-02'),
+    (10, 'healthinsights@example.com', 'user3@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
+    (11, 'financedaily@example.com', 'user4@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01');
+
+INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
+    ("user3@gmail.com","2024-04-20", 8, 50),
+    ("user3@gmail.com","2024-04-20", 9, 70),
+    ("user3@gmail.com","2024-04-20", 10, 100),
+    ("user4@gmail.com","2024-04-20", 11, 100);
+
+
