@@ -45,7 +45,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
     final Map<Long, LocalDate> readDates = extractReadDates(userReadBoxDetails);
     final Map<Long, Integer> percentages = extractPercentage(userReadBoxDetails);
     final List<Article> articles = articleRepository.findArticleByIdAndUserEmail(articleIds, email);
-    final Map<String, Newsletter> newsletters = extractNewsletterprofiles(articles);
+    final Map<String, Newsletter> newsletters = extractNewsletterProfiles(articles);
 
     return articles.stream()
         .map(article -> {
@@ -82,7 +82,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
 
   //뉴스레터 Email값을 이용해 Newsletter Entitu 추출
   //Map<String,String> => KEY : newsletterEmail / VALUE : Newsletter Entitu
-  private Map<String, Newsletter> extractNewsletterprofiles(List<Article> articles) {
+  private Map<String, Newsletter> extractNewsletterProfiles(List<Article> articles) {
     final List<String> newsletterEmails = extractnewsletterEamils(articles);
     final List<Object[]> thumbnails = newsletterRepository.findNewslettersByNewsletterEmails(newsletterEmails);
     return thumbnails.stream()
