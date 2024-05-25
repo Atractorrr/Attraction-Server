@@ -1,7 +1,5 @@
 package run.attraction.api.v1.mypage.controller;
 
-import java.time.LocalDate;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
