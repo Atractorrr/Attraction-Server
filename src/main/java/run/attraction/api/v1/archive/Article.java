@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class Article {
+public class Article extends AuditableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +51,4 @@ public class Article {
 
   @Column(nullable = false)
   private LocalDate receivedAt;
-
-  @Column(nullable = false)
-  private LocalDate createAt;
 }
