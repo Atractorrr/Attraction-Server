@@ -112,6 +112,14 @@ public class User implements UserDetails {
     this.userExpiration = userExpiration;
   }
 
+  public void updateProfileImg(String profileImg){
+    this.profileImg = profileImg;
+  }
+
+  public void updateBackgroundImg(String backgroundImg){
+    this.backgroundImg = backgroundImg;
+  }
+
   private static List<Interest> getInterestFromString(List<String> interests) {
     return interests.stream()
         .map(Interest::valueOf)
