@@ -34,4 +34,10 @@ public class MypageUserServiceImpl implements MypageUserService {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateProfileImg(profileImg);
   }
+
+  @Transactional
+  public void updateBackgroundImg(String email, String backgroundImg) {
+    User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
+    user.updateBackgroundImg(backgroundImg);
+  }
 }
