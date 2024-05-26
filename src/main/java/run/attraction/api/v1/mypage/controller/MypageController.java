@@ -15,6 +15,7 @@ import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesResponseDto;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
+import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateBackgroundImgRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateProfileImgRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
@@ -49,6 +50,12 @@ public class MypageController {
   @PatchMapping("/{email}/profile")
   public final ResponseEntity<?> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
     mypageService.updateProfileImgByEmail(email,request.profileImg());
+    return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping("/{email}/background")
+  public final ResponseEntity<?> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
+    mypageService.updateBackgroundImgByEmail(email,request.backgroundImg());
     return ResponseEntity.ok().build();
   }
 
