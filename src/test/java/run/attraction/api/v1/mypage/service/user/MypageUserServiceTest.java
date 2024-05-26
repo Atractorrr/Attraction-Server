@@ -28,7 +28,9 @@ public class MypageUserServiceTest {
 
     user = User.builder()
         .email("test@gmail.com")
-        .profileImg("beforeProfileImg").build();
+        .profileImg("beforeProfileImg")
+        .backgroundImg("beforeBackgroundImg")
+        .build();
 
     when(userRepository.findById("test@gmail.com")).thenReturn(Optional.of(user));
   }
@@ -45,5 +47,19 @@ public class MypageUserServiceTest {
 
     //then
     assertEquals(profileImg,userRepository.findById(email).get().getProfileImg());
+  }
+
+  @Test
+  @DisplayName("프로필 배경이미지 변경 요청 API 테스트")
+  void updateBackgroundImg(){
+    //Given
+    String email = "test@gmail.com";
+    String backgroundImg = "AfterBackgroundImg";
+
+    //When
+    mypageUserService.updateBackgroundImg(email, backgroundImg);
+
+    //then
+    assertEquals(backgroundImg,userRepository.findById(email).get().getBackgroundImg());
   }
 }
