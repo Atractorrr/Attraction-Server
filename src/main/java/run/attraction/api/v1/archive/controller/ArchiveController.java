@@ -36,8 +36,8 @@ public class ArchiveController {
   }
 
   @PutMapping("/{userEmail}/article/{articleId}")
-  public ApiResponse<Void> updateUserArticlePercentage(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long articleId, @RequestParam @NotNull int percentage) {
-    archiveService.updateUserArticlePercentage(userEmail, articleId, percentage);
+  public ApiResponse<Void> saveUserArticleProgress(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long articleId, @RequestParam @NotNull int percentage) {
+    archiveService.saveUserArticleProgress(userEmail, articleId, percentage);
 
     return ApiResponse.from(HttpStatus.OK, "성공", null);
   }
