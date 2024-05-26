@@ -13,6 +13,7 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
+import run.attraction.api.v1.introduction.exception.ErrorMessages;
 
 
 @Service
@@ -39,7 +40,7 @@ public class ArchiveService {
   @Transactional
   public void updateUserArticlePercentage(String userEmail, Long articleId, int percentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 데이터 입니다."));
+        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_DATA.getViewName()));
     readBox.updatePercentage(percentage);
     readBoxRepository.save(readBox);
   }
