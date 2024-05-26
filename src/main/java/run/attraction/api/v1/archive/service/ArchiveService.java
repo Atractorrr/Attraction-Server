@@ -1,7 +1,6 @@
 package run.attraction.api.v1.archive.service;
 
 
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,15 +40,7 @@ public class ArchiveService {
   public void updateUserArticlePercentage(String userEmail, Long articleId, int percentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 데이터 입니다."));
-
-    int userPercentage = readBox.getPercentage();
-
-    if(percentage > userPercentage) {
-      readBox.setPercentage(percentage);
-      if(percentage == 100) {
-        readBox.setReadDate(LocalDate.now());
-      }
-      readBoxRepository.save(readBox);
-    }
+    readBox.updatePercentage(percentage);
+    readBoxRepository.save(readBox);
   }
 }

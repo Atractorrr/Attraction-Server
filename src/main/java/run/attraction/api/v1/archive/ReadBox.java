@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -35,11 +34,9 @@ public class ReadBox extends AuditableEntity {
   @Column(nullable = false)
   private String userEmail;
 
-  @Setter
   @Column(nullable = false)
   private int percentage;
 
-  @Setter
   private LocalDate readDate;
 
   @QueryProjection
@@ -48,5 +45,20 @@ public class ReadBox extends AuditableEntity {
     this.articleId = articleId;
     this.userEmail = userEmail;
     this.percentage = percentage;
+  }
+
+  public void updatePercentage(int percentage) {
+    this.percentage = percentage;
+    if(isFullPercentage(percentage)) {
+      updateReadDate();
+    }
+  }
+
+  private boolean isFullPercentage(int percentage) {
+    return percentage == PULL_PERCENTAGE;
+  }
+
+  private void updateReadDate() {
+      this.readDate = LocalDate.now();
   }
 }
