@@ -35,7 +35,7 @@ public class ReadBox extends AuditableEntity {
   private String userEmail;
 
   @Column(nullable = false)
-  private int percentage;
+  private int percentage = 0;
 
   private LocalDate readDate;
 
@@ -45,6 +45,11 @@ public class ReadBox extends AuditableEntity {
     this.articleId = articleId;
     this.userEmail = userEmail;
     this.percentage = percentage;
+  }
+
+  public ReadBox(String userEmail, Long articleId) {
+    this.articleId = articleId;
+    this.userEmail = userEmail;
   }
 
   public void updatePercentage(int percentage) {

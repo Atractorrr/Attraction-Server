@@ -13,7 +13,6 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
-import run.attraction.api.v1.introduction.exception.ErrorMessages;
 
 
 @Service
@@ -25,7 +24,6 @@ public class ArchiveService {
 
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
-
     String ASC = "asc";
     String HIDE_READ_TRUE = "true";
 
@@ -38,10 +36,14 @@ public class ArchiveService {
   }
 
   @Transactional
-  public void updateUserArticlePercentage(String userEmail, Long articleId, int percentage) {
+  public void saveUserArticleProgress(String userEmail, Long articleId, int percentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_DATA.getViewName()));
+        .orElse(createReadBox(userEmail, articleId));
     readBox.updatePercentage(percentage);
     readBoxRepository.save(readBox);
+  }
+
+  private ReadBox createReadBox(String userEmail, Long articleId) {
+    return new ReadBox(userEmail, articleId);
   }
 }
