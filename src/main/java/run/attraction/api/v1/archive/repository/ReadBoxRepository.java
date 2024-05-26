@@ -10,4 +10,5 @@ public interface ReadBoxRepository extends JpaRepository<ReadBox, Long> {
   @Query("SELECT rb FROM ReadBox rb WHERE rb.userEmail = :userEmail AND rb.percentage = 100")
   List<ReadBox> findCompletedReadBoxByEmail(String userEmail);
   Optional<ReadBox> findByUserEmailAndArticleId(String userEmail, Long articleId);
+  List<ReadBox> findByUserEmail(String email);
 }
