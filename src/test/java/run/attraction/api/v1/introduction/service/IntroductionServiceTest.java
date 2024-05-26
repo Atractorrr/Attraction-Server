@@ -61,7 +61,6 @@ class IntroductionServiceTest {
         .contentSummary("Overview of tech trends in 2024")
         .isDeleted(false)
         .receivedAt(LocalDate.of(2024, 6, 7))
-        .createAt(LocalDate.now())
         .build();
 
     Article article2 = Article.builder()
@@ -75,7 +74,6 @@ class IntroductionServiceTest {
         .contentSummary("Tips for a healthier lifestyle")
         .isDeleted(false)
         .receivedAt(LocalDate.of(2024, 4, 1))
-        .createAt(LocalDate.now())
         .build();
 
     articles = Arrays.asList(article1, article2);
@@ -91,7 +89,6 @@ class IntroductionServiceTest {
         .contentSummary("Overview of tech trends in 2024")
         .isDeleted(false)
         .receivedAt(LocalDate.of(2024, 6, 7))
-        .createAt(LocalDate.now())
         .build();
 
     AdminArticle adminArticle2 = AdminArticle.builder()
@@ -105,7 +102,6 @@ class IntroductionServiceTest {
         .contentSummary("Tips for a healthier lifestyle")
         .isDeleted(false)
         .receivedAt(LocalDate.of(2024, 4, 1))
-        .createAt(LocalDate.now())
         .build();
 
     adminArticles = Arrays.asList(adminArticle1, adminArticle2);
