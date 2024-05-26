@@ -14,6 +14,9 @@ import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesRe
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
+import run.attraction.api.v1.mypage.service.dto.UserDetailDto;
+import run.attraction.api.v1.mypage.service.dto.UserDetailsResponseDto;
+
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -40,4 +43,5 @@ public class MypageController {
     final List<MypageArticle> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
     return ResponseEntity.ok(new RecentArticlesResponseDto(recentArticlesByEmail));
   }
+
 }
