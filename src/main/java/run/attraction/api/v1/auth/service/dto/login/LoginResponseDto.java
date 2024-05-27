@@ -4,9 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class LoginResponseDto {
+  private String email;
   private String accessToken;
 
-  public LoginResponseDto(String accessToken) {
+  public LoginResponseDto(String email, String accessToken) {
+    this.email = email;
     this.accessToken = accessToken;
   }
 }
