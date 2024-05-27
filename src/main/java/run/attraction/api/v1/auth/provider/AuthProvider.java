@@ -1,12 +1,15 @@
 package run.attraction.api.v1.auth.provider;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
 import run.attraction.api.v1.user.User;
 
 public class AuthProvider {
 
+  private static final Logger log = LoggerFactory.getLogger(AuthProvider.class);
   private final List<OAuthService> OAuthServices;
 
   public AuthProvider(List<OAuthService> OAuthServices) {
@@ -17,6 +20,7 @@ public class AuthProvider {
     OAuthService oAuthService = getOAuthService(provider);
     final OAuthToken token = oAuthService.getToken(code);
     final String responseBody = oAuthService.getResponseBody(token.getAccess_token());
+    //
     return oAuthService.getAuthUser(responseBody);
   }
 
