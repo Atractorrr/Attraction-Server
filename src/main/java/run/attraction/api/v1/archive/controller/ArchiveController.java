@@ -41,4 +41,11 @@ public class ArchiveController {
 
     return ApiResponse.from(HttpStatus.OK, "성공", null);
   }
+
+  @PutMapping("/{userEmail}/subscribe/{newsletterId}")
+  public ApiResponse<Void> addNewsletter(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long newsletterId) {
+    archiveService.addNewsletter(userEmail, newsletterId);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", null);
+  }
 }
