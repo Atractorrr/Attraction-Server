@@ -2,7 +2,6 @@ SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE TABLE article;
 TRUNCATE TABLE admin_article;
 TRUNCATE TABLE newsletter;
-TRUNCATE TABLE in_box;
 TRUNCATE TABLE read_box;
 TRUNCATE TABLE users;
 SET FOREIGN_KEY_CHECKS=1;
@@ -90,15 +89,6 @@ INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_ur
      (6, 'healthwellness@example.com', 'user5@example.com', 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01', 'content test5',"f", false, '2024-05-01'),
      (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g",false, '2024-05-01');
 
-
--- InBox 데이터 삽입
-INSERT INTO in_box (user_email, article_id) VALUES
-     ("test@gmail.com", 4),
-     ("test@gmail.com", 5),
-     ("test@gmail.com", 6),
-     ("test@gmail.com", 7),
-     ("test@gmail.com", 8),
-     ("test@gmail.com", 9);
 
 -- Readbox 데이터 삽입
 INSERT INTO read_box (user_email, article_id, percentage) VALUES
