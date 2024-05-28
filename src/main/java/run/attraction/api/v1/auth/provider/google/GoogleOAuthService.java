@@ -2,6 +2,7 @@ package run.attraction.api.v1.auth.provider.google;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +46,7 @@ public class GoogleOAuthService implements OAuthService {
         .body(requestBody)
         .retrieve()
         .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+          log.error("response = {}",new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
           throw new GoogleApiCodeException(response.getStatusCode(), response.getHeaders());
         })
         .toEntity(OAuthToken.class)
@@ -59,6 +61,7 @@ public class GoogleOAuthService implements OAuthService {
         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
         .retrieve()
         .onStatus(HttpStatusCode::is4xxClientError, (req, rep) -> {
+          log.error("response = {}",new String(rep.getBody().readAllBytes(), StandardCharsets.UTF_8));
           throw new GoogleApiAccessTokenException(rep.getStatusCode(), rep.getHeaders());
         })
         .body(String.class);
