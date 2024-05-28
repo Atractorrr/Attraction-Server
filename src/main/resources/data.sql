@@ -144,4 +144,10 @@ INSERT INTO read_box (user_email,update_at,article_id, percentage) VALUES
     ("user3@gmail.com","2024-04-20", 10, 100),
     ("user4@gmail.com","2024-04-20", 11, 100);
 
+INSERT INTO subscribe (id,user_email) VALUES
+    (1,"user3@gmail.com");
+
+UPDATE Newsletter SET subscribe_id = 1 WHERE id = 1;
+UPDATE Newsletter SET subscribe_id = 1 WHERE id = 2;
+UPDATE Newsletter SET subscribe_id = 1 WHERE id = 3;
 
