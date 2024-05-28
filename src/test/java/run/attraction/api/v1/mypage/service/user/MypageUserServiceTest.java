@@ -84,7 +84,7 @@ public class MypageUserServiceTest {
   }
 
   @Test
-  @DisplayName("프로필 배경이미지 변경 요청 API 테스트")
+  @DisplayName("마이페이지 개인설정 API 테스트")
   void updateUserDetails(){
     //Given
     String email = "test@gmail.com";
