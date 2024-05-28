@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesResponseDto;
+import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
+import run.attraction.api.v1.mypage.service.dto.archive.newsletter.SubscribeResponseDto;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateBackgroundImgRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateProfileImgRequestDto;
@@ -59,4 +61,9 @@ public class MypageController {
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping("/{email}/subscribe-list")
+  public final ResponseEntity<SubscribeResponseDto> getSubscribes(@PathVariable("email") String email) {
+    final List<MypageNewsletterDetail> subscribeByEmail = mypageService.getSubscribeByEmail(email);
+    return ResponseEntity.ok(new SubscribeResponseDto(subscribeByEmail));
+  }
 }
