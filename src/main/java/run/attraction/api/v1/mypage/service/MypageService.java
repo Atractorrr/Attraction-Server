@@ -37,4 +37,12 @@ public class MypageService {
   public List<MypageArticle> getRecentArticlesByEmail(String email){
     return articleService.getUserRecentArticles(email);
   }
+
+  public void updateProfileImgByEmail(String email, String profileImg){
+    mypageUserService.updateProfileImg(email, profileImg);
+  }
+
+  public void updateBackgroundImgByEmail(String email, String backgroundImg){
+    mypageUserService.updateBackgroundImg(email, backgroundImg);
+  }
 }

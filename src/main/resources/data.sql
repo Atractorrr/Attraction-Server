@@ -138,7 +138,7 @@ INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, con
     (10, 'healthinsights@example.com', 'user3@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
     (11, 'financedaily@example.com', 'user4@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01');
 
-INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
+INSERT INTO read_box (user_email,update_at,article_id, percentage) VALUES
     ("user3@gmail.com","2024-04-20", 8, 50),
     ("user3@gmail.com","2024-04-20", 9, 70),
     ("user3@gmail.com","2024-04-20", 10, 100),

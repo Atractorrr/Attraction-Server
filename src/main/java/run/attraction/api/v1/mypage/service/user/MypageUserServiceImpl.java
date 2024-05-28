@@ -1,6 +1,8 @@
 package run.attraction.api.v1.mypage.service.user;
 
+import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
@@ -25,5 +27,17 @@ public class MypageUserServiceImpl implements MypageUserService {
         user.getProfileImg(),
         user.getBackgroundImg(),
         user.getInterests());
+  }
+
+  @Transactional
+  public void updateProfileImg(String email, String profileImg) {
+    User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
+    user.updateProfileImg(profileImg);
+  }
+
+  @Transactional
+  public void updateBackgroundImg(String email, String backgroundImg) {
+    User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
+    user.updateBackgroundImg(backgroundImg);
   }
 }
