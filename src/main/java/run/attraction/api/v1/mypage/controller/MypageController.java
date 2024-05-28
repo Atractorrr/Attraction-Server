@@ -19,6 +19,8 @@ import run.attraction.api.v1.mypage.service.dto.archive.newsletter.SubscribeResp
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateBackgroundImgRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateProfileImgRequestDto;
+import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
+import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
 
@@ -65,5 +67,25 @@ public class MypageController {
   public final ResponseEntity<SubscribeResponseDto> getSubscribes(@PathVariable("email") String email) {
     final List<MypageNewsletterDetail> subscribeByEmail = mypageService.getSubscribeByEmail(email);
     return ResponseEntity.ok(new SubscribeResponseDto(subscribeByEmail));
+  }
+
+  @PatchMapping("/{email}")
+  public final ResponseEntity<?> updateUserDetails(@PathVariable("email") String email,
+                                                   @RequestBody(required = false) UpdateUserDetailRequestDto request)
+  {
+    log.info("123123123213123123");
+    UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
+    mypageService.updateUserDetails(updateUserDetailDto);
+    return ResponseEntity.ok().build();
+  }
+
+  private UpdateUserDetailDto getUpdateUserDetailDto(String email, UpdateUserDetailRequestDto request) {
+    return UpdateUserDetailDto.builder()
+        .email(email)
+        .nickName(request.nickName())
+        .userExpiration(request.userExpiration())
+        .interest(request.interest())
+        .occupation(request.occupation())
+        .build();
   }
 }
