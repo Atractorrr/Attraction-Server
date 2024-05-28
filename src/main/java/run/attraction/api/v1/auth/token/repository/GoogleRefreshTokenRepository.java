@@ -10,4 +10,5 @@ import run.attraction.api.v1.auth.token.GoogleRefreshToken;
 public interface GoogleRefreshTokenRepository extends JpaRepository<GoogleRefreshToken, String> {
   @Query("SELECT rt FROM GoogleRefreshToken rt WHERE rt.email = :userEmail AND rt.shouldReissueToken = true")
   Optional<GoogleRefreshToken> findTokenByEmail(String userEmail);
+  GoogleRefreshToken findByEmail(String userEmail);
 }

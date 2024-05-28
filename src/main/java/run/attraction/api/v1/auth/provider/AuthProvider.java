@@ -1,7 +1,6 @@
 package run.attraction.api.v1.auth.provider;
 
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
@@ -28,7 +27,9 @@ public class AuthProvider {
     final User authUser = oAuthService.getAuthUser(responseBody);
 
     String googleRefreshToken = token.getRefresh_token();
-    if (!(googleRefreshToken.isEmpty())) {
+    log.info("email = {}", authUser.getEmail());
+    log.info("googleRefreshToken = {}", googleRefreshToken);
+    if (!(googleRefreshToken==null)) {
       saveGoogleRefreshToken(googleRefreshToken, authUser.getEmail());
     }
     return authUser;
