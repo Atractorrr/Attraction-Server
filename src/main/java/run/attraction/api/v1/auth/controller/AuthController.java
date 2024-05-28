@@ -37,13 +37,11 @@ public class AuthController {
   public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
                                  HttpServletResponse response) {
     final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
-
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
-
     if (userTokenDto.isUserBefore()) {
-      return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken()));
+      return ResponseEntity.status(HttpStatus.CREATED).body(
+          new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken(), userTokenDto.getShouldReissueToken()));
     }
-
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .email(userTokenDto.getEmail())
         .hasExtraDetails(false)

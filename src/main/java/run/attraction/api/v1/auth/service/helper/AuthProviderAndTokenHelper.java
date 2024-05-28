@@ -7,11 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
+import run.attraction.api.v1.auth.token.GoogleRefreshToken;
 import run.attraction.api.v1.auth.token.LogoutAccessToken;
 import run.attraction.api.v1.auth.token.RefreshToken;
 import run.attraction.api.v1.auth.token.exception.InvalidTokenException;
 import run.attraction.api.v1.auth.token.exception.TokenNotFoundException;
 import run.attraction.api.v1.auth.token.jwt.JwtService;
+import run.attraction.api.v1.auth.token.repository.GoogleRefreshTokenRepository;
 import run.attraction.api.v1.auth.token.repository.LogoutAccessTokenRepository;
 import run.attraction.api.v1.auth.token.repository.RefreshTokenRepository;
 import run.attraction.api.v1.user.User;
@@ -25,6 +27,7 @@ public class AuthProviderAndTokenHelper {
   private final RefreshTokenRepository refreshTokenRepository;
   private final LogoutAccessTokenRepository logoutAccessTokenRepository;
   private final UserRepository userRepository;
+  private final GoogleRefreshTokenRepository googleRefreshTokenRepository;
   private final UserServiceImpl userService;
 
   @Transactional
@@ -46,12 +49,22 @@ public class AuthProviderAndTokenHelper {
     final String refreshToken = jwtService.generateRefreshToken(preparedJoinUser, new Date(System.nanoTime()));
 
     renewRefreshToken(preparedJoinUser, refreshToken);
-    return UserTokenDto.builder()
+    UserTokenDto userTokenDto = UserTokenDto.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
         .email(preparedJoinUser.getEmail())
         .isUserBefore(isUserBefore)
         .build();
+
+    if (isUserBefore) {
+      userTokenDto.setShouldReissueToken(getShouldReissueToken(preparedJoinUser));
+    }
+    return userTokenDto;
+  }
+
+  private boolean getShouldReissueToken(User user) {
+    final GoogleRefreshToken googleRefreshToken = googleRefreshTokenRepository.findByEmail(user.getEmail());
+    return googleRefreshToken.getShouldReissueToken();
   }
 
   private void renewRefreshToken(User user, String refreshToken) {

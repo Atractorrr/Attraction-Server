@@ -31,6 +31,10 @@ public class GoogleRefreshToken {
     this.token = token;
   }
 
+  public boolean getShouldReissueToken() {
+    return this.shouldReissueToken;
+  }
+
   public void updateState(boolean shouldReissueToken){
     this.shouldReissueToken=shouldReissueToken;
   }
