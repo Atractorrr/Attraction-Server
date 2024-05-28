@@ -1,6 +1,7 @@
 package run.attraction.api.v1.mypage.service.user;
 
 import jakarta.transaction.Transactional;
+import java.time.Period;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import run.attraction.api.v1.user.repository.UserRepository;
 public class MypageUserServiceImpl implements MypageUserService {
   private final UserRepository userRepository;
 
+  private static final int EXPIRATION_FOREVER = 120;
   public UserDetailDto getUserDetails(String email) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
     final UserDetailDto userDetailDto = getUserDetailDto(user);
@@ -28,7 +30,15 @@ public class MypageUserServiceImpl implements MypageUserService {
         user.getNickName(),
         user.getProfileImg(),
         user.getBackgroundImg(),
-        user.getInterests());
+        user.getInterests(),
+        user.getOccupation().name(),
+        calculateExpiration(user));
+  }
+
+  private static int calculateExpiration(User user){
+    final Period between = Period.between(user.getUpdateAt(), user.getUserExpiration());
+    int betweenMonths = between.getYears() * 12 + between.getMonths();
+    return betweenMonths == EXPIRATION_FOREVER ? 0 : betweenMonths;
   }
 
   @Transactional

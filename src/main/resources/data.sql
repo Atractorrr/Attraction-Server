@@ -101,9 +101,9 @@ INSERT INTO read_box (user_email, article_id, percentage) VALUES
 
 -- User 데이터 삽입
 INSERT  INTO users (email,profile_img,background_img,created_at,update_at,role,nick_Name,birth_date,user_expiration,occupation) VALUES
-    ("user1@gmail.com","profileImgUrl1","backgroundImgUrl1","2024-03-10","2024-05-10","USER","KIM","1998-02-19","2025-11-10","OFFICE"),
-    ("user2@gmail.com","profileImgUrl2","backgroundImgUrl2","2024-04-17","2024-04-29","USER","RYU","1999-05-22","2024-10-17","SELLING"),
-    ("user3@gmail.com","profileImgUrl3","backgroundImgUrl3","2024-05-01","2024-05-02","USER","KANG","1996-11-18","2025-05-01","SERVICE");
+    ("user1@gmail.com","profileImgUrl1","backgroundImgUrl1","2024-03-10","2024-05-10","USER","KIM","1998-02-19","2025-05-10","OFFICE"),
+    ("user2@gmail.com","profileImgUrl2","backgroundImgUrl2","2024-04-17","2024-04-29","USER","RYU","1999-05-22","2024-10-29","SELLING"),
+    ("user3@gmail.com","profileImgUrl3","backgroundImgUrl3","2024-05-01","2024-05-02","USER","KANG","1996-11-18","2034-05-02","SERVICE");
 
 -- Interest 데이터 삽입
 INSERT INTO interests (email, interests) VALUES
