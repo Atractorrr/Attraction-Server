@@ -9,12 +9,16 @@ public record UserDetailDto(
   String name,
   String profileImg,
   String backgroundImg,
-  Set<Interest> categories
+  Set<Interest> categories,
+  String occupation,
+  int userExpiration
 ){
   public UserDetailDto {
     Objects.requireNonNull(email);
     Objects.requireNonNull(name);
     Objects.requireNonNull(profileImg);
+    Objects.requireNonNull(backgroundImg);
     Objects.requireNonNull(categories);
+    Objects.requireNonNull(occupation);
   }
 }
