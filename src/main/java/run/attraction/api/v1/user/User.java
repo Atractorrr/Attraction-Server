@@ -46,8 +46,7 @@ public class User implements UserDetails {
   @Column(name = "update_at")
   private LocalDate updateAt;
 
-  @Column(name = "is_deleted")
-  @ColumnDefault("false")
+  @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
   private boolean isDeleted;
 
   @Enumerated(EnumType.STRING)
@@ -82,7 +81,6 @@ public class User implements UserDetails {
       String backgroundImg,
       LocalDate createdAt,
       LocalDate updateAt,
-      boolean isDeleted,
       Role role
   ) {
     this.email = email;
@@ -90,7 +88,6 @@ public class User implements UserDetails {
     this.backgroundImg = backgroundImg;
     this.createdAt = createdAt;
     this.updateAt = updateAt;
-    this.isDeleted = isDeleted;
     this.role = role;
   }
 

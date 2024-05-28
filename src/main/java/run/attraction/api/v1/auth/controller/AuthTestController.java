@@ -30,11 +30,23 @@ public class AuthTestController {
   @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
   private String googleRedirectUrl;
 
+  private static final String MAIL_GOOGLE_COM = "https://mail.google.com/";
+  private static final String GMAIL_READONLY = "https://www.googleapis.com/auth/gmail.readonly";
+  private static final String GMAIL_LABELS = "https://www.googleapis.com/auth/gmail.labels";
+  private static final String GMAIL_SETTINGS_BASIC = "https://www.googleapis.com/auth/gmail.settings.basic";
+
   @PostMapping("/api/v1/auth")
   public String loginUrlGoogle() {
     String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
         + "&redirect_uri=" + googleRedirectUrl
-        + "&response_type=code&scope=email%20profile%20openid&access_type=offline";
+        + "&response_type=code&scope=email profile openid "
+        + MAIL_GOOGLE_COM + " "
+        + GMAIL_READONLY + " "
+        + GMAIL_LABELS + " "
+        + GMAIL_SETTINGS_BASIC + " "
+        + "https://www.googleapis.com/auth/userinfo.email" + " "
+        + "https://www.googleapis.com/auth/userinfo.profile" + " "
+        +"&access_type=offline";
     return reqUrl;
   }
 
