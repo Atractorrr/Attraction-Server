@@ -15,7 +15,6 @@ import run.attraction.api.v1.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class MypageUserServiceImpl implements MypageUserService {
   private final UserRepository userRepository;
-//  private final UserValidator userValidator;
 
   public UserDetailDto getUserDetails(String email) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
@@ -52,5 +51,10 @@ public class MypageUserServiceImpl implements MypageUserService {
     updateUserDetailDto.getUserExpiration().ifPresent(user::updateExpiration);
     updateUserDetailDto.getInterest().ifPresent(user::updateInterest);
     updateUserDetailDto.getOccupation().ifPresent(user::updateOccupation);
+  }
+
+  @Transactional
+  public boolean checkNickNameDuplication(String nickName) {
+    return userRepository.existsByNickName(nickName);
   }
 }

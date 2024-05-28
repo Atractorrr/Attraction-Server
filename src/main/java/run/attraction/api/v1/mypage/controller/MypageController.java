@@ -1,5 +1,6 @@
 package run.attraction.api.v1.mypage.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,7 @@ import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
+import org.springframework.http.HttpStatus;
 
 
 @RestController
@@ -73,7 +76,6 @@ public class MypageController {
   public final ResponseEntity<?> updateUserDetails(@PathVariable("email") String email,
                                                    @RequestBody(required = false) UpdateUserDetailRequestDto request)
   {
-    log.info("123123123213123123");
     UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
     mypageService.updateUserDetails(updateUserDetailDto);
     return ResponseEntity.ok().build();
@@ -87,5 +89,13 @@ public class MypageController {
         .interest(request.interest())
         .occupation(request.occupation())
         .build();
+  }
+
+  @PostMapping("/username-duplicate")
+  public final ResponseEntity<?> checkNickNameDuplication(@Valid @RequestParam String nickname) {
+    if (mypageService.checkNickNameDuplication(nickname)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임 입니다.");
+    }
+    return ResponseEntity.ok().build();
   }
 }

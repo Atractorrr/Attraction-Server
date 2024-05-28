@@ -57,4 +57,8 @@ public class MypageService {
     userService.updateUserDetail(updateUserDetailDto);
   }
 
+  public boolean checkNickNameDuplication(String nickName) {
+    return userService.checkNickNameDuplication(nickName);
+  }
+
 }
