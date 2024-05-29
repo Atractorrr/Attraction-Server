@@ -50,3 +50,7 @@ app_*.log.gz
 # .yml .properties
 *.yml
 *.properties
+!gradle/wrapper/gradle-wrapper.properties
+
+# .github 디렉토리 내의 .yml 파일 예외 처리
+!.github/**/*.yml
