@@ -12,10 +12,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,8 +48,7 @@ public class User implements UserDetails {
   @Column(name = "update_at")
   private LocalDate updateAt;
 
-  @Column(name = "is_deleted")
-  @ColumnDefault("false")
+  @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
   private boolean isDeleted;
 
   @Enumerated(EnumType.STRING)
@@ -82,7 +83,6 @@ public class User implements UserDetails {
       String backgroundImg,
       LocalDate createdAt,
       LocalDate updateAt,
-      boolean isDeleted,
       Role role
   ) {
     this.email = email;
@@ -90,7 +90,6 @@ public class User implements UserDetails {
     this.backgroundImg = backgroundImg;
     this.createdAt = createdAt;
     this.updateAt = updateAt;
-    this.isDeleted = isDeleted;
     this.role = role;
   }
 
@@ -110,6 +109,32 @@ public class User implements UserDetails {
   public void renewUpdateAtAndExpirationAt(LocalDate updateAt,LocalDate userExpiration){
     this.updateAt = updateAt;
     this.userExpiration = userExpiration;
+  }
+
+  public void updateProfileImg(String profileImg){
+    this.profileImg = profileImg;
+  }
+
+  public void updateBackgroundImg(String backgroundImg){
+    this.backgroundImg = backgroundImg;
+  }
+
+  public void updateNickName(String nickName){
+    this.nickName = nickName;
+  }
+
+  public void updateExpiration(Integer month){
+    this.userExpiration = updateAt.plus(Period.ofMonths(month));
+  }
+
+  public void updateInterest(List<String> interests){
+    this.interests = interests.stream()
+        .map(Interest::valueOf)
+        .collect(Collectors.toSet());
+  }
+
+  public void updateOccupation(String occupation){
+    this.occupation = Occupation.valueOf(occupation);
   }
 
   private static List<Interest> getInterestFromString(List<String> interests) {

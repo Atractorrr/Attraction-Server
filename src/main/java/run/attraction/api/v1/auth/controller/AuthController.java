@@ -37,13 +37,11 @@ public class AuthController {
   public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
                                  HttpServletResponse response) {
     final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
-
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
-
     if (userTokenDto.isUserBefore()) {
-      return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponseDto(userTokenDto.getAccessToken()));
+      return ResponseEntity.status(HttpStatus.CREATED).body(
+          new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken(), userTokenDto.getShouldReissueToken()));
     }
-
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .email(userTokenDto.getEmail())
         .hasExtraDetails(false)
@@ -51,7 +49,7 @@ public class AuthController {
         .build());
   }
 
-  @GetMapping("/join/username-duplicate")
+  @PostMapping("/join/username-duplicate")
   public ResponseEntity<?> checkNicknameDuplication(@Valid @RequestParam String nickname) {
     if(authService.checkNicknameDuplication(nickname)){
       return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임 입니다.");
