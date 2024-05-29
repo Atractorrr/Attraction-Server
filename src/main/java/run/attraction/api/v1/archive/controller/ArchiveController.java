@@ -48,5 +48,4 @@ public class ArchiveController {
 
     return ApiResponse.from(HttpStatus.OK, "성공", null);
   }
-
 }
