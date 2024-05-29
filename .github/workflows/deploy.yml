@@ -32,17 +32,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: ECR에 로그인하기
-        id: login-ecr
+        id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          region: ap-northeast-2
 
       - name: Docker 이미지 생성
         run: docker build -t attraction-api-server .
 
       - name: Docker 이미지에 Tag 붙이기
-        run: docker tag attraction-api-server ${{ steps.login-ecr.outputs.registry }}/attraction-api-server:latest
+        run: docker tag attraction-api-server ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
 
       - name: ECR에 Docker 이미지 Push
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/attraction-api-server:latest
+        run: docker push ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
 
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
@@ -54,6 +56,6 @@ jobs:
           script: |
             docker stop attraction-api-server || true  
             docker rm attraction-api-server || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/attraction-api-server:latest
-            docker run -d --name attraction-api-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/attraction-api-server:latest
+            docker pull ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
+            docker run -d --name attraction-api-server -p 8080:8080 ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
             
