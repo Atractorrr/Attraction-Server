@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 public record NewslettersResponseDto(
-    List<NewsletterDetailDto> mainPageNewsLetters
+    List<NewsletterDetailDto> mainPageNewsletters
 ) {
   public NewslettersResponseDto {
-    Objects.requireNonNull(mainPageNewsLetters);
+    Objects.requireNonNull(mainPageNewsletters);
   }
 }
