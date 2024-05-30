@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.ReadBox;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
@@ -17,8 +19,10 @@ import run.attraction.api.v1.mypage.service.dto.archive.article.UserArticleDetai
 import run.attraction.api.v1.mypage.service.dto.archive.article.UserArticleImg;
 import run.attraction.api.v1.mypage.service.dto.archive.article.UserReadBoxDetail;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MypageArticleServiceImpl implements MypageArticleService {
 
   private final ArticleRepository articleRepository;
@@ -27,7 +31,9 @@ public class MypageArticleServiceImpl implements MypageArticleService {
 
   public List<MypageArticle> getUserRecentArticles(String email) {
     final List<UserReadBoxDetail> userReadBoxDetails = getReadBoxDetailsByEmail(email);
-    return getMypageArticles(email, userReadBoxDetails);
+    LocalDate endDate = LocalDate.now();
+    LocalDate startDate = LocalDate.now().minusDays(6);
+    return getMypageArticles(email, userReadBoxDetails,startDate, endDate);
   }
 
   private List<UserReadBoxDetail> getReadBoxDetailsByEmail(String email) {
@@ -40,11 +46,17 @@ public class MypageArticleServiceImpl implements MypageArticleService {
         .toList();
   }
 
-  private List<MypageArticle> getMypageArticles(String email, List<UserReadBoxDetail> userReadBoxDetails) {
+  private List<MypageArticle> getMypageArticles(String email,
+                                                List<UserReadBoxDetail> userReadBoxDetails,
+                                                LocalDate startDate,
+                                                LocalDate endDate)
+  {
     final List<Long> articleIds = extractArticleIds(userReadBoxDetails);
     final Map<Long, LocalDate> readDates = extractReadDates(userReadBoxDetails);
     final Map<Long, Integer> percentages = extractPercentage(userReadBoxDetails);
-    final List<Article> articles = articleRepository.findArticleByIdAndUserEmail(articleIds, email);
+    log.info("articleIds = {}",articleIds.toString());
+    final List<Article> articles = articleRepository.findArticleByIdAndUserEmail(articleIds, email, startDate, endDate);
+    log.info("articles = {}",articles.toString());
     final Map<String, Newsletter> newsletters = extractNewsletterProfiles(articles);
 
     return articles.stream()
@@ -112,6 +124,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
         article.getTitle(),
         newsletter.getName(),
         readDates.get(article.getId()),
+        article.getReceivedAt(),
         article.getReadingTime(),
         percentages.get(article.getId())
     );

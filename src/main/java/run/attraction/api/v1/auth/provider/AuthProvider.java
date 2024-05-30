@@ -36,7 +36,7 @@ public class AuthProvider {
   }
 
   private void saveGoogleRefreshToken(String refreshToken, String email) {
-    googleRefreshTokenRepository.findTokenByEmail(email)
+    googleRefreshTokenRepository.findInvalidTokenByEmail(email)
         .ifPresentOrElse(
             token -> updateGoogleRefreshToken(token, refreshToken),
             () -> saveNewGoogleRefreshToken(refreshToken, email)

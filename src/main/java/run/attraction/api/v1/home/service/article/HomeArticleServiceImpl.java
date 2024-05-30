@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
-import run.attraction.api.v1.introduction.repository.NewsletterRepository;
-import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor

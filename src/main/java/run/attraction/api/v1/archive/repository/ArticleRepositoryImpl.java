@@ -61,7 +61,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         .select(new QArticleDTO(this.article, readBox.percentage, newsletter))
         .from(this.article)
         .join(readBox).on(this.article.id.eq(readBox.articleId))
-        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.newsletterEmail))
+        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
         .where(predicate)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());

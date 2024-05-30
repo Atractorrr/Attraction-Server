@@ -6,11 +6,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.ReadBox;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MypageCalendarServiceImpl implements MypageCalendarService {
   private final ReadBoxRepository readBoxRepository;
 

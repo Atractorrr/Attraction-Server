@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.archive.article.MypageArticleService;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterService;
 import run.attraction.api.v1.mypage.service.calendar.MypageCalendarService;
@@ -40,6 +41,7 @@ public class MypageService {
   public List<MypageArticle> getRecentArticlesByEmail(String email){
     return articleService.getUserRecentArticles(email);
   }
+
 
   public void updateProfileImgByEmail(String email, String profileImg){
     userService.updateProfileImg(email, profileImg);

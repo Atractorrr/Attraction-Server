@@ -8,28 +8,23 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import run.attraction.api.v1.archive.AuditableEntity;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@ToString
-public class Newsletter {
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Newsletter extends AuditableEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false, length = 100)
-  private String newsletterEmail;
+  private String email;
 
   @Column(nullable = false, length = 30)
   private String name;
@@ -55,12 +50,34 @@ public class Newsletter {
   @Column(nullable = false)
   private String thumbnailUrl;
 
-  @Column(nullable = false)
+
+  private String nickname;
+
+  @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
   private boolean isDeleted;
 
-  @Column(nullable = false)
-  private LocalDate createdAt;
-
-  @Column(nullable = false)
-  private LocalDate updateAt;
+  @Builder
+  private Newsletter(
+      Long id,
+      String email,
+      String name,
+      String description,
+      Category category,
+      String mainLink,
+      String subscribeLink,
+      String thumbnailUrl,
+      UploadDays uploadDays,
+      String nickname
+  ) {
+    this.id = id;
+    this.email = email;
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.mainLink = mainLink;
+    this.subscribeLink = subscribeLink;
+    this.thumbnailUrl = thumbnailUrl;
+    this.uploadDays = List.of(uploadDays);
+    this.nickname = nickname;
+  }
 }

@@ -36,7 +36,7 @@ public class IntroductionService {
   public List<PreviousArticleResponse> getPreviousArticles(Long newsletterId, int size) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
-    List<AdminArticle> previousArticles = adminArticleRepository.findByNewsletterEmail(newsletter.getNewsletterEmail())
+    List<AdminArticle> previousArticles = adminArticleRepository.findByNewsletterEmail(newsletter.getEmail())
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
 
     return previousArticles.stream()

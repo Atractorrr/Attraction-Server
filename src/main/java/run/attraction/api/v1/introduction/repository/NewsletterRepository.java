@@ -16,7 +16,7 @@ public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
   List<Newsletter> findByCategoryAndIdNotWithOffset(@Param("id") Long id, @Param("category") String category,
                                                     @Param("size") int size, @Param("offset") int offset);
 
-  @Query("SELECT n.newsletterEmail, n FROM Newsletter n WHERE n.newsletterEmail IN :newsletterEmails")
+  @Query("SELECT n.email, n FROM Newsletter n WHERE n.email IN :newsletterEmails")
   List<Object[]> findNewslettersByNewsletterEmails(List<String> newsletterEmails);
 
   @Query("SELECT n.id, n FROM Newsletter n WHERE n.category = :category")
