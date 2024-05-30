@@ -30,6 +30,7 @@ public class Subscribe {
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "subscribe_id")
+  @Builder.Default
   private List<Newsletter> newsletters = new ArrayList<>();
 
   @Column(nullable = false)

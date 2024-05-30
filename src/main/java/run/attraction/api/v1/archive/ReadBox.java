@@ -35,6 +35,7 @@ public class ReadBox extends AuditableEntity {
   private String userEmail;
 
   @Column(nullable = false)
+  @Builder.Default
   private int percentage = 0;
 
   private LocalDate readDate;

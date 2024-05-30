@@ -50,5 +50,6 @@ public class AdminArticle extends AuditableEntity {
     private String newsletterNickname;
 
     @Column(nullable = false)
+    @Builder.Default
     boolean isDeleted = false;
 }
