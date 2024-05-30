@@ -163,13 +163,4 @@ UPDATE newsletter SET subscribe_id = 3 WHERE id = 5;
 UPDATE newsletter SET subscribe_id = 3 WHERE id = 6;
 
 
-INSERT INTO newsletter (id, email, name, description, category, main_link, subscribe_link, thumbnail_url, is_deleted) VALUES
-    (31, 'techweekly@example.com', 'Tech Weekly', 'Weekly newsletter about the latest in tech.', 'IT_TECH', 'http://techweekly.com', 'http://techweekly.com/subscribe', 'http://techweekly.com/thumbnail.jpg', false),
-    (32, 'healthinsights@example.com', 'Health Insights', 'Daily health tips and news.', 'IT_TECH', 'http://healthinsights.com', 'http://healthinsights.com/subscribe', 'http://healthinsights.com/thumbnail.jpg', false),
-    (33, 'financedaily@example.com', 'Finance Daily', 'Daily updates on the stock market.', 'IT_TECH', 'http://financedaily.com', 'http://financedaily.com/subscribe', 'http://financedaily.com/thumbnail.jpg', false),
-    (34, 'gadgetworld@example.com', 'Gadget World', 'Latest news on gadgets and electronics.', 'IT_TECH', 'http://gadgetworld.com', 'http://gadgetworld.com/subscribe', 'http://gadgetworld.com/thumbnail.jpg', false),
-    (35, 'healthwellness@example.com', 'Health and Wellness', 'Health and wellness tips.', 'IT_TECH', 'http://healthwellness.com', 'http://healthwellness.com/subscribe', 'http://healthwellness.com/thumbnail.jpg', false),
-    (36, 'investmentweekly@example.com', 'Investment Weekly', 'Weekly investment tips and news.', 'IT_TECH', 'http://investmentweekly.com', 'http://investmentweekly.com/subscribe', 'http://investmentweekly.com/thumbnail.jpg', false),
-    (37, 'techinnovations@example.com', 'Tech Innovations', 'Innovations and breakthroughs in tech.', 'IT_TECH', 'http://techinnovations.com', 'http://techinnovations.com/subscribe', 'http://techinnovations.com/thumbnail.jpg', false);
-
 

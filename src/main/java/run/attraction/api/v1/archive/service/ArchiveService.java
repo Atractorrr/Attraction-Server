@@ -63,7 +63,7 @@ public class ArchiveService {
 
     subscribe.saveNewsletter(newsletter);
     subscribeRepository.save(subscribe);
-    return new NewsletterEmail(newsletter.getNewsletterEmail());
+    return new NewsletterEmail(newsletter.getEmail());
   }
 
   private Subscribe createSubscribe(String userEmail) {
