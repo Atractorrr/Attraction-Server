@@ -133,10 +133,10 @@ INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
 -- 마이페이지 최근 읽은 아티클 조회 Test용
 
 INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, create_at) VALUES
-    (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1', "a",  false, '2024-05-01'),
-    (9, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1' , "b", false, '2024-05-02'),
-    (10, 'healthinsights@example.com', 'user3@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
-    (11, 'financedaily@example.com', 'user4@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01');
+    (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01'),
+    (9, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-05-28', 'content test1' , "b", false, '2024-05-02'),
+    (10, 'healthinsights@example.com', 'user3@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-28', 'content test2', "c", false, '2024-05-01'),
+    (11, 'financedaily@example.com', 'user4@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-28', 'content test3', "d" , false, '2024-05-01');
 
 INSERT INTO read_box (user_email,update_at,article_id, percentage) VALUES
     ("user3@gmail.com","2024-04-20", 8, 50),
@@ -145,9 +145,31 @@ INSERT INTO read_box (user_email,update_at,article_id, percentage) VALUES
     ("user4@gmail.com","2024-04-20", 11, 100);
 
 INSERT INTO subscribe (id,user_email) VALUES
-    (1,"user3@gmail.com");
+    (1,"user1@gmail.com"),
+    (2,"user2@gmail.com"),
+    (3,"user3@gmail.com");
 
 UPDATE Newsletter SET subscribe_id = 1 WHERE id = 1;
 UPDATE Newsletter SET subscribe_id = 1 WHERE id = 2;
-UPDATE Newsletter SET subscribe_id = 1 WHERE id = 3;
+UPDATE Newsletter SET subscribe_id = 2 WHERE id = 1;
+UPDATE Newsletter SET subscribe_id = 2 WHERE id = 2;
+UPDATE Newsletter SET subscribe_id = 2 WHERE id = 3;
+UPDATE Newsletter SET subscribe_id = 2 WHERE id = 4;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 1;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 2;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 3;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 4;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 5;
+UPDATE Newsletter SET subscribe_id = 3 WHERE id = 6;
+
+
+INSERT INTO newsletter (id, newsletter_email, name, description, category, main_link, subscribe_link, thumbnail_url, is_deleted, created_at, update_at) VALUES
+    (31, 'techweekly@example.com', 'Tech Weekly', 'Weekly newsletter about the latest in tech.', 'IT_TECH', 'http://techweekly.com', 'http://techweekly.com/subscribe', 'http://techweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (32, 'healthinsights@example.com', 'Health Insights', 'Daily health tips and news.', 'IT_TECH', 'http://healthinsights.com', 'http://healthinsights.com/subscribe', 'http://healthinsights.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (33, 'financedaily@example.com', 'Finance Daily', 'Daily updates on the stock market.', 'IT_TECH', 'http://financedaily.com', 'http://financedaily.com/subscribe', 'http://financedaily.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (34, 'gadgetworld@example.com', 'Gadget World', 'Latest news on gadgets and electronics.', 'IT_TECH', 'http://gadgetworld.com', 'http://gadgetworld.com/subscribe', 'http://gadgetworld.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (35, 'healthwellness@example.com', 'Health and Wellness', 'Health and wellness tips.', 'IT_TECH', 'http://healthwellness.com', 'http://healthwellness.com/subscribe', 'http://healthwellness.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (36, 'investmentweekly@example.com', 'Investment Weekly', 'Weekly investment tips and news.', 'IT_TECH', 'http://investmentweekly.com', 'http://investmentweekly.com/subscribe', 'http://investmentweekly.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22'),
+    (37, 'techinnovations@example.com', 'Tech Innovations', 'Innovations and breakthroughs in tech.', 'IT_TECH', 'http://techinnovations.com', 'http://techinnovations.com/subscribe', 'http://techinnovations.com/thumbnail.jpg', false, '2024-05-22', '2024-05-22');
+
 

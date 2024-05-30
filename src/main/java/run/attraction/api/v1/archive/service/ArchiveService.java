@@ -19,7 +19,6 @@ import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 
-
 @Service
 @RequiredArgsConstructor
 public class ArchiveService {
