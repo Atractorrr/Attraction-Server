@@ -21,14 +21,19 @@ public class AuthProvider {
   }
 
   public User getUserProfileByCode(String provider, final String code) {
+    log.info("getUserProfileByCode");
     OAuthService oAuthService = getOAuthService(provider);
+    log.info("getToken");
     final OAuthToken token = oAuthService.getToken(code);
+    log.info("googleRefreshToken = {}", token.getRefresh_token());
+    log.info("googleAccessToken = {}", token.getAccess_token());
+    log.info("getResponseBody");
     final String responseBody = oAuthService.getResponseBody(token.getAccess_token());
+    log.info("getAuthUser");
     final User authUser = oAuthService.getAuthUser(responseBody);
 
     String googleRefreshToken = token.getRefresh_token();
     log.info("email = {}", authUser.getEmail());
-    log.info("googleRefreshToken = {}", googleRefreshToken);
     if (!(googleRefreshToken==null)) {
       saveGoogleRefreshToken(googleRefreshToken, authUser.getEmail());
     }

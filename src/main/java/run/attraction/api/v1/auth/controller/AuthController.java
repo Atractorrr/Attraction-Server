@@ -3,6 +3,8 @@ package run.attraction.api.v1.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,10 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
                                  HttpServletResponse response) {
-    final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
+    log.info("code={}", loginRequestDto.getCode());
+//    String code = new String(Base64.getEncoder().encode(
+//        loginRequestDto.getCode().getBytes(StandardCharsets.UTF_8)));
+    final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(),loginRequestDto.getCode());
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
     if (userTokenDto.isUserBefore()) {
       return ResponseEntity.status(HttpStatus.CREATED).body(
