@@ -9,8 +9,14 @@ import run.attraction.api.v1.archive.ReadBox;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
 
 public interface ArticleRepository extends JpaRepository<Article, Long>, ArticleRepositoryCustom {
-  @Query("SELECT a FROM Article a WHERE a.userEmail = :userEmail AND a.id IN :articleIds")
-  List<Article> findArticleByIdAndUserEmail(List<Long> articleIds, String userEmail);
+  @Query("""
+      SELECT a 
+      FROM Article a 
+      WHERE a.userEmail = :userEmail 
+      AND a.id IN :articleIds 
+      AND a.receivedAt BETWEEN :startDate AND :endDate
+    """)
+  List<Article> findArticleByIdAndUserEmail(List<Long> articleIds, String userEmail, LocalDate startDate, LocalDate endDate);
 
   @Query("""
       SELECT new run.attraction.api.v1.home.service.dto.article.ArticleDetailDto(

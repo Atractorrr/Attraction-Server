@@ -7,6 +7,7 @@ public record UserArticleDetail(
     String title,
     String name,
     LocalDate date,
+    LocalDate receivedAt,
     int readingTime,
     int readPercentage
 ) {
@@ -14,5 +15,6 @@ public record UserArticleDetail(
     Objects.requireNonNull(title);
     Objects.requireNonNull(name);
     Objects.requireNonNull(date);
+    Objects.requireNonNull(receivedAt);
   }
 }
