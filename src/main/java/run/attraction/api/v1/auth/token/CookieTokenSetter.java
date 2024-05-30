@@ -24,8 +24,8 @@ public class CookieTokenSetter {
     cookie.setMaxAge((int) expireTime);
     cookie.setMaxAge(EXPIRE_TIME);
     // Test용
-//    cookie.setSecure(true);
-//    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
     cookie.setPath("/");
     response.addCookie(cookie);
   }

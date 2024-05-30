@@ -37,10 +37,13 @@ public class AuthProviderAndTokenHelper {
     log.info("getTokenAndRegisterUserByAuthUser");
     final Optional<User> findUser = userRepository.findById(authUser.getEmail());
     if (findUser.isPresent()) {
+      log.info("findUser.isPresent() 진입");
       User user = findUser.get();
       if (user.getUpdateAt().isBefore(LocalDate.now())){
+        log.info("user.getUpdateAt().isBefore(LocalDate.now() 진입");
         userService.updateUserExpiration(user,LocalDate.now());
       }
+      log.info("getToken 시작");
       return getToken(user, true);
     }
     log.info("유저 저장");
@@ -49,6 +52,7 @@ public class AuthProviderAndTokenHelper {
   }
 
   public UserTokenDto getToken(User preparedJoinUser, boolean isUserBefore) {
+    log.info("getToken 시작");
     final String accessToken = jwtService.generateAccessToken(preparedJoinUser, new Date(System.nanoTime()));
     final String refreshToken = jwtService.generateRefreshToken(preparedJoinUser, new Date(System.nanoTime()));
 
@@ -72,6 +76,7 @@ public class AuthProviderAndTokenHelper {
   }
 
   private void renewRefreshToken(User user, String refreshToken) {
+    log.info("log.info() 시작");
     RefreshToken token = refreshTokenRepository.findTokenByUser(user)
         .orElse(createRefreshToken(user, refreshToken));
 
