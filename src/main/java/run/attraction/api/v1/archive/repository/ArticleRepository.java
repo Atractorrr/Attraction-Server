@@ -23,7 +23,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
           a.id, n.thumbnailUrl, n.name, a.thumbnailUrl, a.title, a.receivedAt, a.readingTime, COALESCE(MAX(r.percentage), 0)
       )
       FROM Article a
-      JOIN Newsletter n ON a.newsletterEmail = n.newsletterEmail
+      JOIN Newsletter n ON a.newsletterEmail = n.email
       LEFT JOIN ReadBox r ON a.id = r.articleId
       WHERE a.userEmail = :email
         AND a.receivedAt BETWEEN :startDate AND :endDate
