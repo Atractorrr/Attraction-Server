@@ -1,9 +1,7 @@
 package run.attraction.api.v1.auth.service.dto;
 
-import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class UserTokenDto {
@@ -11,7 +9,6 @@ public class UserTokenDto {
   private String refreshToken;
   private String email;
   private boolean isUserBefore;
-  @Setter
   private boolean shouldReissueToken;
 
   @Builder
@@ -25,6 +22,7 @@ public class UserTokenDto {
   public boolean getShouldReissueToken() {
     return shouldReissueToken;
   }
+
   public void setShouldReissueToken(boolean shouldReissueToken) {
     this.shouldReissueToken = shouldReissueToken;
   }
