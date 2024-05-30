@@ -1,19 +1,18 @@
 package run.attraction.api.v1.mypage.service.user;
 
-import jakarta.transaction.Transactional;
 import java.time.Period;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.user.User;
-import run.attraction.api.v1.user.UserValidator;
 import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MypageUserServiceImpl implements MypageUserService {
   private final UserRepository userRepository;
 
