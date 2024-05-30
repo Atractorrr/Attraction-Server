@@ -57,5 +57,12 @@ jobs:
             docker stop attraction-api-server || true  
             docker rm attraction-api-server || true
             docker pull ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
-            docker run -d --name attraction-api-server -p 8080:8080 ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
+            
+            # Redis 컨테이너 실행
+            docker stop redis-server || true
+            docker rm redis-server || true
+            docker run -d --name redis-server -p 6379:6379 redis:latest
+            
+            # Spring Boot 애플리케이션 컨테이너 실행
+            docker run -d --name attraction-api-server --link redis-server:redis -p 8080:8080 ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
             
