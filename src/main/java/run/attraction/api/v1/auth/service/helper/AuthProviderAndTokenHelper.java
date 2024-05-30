@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
@@ -20,6 +21,7 @@ import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
 import run.attraction.api.v1.user.service.UserServiceImpl;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthProviderAndTokenHelper {
@@ -32,6 +34,7 @@ public class AuthProviderAndTokenHelper {
 
   @Transactional
   public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
+    log.info("getTokenAndRegisterUserByAuthUser");
     final Optional<User> findUser = userRepository.findById(authUser.getEmail());
     if (findUser.isPresent()) {
       User user = findUser.get();
@@ -40,6 +43,7 @@ public class AuthProviderAndTokenHelper {
       }
       return getToken(user, true);
     }
+    log.info("유저 저장");
     userRepository.save(authUser);
     return getToken(authUser, false);
   }
