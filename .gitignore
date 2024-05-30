@@ -50,3 +50,5 @@ app_*.log.gz
 # .yml .properties
 *.yml
 *.properties
+
+src/main/resources/credentials.json

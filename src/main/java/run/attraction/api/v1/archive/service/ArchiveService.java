@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.ReadBox;
 import run.attraction.api.v1.archive.Subscribe;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
+import run.attraction.api.v1.archive.dto.NewsletterEmail;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
@@ -55,7 +56,7 @@ public class ArchiveService {
   }
 
   @Transactional
-  public void addNewsletter(String userEmail, Long newsletterId) {
+  public NewsletterEmail addNewsletter(String userEmail, Long newsletterId) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
     Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
@@ -63,6 +64,7 @@ public class ArchiveService {
 
     subscribe.saveNewsletter(newsletter);
     subscribeRepository.save(subscribe);
+    return new NewsletterEmail(newsletter.getNewsletterEmail());
   }
 
   private Subscribe createSubscribe(String userEmail) {
