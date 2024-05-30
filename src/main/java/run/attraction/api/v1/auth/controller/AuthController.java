@@ -42,8 +42,10 @@ public class AuthController {
 //    String code = new String(Base64.getEncoder().encode(
 //        loginRequestDto.getCode().getBytes(StandardCharsets.UTF_8)));
     final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(),loginRequestDto.getCode());
+    log.info("setCookieToken 진입");
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
     if (userTokenDto.isUserBefore()) {
+      log.info("userTokenDto.isUserBefore() 진입");
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken(), userTokenDto.getShouldReissueToken()));
     }
