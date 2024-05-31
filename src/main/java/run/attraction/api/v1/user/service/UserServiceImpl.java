@@ -20,11 +20,10 @@ public class UserServiceImpl implements UserService {
   }
 
   public void updateUserExpiration(User user, LocalDate now){
-    log.info("updateUserExpiration 진입");
+    log.info("최신 접속 이력 update 시작");
     final long betweenDays = ChronoUnit.DAYS.between(user.getUpdateAt(), now);
-    log.info("renewUpdateAtAndExpirationAt 시작");
     user.renewUpdateAtAndExpirationAt(now,user.getUserExpiration().plusDays(betweenDays));
-    log.info("save 시작");
     userRepository.save(user);
+    log.info("업데이트 완료");
   }
 }
