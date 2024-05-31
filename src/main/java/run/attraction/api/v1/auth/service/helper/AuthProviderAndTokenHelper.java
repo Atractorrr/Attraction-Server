@@ -18,6 +18,8 @@ import run.attraction.api.v1.auth.token.repository.GoogleRefreshTokenRepository;
 import run.attraction.api.v1.auth.token.repository.LogoutAccessTokenRepository;
 import run.attraction.api.v1.auth.token.repository.RefreshTokenRepository;
 import run.attraction.api.v1.user.User;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
 import run.attraction.api.v1.user.service.UserServiceImpl;
 
@@ -30,6 +32,7 @@ public class AuthProviderAndTokenHelper {
   private final LogoutAccessTokenRepository logoutAccessTokenRepository;
   private final UserRepository userRepository;
   private final GoogleRefreshTokenRepository googleRefreshTokenRepository;
+  private final UserDetailRepository userDetailRepository;
   private final UserServiceImpl userService;
 
   @Transactional
@@ -39,10 +42,7 @@ public class AuthProviderAndTokenHelper {
     if (findUser.isPresent()) {
       log.info("기존에 존재하는 유저입니다.");
       User user = findUser.get();
-      if (user.getUpdateAt().isBefore(LocalDate.now())){
-        log.info("유저의 최신 접속 이력 갱신");
-        userService.updateUserExpiration(user,LocalDate.now());
-      }
+      renewUserUpdateAt(user);
       log.info("JWT 토큰 발급 시작");
       return getToken(user, true);
     }
@@ -53,22 +53,31 @@ public class AuthProviderAndTokenHelper {
     return getToken(authUser, false);
   }
 
-  public UserTokenDto getToken(User preparedJoinUser, boolean isUserBefore) {
+  private void renewUserUpdateAt(User user) {
+    if (user.getUpdateAt().isBefore(LocalDate.now())){
+      log.info("유저의 최신 접속 이력 갱신");
+      userService.updateUserExpiration(user,LocalDate.now());
+    }
+  }
+
+  public UserTokenDto getToken(User user, boolean isUserBefore) {
     log.info("getToken 시작");
-    final String accessToken = jwtService.generateAccessToken(preparedJoinUser, new Date(System.nanoTime()));
-    final String refreshToken = jwtService.generateRefreshToken(preparedJoinUser, new Date(System.nanoTime()));
+    final String accessToken = jwtService.generateAccessToken(user, new Date(System.nanoTime()));
+    final String refreshToken = jwtService.generateRefreshToken(user, new Date(System.nanoTime()));
     log.info("JWT 토큰 생성 완료");
-    renewRefreshToken(preparedJoinUser, refreshToken);
+    renewRefreshToken(user, refreshToken);
     UserTokenDto userTokenDto = UserTokenDto.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
-        .email(preparedJoinUser.getEmail())
+        .email(user.getEmail())
         .isUserBefore(isUserBefore)
         .build();
 
     if (isUserBefore) {
-      userTokenDto.setShouldReissueToken(getShouldReissueToken(preparedJoinUser));
-      log.info("기존의 유저의 구글 refreshToken 갱신 유무 값 저장 완료");
+      userTokenDto.setShouldReissueToken(getShouldReissueToken(user));
+      final Optional<UserDetail> checkUserDetail = userDetailRepository.findById(user.getEmail());
+      userTokenDto.setHasExtraDetails(checkUserDetail.isPresent());
+      log.info("기존의 유저의 shouldReissueToken, hasExtraDetails 추출 완료 ");
     }
     return userTokenDto;
   }

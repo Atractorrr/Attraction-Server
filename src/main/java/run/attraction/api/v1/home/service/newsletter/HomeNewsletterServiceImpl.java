@@ -16,7 +16,8 @@ import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.user.Interest;
-import run.attraction.api.v1.user.User;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
@@ -27,6 +28,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   private final UserRepository userRepository;
   private final NewsletterRepository newsletterRepository;
   private final SubscribeRepository subscribeRepository;
+  private final UserDetailRepository userDetailRepository;
 
   public List<String> getDefaultCategories() {
     return Stream.concat(
@@ -35,9 +37,14 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
     ).toList();
   }
 
+  public boolean hasUserDetail(String email){
+    return userDetailRepository.existsById(email);
+  }
+
   public List<String> getUserCategories(String email) {
-    final User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
-    final Set<Interest> interests = user.getInterests();
+    UserDetail userDetail = userDetailRepository.findById(email)
+        .orElseThrow(() -> new NoSuchElementException("추가 정보를 받지 않은 유저 입니다."));
+    final Set<Interest> interests = userDetail.getInterests();
     return Stream.concat(Stream.concat(Stream.of("RECOMMAND"), interests.stream().map(Interest::name)),
         Stream.of(Category.values())
             .map(Category::name)
