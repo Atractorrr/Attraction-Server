@@ -3,10 +3,12 @@ package run.attraction.api.v1.auth.token;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CookieTokenSetter {
   private static final String KEY = "Refresh-Token";
@@ -31,9 +33,11 @@ public class CookieTokenSetter {
   }
 
   public void expireCookieToken(HttpServletResponse response) {
+    log.info("쿠키 만료시키기 시작");
     Cookie cookie = new Cookie(KEY, null);
     cookie.setMaxAge(0);
     response.addCookie(cookie);
+    log.info("쿠키 만료시키기 완료");
   }
 
   public String getBearerTokenFromRequest(HttpServletRequest request) {

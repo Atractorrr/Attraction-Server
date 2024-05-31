@@ -61,27 +61,33 @@ public class AuthController {
 
   @PostMapping("/join/username-duplicate")
   public ResponseEntity<?> checkNicknameDuplication(@Valid @RequestParam String nickname) {
+    log.info("회원가입 닉네임 중복 체크 시작");
     if(authService.checkNicknameDuplication(nickname)){
+      log.info("회원가입 닉네임 중복 체크 결과 = {}",authService.checkNicknameDuplication(nickname));
       return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임 입니다.");
     };
+    log.info("회원가입 닉네임 중복 체크 결과 = {}",authService.checkNicknameDuplication(nickname));
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/join")
   public ResponseEntity<?> join(@Valid @RequestBody JoinRequestDto joinRequestDto) {
-    log.info("추가정보 받기 시작");
+    log.info("[join] 추가정보 받기 시작");
     authService.join(joinRequestDto);
-    log.info("추가정보 저장하기 완료");
+    log.info("[join] 추가정보 저장하기 완료");
     return ResponseEntity.ok().build();
   }
 
 
   @PostMapping("/logout")
   public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    log.info("로그아웃 시작");
     final String accessToken = cookieTokenSetter.getBearerTokenFromRequest(request);
+    log.info("accessToken = {}", accessToken);
     authService.logout(accessToken);
     cookieTokenSetter.expireCookieToken(response);
-    return ResponseEntity.ok().build();
+    log.info("로그아웃 완료");
+    return ResponseEntity.ok("로그아웃 완료되었습니다.");
   }
 
   @GetMapping("/reissue-token")

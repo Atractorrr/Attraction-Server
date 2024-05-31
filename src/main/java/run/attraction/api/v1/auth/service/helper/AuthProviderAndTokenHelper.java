@@ -96,21 +96,27 @@ public class AuthProviderAndTokenHelper {
   }
 
   public void saveAccessTokenAndDeleteRefreshToken(final String accessToken) {
+    log.info("accessToken 저장 및 refreshToken 삭제 시작");
     String userEmail = jwtService.extractEmailFromToken(accessToken);
     saveLogoutAccessToken(accessToken);
     refreshTokenRepository.findTokenByUserEmail(userEmail)
         .ifPresent(this::deleteRefreshToken);
+    log.info("accessToken 저장 및 refreshToken 삭제 완료");
   }
 
   private void saveLogoutAccessToken(final String accessToken) {
     final long expireTimeFromToken = jwtService.getExpireTimeFromToken(accessToken);
     final LogoutAccessToken logoutAccessToken = LogoutAccessToken.builder().id(accessToken)
         .expiration(expireTimeFromToken).build();
+    log.info("로그아웃 AccessToken 저장 시작");
     logoutAccessTokenRepository.save(logoutAccessToken);
+    log.info("로그아웃 AccessToken 저장 완료");
   }
 
   private void deleteRefreshToken(RefreshToken refreshToken) {
+    log.info("refreshToken 삭제 시작");
     refreshTokenRepository.delete(refreshToken);
+    log.info("refreshToken 삭제 완료");
   }
 
   public UserTokenDto reissueToken(String refreshToken, Date issuedAt) {

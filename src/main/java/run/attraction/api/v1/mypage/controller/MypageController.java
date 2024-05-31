@@ -38,37 +38,57 @@ public class MypageController {
 
   @GetMapping("/{email}")
   public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("email") String email) {
+    log.info("마이페이지 유저 정보 API 시작");
+    log.info("email = {} ",email);
     final UserDetailDto userDetails = mypageService.getUserDetails(email);
+    log.info("마이페이지 유저 정보 추출 완료");
     return ResponseEntity.ok(new UserDetailsResponseDto(userDetails));
   }
 
   @GetMapping("/{email}/calendar")
   public final ResponseEntity<?> getCalendar(@PathVariable("email") String email) {
+    log.info("마이페이지 캘린더 API 시작");
+    log.info("email = {} ",email);
     final CalendarResponseDto userCalendar = mypageService.getUserCalendar(email);
+    log.info("마이페이지 캘린더 API 완료");
     return ResponseEntity.ok(userCalendar);
   }
 
   @GetMapping("/{email}/articles/recent")
   public final ResponseEntity<?> getRecentArticles(@PathVariable("email") String email) {
+    log.info("최근 읽은 아티클 API 시작");
+    log.info("email = {} ",email);
     final List<MypageArticle> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
+    log.info("조회 완료");
     return ResponseEntity.ok(new RecentArticlesResponseDto(recentArticlesByEmail));
   }
 
   @PatchMapping("/{email}/profile")
   public final ResponseEntity<?> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
+    log.info("마이페이지 프로필 이미지 수정 시작");
+    log.info("email = {} ",email);
+    log.info("img = {} ",request.profileImg());
     mypageService.updateProfileImgByEmail(email,request.profileImg());
+    log.info("마이페이지 프로필이미지 수정 완료");
     return ResponseEntity.ok().build();
   }
 
   @PatchMapping("/{email}/background")
   public final ResponseEntity<?> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
+    log.info("마이페이지 배경이미지 수정 시작");
+    log.info("email = {} ",email);
+    log.info("img = {} ",request.backgroundImg());
     mypageService.updateBackgroundImgByEmail(email,request.backgroundImg());
+    log.info("마이페이지 배경이미지 수정 완료");
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/{email}/subscribe-list")
   public final ResponseEntity<SubscribeResponseDto> getSubscribes(@PathVariable("email") String email) {
+    log.info("마이페이지 구독리스트 API 시작");
+    log.info("email = {} ",email);
     final List<MypageNewsletterDetail> subscribeByEmail = mypageService.getSubscribeByEmail(email);
+    log.info("마이페이지 구독리스트 API 완료");
     return ResponseEntity.ok(new SubscribeResponseDto(subscribeByEmail));
   }
 
@@ -76,8 +96,11 @@ public class MypageController {
   public final ResponseEntity<?> updateUserDetails(@PathVariable("email") String email,
                                                    @RequestBody(required = false) UpdateUserDetailRequestDto request)
   {
+    log.info("마이페이지 개인설정 API 시작");
+    log.info("email = {} ",email);
     UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
     mypageService.updateUserDetails(updateUserDetailDto);
+    log.info("마이페이지 개인설정 API 완료");
     return ResponseEntity.ok().build();
   }
 
