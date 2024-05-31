@@ -25,10 +25,11 @@ public class AuthService {
   private final UserValidator userValidator;
 
   public UserTokenDto login(String provider, final String code) {
+    log.info("로그인 진입");
     final User authUser = authProvider.getUserProfileByCode(provider, code);
+    log.info("회원 정보 반환 및 Google RefreshToken 처리 완료");
     log.info("구글 API 회원 조회 결과 email = {}",authUser.getEmail());
     log.info("구글 API 회원 조회 결과 프로필이미지 = {}",authUser.getProfileImg());
-    log.info("getTokenAndRegisterUserByAuthUser");
     return authProviderAndTokenHelper.getTokenAndRegisterUserByAuthUser(authUser);
   }
 

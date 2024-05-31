@@ -34,20 +34,22 @@ public class AuthProviderAndTokenHelper {
 
   @Transactional
   public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
-    log.info("getTokenAndRegisterUserByAuthUser");
+    log.info("JWT 토큰 등록 및 유저 저장 시작");
     final Optional<User> findUser = userRepository.findById(authUser.getEmail());
     if (findUser.isPresent()) {
-      log.info("findUser.isPresent() 진입");
+      log.info("기존에 존재하는 유저입니다.");
       User user = findUser.get();
       if (user.getUpdateAt().isBefore(LocalDate.now())){
-        log.info("user.getUpdateAt().isBefore(LocalDate.now() 진입");
+        log.info("유저의 최신 접속 이력 갱신");
         userService.updateUserExpiration(user,LocalDate.now());
       }
-      log.info("getToken 시작");
+      log.info("JWT 토큰 발급 시작");
       return getToken(user, true);
     }
-    log.info("유저 저장");
+    log.info("새로운 유저 저장");
     userRepository.save(authUser);
+    log.info("유저 저장 완료");
+    log.info("JWT 토큰 발급 시작");
     return getToken(authUser, false);
   }
 
@@ -55,7 +57,7 @@ public class AuthProviderAndTokenHelper {
     log.info("getToken 시작");
     final String accessToken = jwtService.generateAccessToken(preparedJoinUser, new Date(System.nanoTime()));
     final String refreshToken = jwtService.generateRefreshToken(preparedJoinUser, new Date(System.nanoTime()));
-
+    log.info("JWT 토큰 생성 완료");
     renewRefreshToken(preparedJoinUser, refreshToken);
     UserTokenDto userTokenDto = UserTokenDto.builder()
         .accessToken(accessToken)
@@ -66,6 +68,7 @@ public class AuthProviderAndTokenHelper {
 
     if (isUserBefore) {
       userTokenDto.setShouldReissueToken(getShouldReissueToken(preparedJoinUser));
+      log.info("기존의 유저의 구글 refreshToken 갱신 유무 값 저장 완료");
     }
     return userTokenDto;
   }
@@ -76,12 +79,13 @@ public class AuthProviderAndTokenHelper {
   }
 
   private void renewRefreshToken(User user, String refreshToken) {
-    log.info("log.info() 시작");
+    log.info("refreshToken 저장 시작");
     RefreshToken token = refreshTokenRepository.findTokenByUser(user)
         .orElse(createRefreshToken(user, refreshToken));
 
     token.updateToken(refreshToken);
     refreshTokenRepository.save(token);
+    log.info("refreshToken 저장 완료");
   }
 
   private RefreshToken createRefreshToken(User user, String refreshToken) {

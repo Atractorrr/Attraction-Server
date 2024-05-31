@@ -38,9 +38,10 @@ public class GoogleOAuthService implements OAuthService {
   @Override
   public OAuthToken getToken(final String code) {
     String tokenUrl = googleOAuth.getTokenUrl();
+    log.info("구글 토큰 요청 Url: {}", tokenUrl);
     var requestBody = googleOAuth.getTokenRequestBody(code);
     RestClient restClient = RestClient.create(tokenUrl);
-
+    log.info("구글 토큰 요청 시작 ");
     return restClient.post()
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         .body(requestBody)
@@ -56,7 +57,9 @@ public class GoogleOAuthService implements OAuthService {
   @Override
   public String getResponseBody(String accessToken) {
     String userInfoUri = googleOAuth.getUserInfoUri();
+    log.info("구글 사용자 정보 요청 Url = {}",userInfoUri);
     RestClient restClient = RestClient.create(userInfoUri);
+    log.info("구글 사용자 정보 요청 시작 ");
     return restClient.get()
         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
         .retrieve()
