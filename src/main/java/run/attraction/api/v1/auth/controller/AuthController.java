@@ -21,6 +21,7 @@ import run.attraction.api.v1.auth.service.AuthService;
 import run.attraction.api.v1.auth.service.dto.ReissueTokenResponseDto;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
+import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationResponseDto;
 import run.attraction.api.v1.auth.service.dto.join.JoinRequestDto;
 import run.attraction.api.v1.auth.service.dto.login.FirstLoginResponseDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginRequestDto;
@@ -64,12 +65,12 @@ public class AuthController {
   public ResponseEntity<?> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
     log.info("회원가입 닉네임 중복 체크 시작");
     String nickname = request.nickname();
-    if(authService.checkNicknameDuplication(nickname)){
-      log.info("회원가입 닉네임 중복 체크 결과 = {}",authService.checkNicknameDuplication(nickname));
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임 입니다.");
+    final boolean result = authService.checkNicknameDuplication(nickname);
+    log.info("회원가입 닉네임 중복 체크 결과 = {}",result);
+    if(result){
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new CheckDuplicationResponseDto(result));
     };
-    log.info("회원가입 닉네임 중복 체크 결과 = {}",authService.checkNicknameDuplication(nickname));
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok().body(new CheckDuplicationResponseDto(result));
   }
 
   @PostMapping("/join")
