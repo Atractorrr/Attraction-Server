@@ -17,7 +17,6 @@ public record UserDetailDto(
     Objects.requireNonNull(email);
     Objects.requireNonNull(name);
     Objects.requireNonNull(profileImg);
-    Objects.requireNonNull(backgroundImg);
     Objects.requireNonNull(categories);
     Objects.requireNonNull(occupation);
   }
