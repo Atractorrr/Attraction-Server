@@ -85,6 +85,9 @@ public class MypageUserServiceImpl implements MypageUserService {
 
   @Transactional
   public boolean checkNicknameDuplication(String nickname) {
-    return userDetailRepository.existsByNickname(nickname);
+    log.info("userRepository.existsByNickname() 시작");
+    final boolean result = userRepository.existsByNickname(nickname);
+    log.info("result = {}", result);
+    return result;
   }
 }
