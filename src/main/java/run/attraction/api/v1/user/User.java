@@ -20,9 +20,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Slf4j
 @Entity
 @Table(name = "users")
 @Getter
@@ -96,11 +98,15 @@ public class User implements UserDetails {
     if (userValidator.isSpecialPatternInNickname(nickname)) {
       throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
     }
-
+    log.info("nickname 대입");
     this.nickname = nickname;
+    log.info("interests 대입");
     this.interests.addAll(getInterestFromString(interests));
+    log.info("birthDate 대입");
     this.birthDate = birthDate;
+    log.info("userExpiration 대입");
     this.userExpiration = userExpiration;
+    log.info("occupation 대입");
     this.occupation = occupation;
   }
   public void renewUpdateAtAndExpirationAt(LocalDate updateAt,LocalDate userExpiration){
@@ -135,6 +141,7 @@ public class User implements UserDetails {
   }
 
   private static List<Interest> getInterestFromString(List<String> interests) {
+    log.info("String -> Interest로 변환");
     return interests.stream()
         .map(Interest::valueOf)
         .toList();
