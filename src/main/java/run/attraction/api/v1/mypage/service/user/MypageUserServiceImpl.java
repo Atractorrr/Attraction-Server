@@ -3,6 +3,7 @@ package run.attraction.api.v1.mypage.service.user;
 import java.time.Period;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
@@ -10,6 +11,7 @@ import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -18,7 +20,14 @@ public class MypageUserServiceImpl implements MypageUserService {
 
   private static final int EXPIRATION_FOREVER = 120;
   public UserDetailDto getUserDetails(String email) {
+    log.info("유저 검색 시작");
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
+    log.info("유저 검색 완료");
+    log.info("닉네임 = {}", user.getNickName());
+    log.info("프로필 url = {}", user.getProfileImg());
+    log.info("배경 이미지 url = {}", user.getNickName());
+    log.info("관심사 = {}", user.getInterests().toString());
+    log.info("직업 = {}", user.getOccupation().name());
     final UserDetailDto userDetailDto = getUserDetailDto(user);
     return userDetailDto;
   }

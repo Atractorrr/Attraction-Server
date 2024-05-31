@@ -30,9 +30,15 @@ public class MypageArticleServiceImpl implements MypageArticleService {
   private final ReadBoxRepository readBoxRepository;
 
   public List<MypageArticle> getUserRecentArticles(String email) {
+    log.info("{}을 가진 ReadBox 조회 시작");
     final List<UserReadBoxDetail> userReadBoxDetails = getReadBoxDetailsByEmail(email);
+    log.info("{}을 가진 ReadBox 조회 완료");
     LocalDate endDate = LocalDate.now();
     LocalDate startDate = LocalDate.now().minusDays(6);
+    log.info("조회 범위");
+    log.info("startDate: {}", startDate);
+    log.info("endDate: {}", endDate);
+    log.info("조회 시작");
     return getMypageArticles(email, userReadBoxDetails,startDate, endDate);
   }
 
@@ -54,9 +60,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
     final List<Long> articleIds = extractArticleIds(userReadBoxDetails);
     final Map<Long, LocalDate> readDates = extractReadDates(userReadBoxDetails);
     final Map<Long, Integer> percentages = extractPercentage(userReadBoxDetails);
-    log.info("articleIds = {}",articleIds.toString());
     final List<Article> articles = articleRepository.findArticleByIdAndUserEmail(articleIds, email, startDate, endDate);
-    log.info("articles = {}",articles.toString());
     final Map<String, Newsletter> newsletters = extractNewsletterProfiles(articles);
 
     return articles.stream()
