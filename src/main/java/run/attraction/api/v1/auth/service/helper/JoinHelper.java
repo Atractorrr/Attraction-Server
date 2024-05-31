@@ -43,6 +43,8 @@ public class JoinHelper {
 
     final LocalDate birthDate = convertToDate(stringBirthDate);
     final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt(), userExpiration);
+    log.info("birthDate = {}", birthDate);
+    log.info("userExpirationDate = {}", userExpirationDate);
     log.info("유저 추가 정보 넣기 시작");
     user.addExtraDetails(userValidator, nickname, interest, birthDate, userExpirationDate, Occupation.valueOf(occupation));
     log.info("유저 추가 정보 넣기 완료");
