@@ -3,6 +3,7 @@ package run.attraction.api.v1.archive.controller;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import run.attraction.api.v1.archive.service.ArchiveService;
 import run.attraction.api.v1.auth.token.dto.UserGmailToken;
 import run.attraction.api.v1.auth.token.service.GoogleTokenService;
 import run.attraction.api.v1.gmail.GmailClient;
+import run.attraction.api.v1.introduction.Newsletter;
 
 
 @RestController
@@ -58,5 +60,13 @@ public class ArchiveController {
         userToken.token()
     );
     return ApiResponse.from(HttpStatus.OK, "성공", null);
+  }
+
+  // DEPRECATED
+  @GetMapping("{userEmail}/subscribe")
+  public ApiResponse<List<Newsletter>> getSubscribedNewslettersByUser(@PathVariable String userEmail) {
+    List<Newsletter> subscribeNewsletters = archiveService.getSubscribedNewslettersByUser(userEmail);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", subscribeNewsletters);
   }
 }

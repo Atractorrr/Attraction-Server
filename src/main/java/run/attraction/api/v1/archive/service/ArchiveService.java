@@ -1,5 +1,6 @@
 package run.attraction.api.v1.archive.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,12 +62,19 @@ public class ArchiveService {
     Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
         .orElse(createSubscribe(userEmail));
 
-    subscribe.saveNewsletter(newsletter);
+    subscribe.saveNewsletterId(newsletter.getId());
     subscribeRepository.save(subscribe);
     return new NewsletterEmail(newsletter.getEmail());
   }
 
   private Subscribe createSubscribe(String userEmail) {
     return new Subscribe(userEmail);
+  }
+
+  @Transactional
+  public List<Newsletter> getSubscribedNewslettersByUser(String userEmail) {
+    List<Long> newsletterIds = subscribeRepository.findNewsletterIdsByUserEmail(userEmail);
+
+    return newsletterRepository.findNewslettersByNewsletterIds(newsletterIds);
   }
 }

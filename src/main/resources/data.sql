@@ -118,18 +118,12 @@ INSERT INTO subscribe (id,user_email) VALUES
     (2,"user2@gmail.com"),
     (3,"user3@gmail.com");
 
-UPDATE newsletter SET subscribe_id = 1 WHERE id = 1;
-UPDATE newsletter SET subscribe_id = 1 WHERE id = 2;
-UPDATE newsletter SET subscribe_id = 2 WHERE id = 1;
-UPDATE newsletter SET subscribe_id = 2 WHERE id = 2;
-UPDATE newsletter SET subscribe_id = 2 WHERE id = 3;
-UPDATE newsletter SET subscribe_id = 2 WHERE id = 4;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 1;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 2;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 3;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 4;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 5;
-UPDATE newsletter SET subscribe_id = 3 WHERE id = 6;
+INSERT INTO newsletter_ids (subscribe_id, newsletter_id) VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (3, 1);
+
 
 
 
