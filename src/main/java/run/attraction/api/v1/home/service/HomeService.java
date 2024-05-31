@@ -19,7 +19,7 @@ public class HomeService {
   private final HomeArticleService articleService;
 
   public List<String> getCategoriesByEmail(String email) {
-    if (email.isEmpty()) {
+    if (email.isEmpty()||(!newsletterService.hasUserDetail(email))) {
       return newsletterService.getDefaultCategories();
     }
     return newsletterService.getUserCategories(email);

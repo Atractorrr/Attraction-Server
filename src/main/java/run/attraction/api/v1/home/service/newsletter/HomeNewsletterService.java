@@ -8,4 +8,5 @@ public interface HomeNewsletterService {
   List<String> getUserCategories(String email);
   List<NewsletterDetailDto> getMostNewsletterByCategory(String category, int size);
   List<NewsletterDetailDto> getMostNewsletter(int size);
+  boolean hasUserDetail(String email);
 }

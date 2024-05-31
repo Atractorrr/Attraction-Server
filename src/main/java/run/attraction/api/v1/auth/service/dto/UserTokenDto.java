@@ -10,9 +10,10 @@ public class UserTokenDto {
   private String email;
   private boolean isUserBefore;
   private boolean shouldReissueToken;
+  private boolean hasExtraDetails;
 
   @Builder
-  private UserTokenDto(String accessToken, String refreshToken, String email, boolean isUserBefore) {
+  private UserTokenDto(String accessToken, String refreshToken, String email, boolean isUserBefore,boolean hasExtraDetails) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.email = email;
@@ -25,5 +26,9 @@ public class UserTokenDto {
 
   public void setShouldReissueToken(boolean shouldReissueToken) {
     this.shouldReissueToken = shouldReissueToken;
+  }
+
+  public void setHasExtraDetails(boolean hasExtraDetails) {
+    this.hasExtraDetails = hasExtraDetails;
   }
 }
