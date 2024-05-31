@@ -41,11 +41,13 @@ public class AuthController {
     log.info("로그인 시작");
     log.info("요청 받은 code = {}", loginRequestDto.getCode());
     final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(),loginRequestDto.getCode());
+
     log.info("JWT 토큰 등록 및 유저 저장 완료");
     log.info("헤더에 토큰 담기 시작 진입");
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
     if (userTokenDto.isUserBefore()) {
       log.info("기존 유저에 대한 응답 response 전달(로그인 완료)");
+
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken(), userTokenDto.getShouldReissueToken()));
     }
