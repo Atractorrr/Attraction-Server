@@ -9,12 +9,11 @@ import run.attraction.api.v1.archive.Subscribe;
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
   Optional<Subscribe> findByUserEmail(String userEmail);
 
-  @Query(""" 
-      SELECT n.id 
-      FROM Subscribe s
-      JOIN s.newsletters n
-      GROUP BY n.id 
-      ORDER BY COUNT(n.id) DESC 
-      """)
+  @Query(value = """ 
+     SELECT newsletter_id
+     FROM newsletter_ids
+     GROUP BY newsletter_id
+     ORDER BY COUNT(newsletter_id) DESC
+     """, nativeQuery = true)
   List<Long> findMostSubscribedNewsletterIds();
 }
