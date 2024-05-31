@@ -144,7 +144,7 @@ public class User implements UserDetails {
     log.info("String -> Interest로 변환");
     return interests.stream()
         .map(Interest::valueOf)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override
