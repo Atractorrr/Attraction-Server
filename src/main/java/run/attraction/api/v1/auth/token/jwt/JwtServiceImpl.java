@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import run.attraction.api.v1.auth.token.exception.InvalidTokenException;
 import run.attraction.api.v1.auth.token.exception.TokenExpirationException;
 import run.attraction.api.v1.user.User;
 
+@Slf4j
 @Component
 public class JwtServiceImpl implements JwtService {
 
@@ -35,11 +37,21 @@ public class JwtServiceImpl implements JwtService {
 
   @Override
   public String generateAccessToken(User user, Date issuedAt) {
+    log.info("jwt accessToken 발급 시작 ");
+    log.info("secretKey: {}", secretKey);
+    log.info("accessExpiration: {}", accessExpiration);
+    log.info("유저 email = {}",user.getEmail());
+    log.info("issuedAt = {}",issuedAt);
     return buildJwtToken(user, issuedAt, accessExpiration);
   }
 
   @Override
   public String generateRefreshToken(User user, Date issuedAt) {
+    log.info("jwt refreshToken 발급 시작 ");
+    log.info("secretKey: {}", secretKey);
+    log.info("refreshExpiration: {}", refreshExpiration);
+    log.info("유저 email = {}",user.getEmail());
+    log.info("issuedAt = {}",issuedAt);
     return buildJwtToken(user, issuedAt, refreshExpiration);
   }
 
