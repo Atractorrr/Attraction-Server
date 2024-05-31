@@ -3,7 +3,6 @@ package run.attraction.api.v1.auth.service.helper;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +23,15 @@ public class JoinHelper {
 
   @Transactional
   public boolean checkNicknameDuplication(String nickname) {
-    return userRepository.existsByNickName(nickname);
+    return userRepository.existsByNickname(nickname);
   }
 
   @Transactional
-  public void joinUser(UserValidator userValidator, String email, String nickName, List<String> interest,
+  public void joinUser(UserValidator userValidator, String email, String nickname, List<String> interest,
                        String stringBirthDate, int userExpiration, String occupation, boolean adPolices) {
     // adPolices 처리 어떻게 할건지 정해야함.
     log.info("email = {} ",email);
-    log.info("nickName = {} ",nickName);
+    log.info("nickname = {} ",nickname);
     log.info("interest = {} ",interest.toString());
     log.info("stringBirthDate = {} ",stringBirthDate);
     log.info("userExpiration = {} ",userExpiration);
@@ -45,7 +44,7 @@ public class JoinHelper {
     final LocalDate birthDate = convertToDate(stringBirthDate);
     final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt(), userExpiration);
     log.info("유저 추가 정보 넣기 시작");
-    user.addExtraDetails(userValidator, nickName, interest, birthDate, userExpirationDate, Occupation.valueOf(occupation));
+    user.addExtraDetails(userValidator, nickname, interest, birthDate, userExpirationDate, Occupation.valueOf(occupation));
     log.info("유저 추가 정보 넣기 완료");
   }
 

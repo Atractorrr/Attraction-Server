@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.archive.article.MypageArticleService;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterService;
 import run.attraction.api.v1.mypage.service.calendar.MypageCalendarService;
@@ -59,8 +58,8 @@ public class MypageService {
     userService.updateUserDetail(updateUserDetailDto);
   }
 
-  public boolean checkNickNameDuplication(String nickName) {
-    return userService.checkNickNameDuplication(nickName);
+  public boolean checkNicknameDuplication(String nickname) {
+    return userService.checkNicknameDuplication(nickname);
   }
 
 }

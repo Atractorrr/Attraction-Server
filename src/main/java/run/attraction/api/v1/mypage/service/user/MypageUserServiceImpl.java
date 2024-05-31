@@ -23,9 +23,9 @@ public class MypageUserServiceImpl implements MypageUserService {
     log.info("유저 검색 시작");
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
     log.info("유저 검색 완료");
-    log.info("닉네임 = {}", user.getNickName());
+    log.info("닉네임 = {}", user.getNickname());
     log.info("프로필 url = {}", user.getProfileImg());
-    log.info("배경 이미지 url = {}", user.getNickName());
+    log.info("배경 이미지 url = {}", user.getNickname());
     log.info("관심사 = {}", user.getInterests().toString());
     log.info("직업 = {}", user.getOccupation().name());
     final UserDetailDto userDetailDto = getUserDetailDto(user);
@@ -35,7 +35,7 @@ public class MypageUserServiceImpl implements MypageUserService {
   private static UserDetailDto getUserDetailDto(User user) {
     return new UserDetailDto(
         user.getEmail(),
-        user.getNickName(),
+        user.getNickname(),
         user.getProfileImg(),
         user.getBackgroundImg(),
         user.getInterests(),
@@ -65,14 +65,14 @@ public class MypageUserServiceImpl implements MypageUserService {
   public void updateUserDetail(UpdateUserDetailDto updateUserDetailDto) {
     User user = userRepository.findById(updateUserDetailDto.getEmail())
         .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
-    updateUserDetailDto.getNickName().ifPresent(user::updateNickName);
+    updateUserDetailDto.getNickname().ifPresent(user::updateNickName);
     updateUserDetailDto.getUserExpiration().ifPresent(user::updateExpiration);
     updateUserDetailDto.getInterest().ifPresent(user::updateInterest);
     updateUserDetailDto.getOccupation().ifPresent(user::updateOccupation);
   }
 
   @Transactional
-  public boolean checkNickNameDuplication(String nickName) {
-    return userRepository.existsByNickName(nickName);
+  public boolean checkNicknameDuplication(String nickname) {
+    return userRepository.existsByNickname(nickname);
   }
 }

@@ -40,7 +40,7 @@ public class AuthService {
   public void join(JoinRequestDto joinRequestDto) {
     joinHelper.joinUser(userValidator,
         joinRequestDto.getEmail(),
-        joinRequestDto.getNickName(),
+        joinRequestDto.getNickname(),
         joinRequestDto.getInterest(),
         joinRequestDto.getBirthDate(),
         joinRequestDto.getUserExpiration(),
