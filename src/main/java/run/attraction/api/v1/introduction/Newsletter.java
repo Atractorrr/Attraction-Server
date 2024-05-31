@@ -33,9 +33,7 @@ public class Newsletter extends AuditableEntity {
   private String description;
 
   @Column(nullable = false)
-  @ElementCollection
-  @Enumerated(EnumType.STRING)
-  private List<UploadDays> uploadDays;
+  private String uploadDays;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -66,7 +64,7 @@ public class Newsletter extends AuditableEntity {
       String mainLink,
       String subscribeLink,
       String thumbnailUrl,
-      UploadDays uploadDays,
+      String uploadDays,
       String nickname
   ) {
     this.id = id;
@@ -77,7 +75,7 @@ public class Newsletter extends AuditableEntity {
     this.mainLink = mainLink;
     this.subscribeLink = subscribeLink;
     this.thumbnailUrl = thumbnailUrl;
-    this.uploadDays = List.of(uploadDays);
+    this.uploadDays = uploadDays;
     this.nickname = nickname;
   }
 }
