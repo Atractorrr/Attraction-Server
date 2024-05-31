@@ -5,8 +5,6 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -22,7 +20,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -59,7 +56,7 @@ public class User implements UserDetails {
    */
 
   @Column(name = "nick_Name", unique = true, length = 20)
-  private String nickName;
+  private String nickname;
 
   @ElementCollection(targetClass = Interest.class)
   @Enumerated(EnumType.STRING)
@@ -94,13 +91,13 @@ public class User implements UserDetails {
   }
 
   public void addExtraDetails(UserValidator userValidator,
-                              String nickName, List<String> interests, LocalDate birthDate,
+                              String nickname, List<String> interests, LocalDate birthDate,
                               LocalDate userExpiration, Occupation occupation) {
-    if (userValidator.isSpecialPatternInNickname(nickName)) {
+    if (userValidator.isSpecialPatternInNickname(nickname)) {
       throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
     }
 
-    this.nickName = nickName;
+    this.nickname = nickname;
     this.interests.addAll(getInterestFromString(interests));
     this.birthDate = birthDate;
     this.userExpiration = userExpiration;
@@ -119,8 +116,8 @@ public class User implements UserDetails {
     this.backgroundImg = backgroundImg;
   }
 
-  public void updateNickName(String nickName){
-    this.nickName = nickName;
+  public void updateNickName(String nickname){
+    this.nickname = nickname;
   }
 
   public void updateExpiration(Integer month){
