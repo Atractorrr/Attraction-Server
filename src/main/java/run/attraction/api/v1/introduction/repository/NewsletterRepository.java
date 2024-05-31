@@ -25,4 +25,6 @@ public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
   @Query ("SELECT n FROM Newsletter n WHERE n.id NOT IN :newsletterIds ORDER BY function('RAND') LIMIT :size")
   List<Newsletter> findNewsletterRandom(List<Long>newsletterIds,int size);
 
+  @Query ("SELECT n FROM Newsletter n WHERE n.id IN :newsletterIds")
+  List<Newsletter> findNewslettersByNewsletterIds(@Param("newsletterIds") List<Long> newsletterIds);
 }
