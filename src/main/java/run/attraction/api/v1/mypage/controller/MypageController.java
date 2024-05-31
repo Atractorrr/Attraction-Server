@@ -117,6 +117,8 @@ public class MypageController {
   @PostMapping("/username-duplicate")
   public final ResponseEntity<?> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
     String nickname = request.nickname();
+    log.info("마이페이지 개인설정 닉네임 중복체크 시작");
+    log.info("nickname = {} ",nickname);
     boolean result = mypageService.checkNicknameDuplication(nickname);
     if (result) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new CheckDuplicationResponseDto(result));
