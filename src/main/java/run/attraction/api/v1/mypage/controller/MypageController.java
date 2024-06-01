@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationResponseDto;
 import run.attraction.api.v1.mypage.service.MypageService;
+import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesResponseDto;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
@@ -55,7 +56,7 @@ public class MypageController {
   }
 
   @GetMapping("/{email}/articles/recent")
-  public final ResponseEntity<?> getRecentArticles(@PathVariable("email") String email) {
+  public final ResponseEntity<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email) {
     log.info("최근 읽은 아티클 API 시작");
     log.info("email = {} ",email);
     final List<MypageArticle> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
@@ -64,23 +65,23 @@ public class MypageController {
   }
 
   @PatchMapping("/{email}/profile")
-  public final ResponseEntity<?> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
+  public final ResponseEntity<MessageResponse> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
     log.info("마이페이지 프로필 이미지 수정 시작");
     log.info("email = {} ",email);
     log.info("img = {} ",request.profileImg());
     mypageService.updateProfileImgByEmail(email,request.profileImg());
     log.info("마이페이지 프로필이미지 수정 완료");
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new MessageResponse("프로필 이미지 변경 성공"));
   }
 
   @PatchMapping("/{email}/background")
-  public final ResponseEntity<?> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
+  public final ResponseEntity<MessageResponse> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
     log.info("마이페이지 배경이미지 수정 시작");
     log.info("email = {} ",email);
     log.info("img = {} ",request.backgroundImg());
     mypageService.updateBackgroundImgByEmail(email,request.backgroundImg());
     log.info("마이페이지 배경이미지 수정 완료");
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new MessageResponse("배경 이미지 변경 성공"));
   }
 
   @GetMapping("/{email}/subscribe-list")
@@ -93,7 +94,7 @@ public class MypageController {
   }
 
   @PatchMapping("/{email}")
-  public final ResponseEntity<?> updateUserDetails(@PathVariable("email") String email,
+  public final ResponseEntity<MessageResponse> updateUserDetails(@PathVariable("email") String email,
                                                    @RequestBody(required = false) UpdateUserDetailRequestDto request)
   {
     log.info("마이페이지 개인설정 API 시작");
@@ -101,7 +102,7 @@ public class MypageController {
     UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
     mypageService.updateUserDetails(updateUserDetailDto);
     log.info("마이페이지 개인설정 API 완료");
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new MessageResponse("개인 설정 완료"));
   }
 
   private UpdateUserDetailDto getUpdateUserDetailDto(String email, UpdateUserDetailRequestDto request) {
@@ -115,7 +116,7 @@ public class MypageController {
   }
 
   @PostMapping("/username-duplicate")
-  public final ResponseEntity<?> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
+  public final ResponseEntity<CheckDuplicationResponseDto> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
     String nickname = request.nickname();
     log.info("마이페이지 개인설정 닉네임 중복체크 시작");
     log.info("nickname = {} ",nickname);
