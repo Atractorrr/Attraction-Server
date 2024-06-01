@@ -7,7 +7,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.user.User;
@@ -18,7 +17,6 @@ import run.attraction.api.v1.user.repository.UserRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class MypageUserServiceImpl implements MypageUserService {
   private final UserRepository userRepository;
   private final UserDetailRepository userDetailRepository;
@@ -57,21 +55,16 @@ public class MypageUserServiceImpl implements MypageUserService {
     return betweenMonths == EXPIRATION_FOREVER ? 0 : betweenMonths;
   }
 
-  @Transactional
   public void updateProfileImg(String email, String profileImg) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateProfileImg(profileImg);
-    userRepository.save(user);
   }
 
-  @Transactional
   public void updateBackgroundImg(String email, String backgroundImg) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateBackgroundImg(backgroundImg);
-    userRepository.save(user);
   }
 
-  @Transactional
   public void updateUserDetail(UpdateUserDetailDto updateUserDetailDto) {
     final String email = updateUserDetailDto.getEmail();
     User user = userRepository.findById(email)
@@ -87,10 +80,8 @@ public class MypageUserServiceImpl implements MypageUserService {
       final LocalDate newExpiration = user.getUpdateAt().plus(Period.ofMonths(expiration));
       userDetail.updateUserExpiration(newExpiration);
     });
-    userDetailRepository.save(userDetail);
   }
 
-  @Transactional
   public boolean checkNicknameDuplication(String nickname) {
     log.info("userDetailRepository.existsByNickname() 시작");
     final boolean result = userDetailRepository.existsByNickname(nickname);
