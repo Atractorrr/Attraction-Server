@@ -3,8 +3,6 @@ package run.attraction.api.v1.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.auth.service.AuthService;
 import run.attraction.api.v1.auth.service.dto.ReissueTokenResponseDto;
@@ -42,22 +39,26 @@ public class AuthController {
                                  HttpServletResponse response) {
     log.info("로그인 시작");
     log.info("요청 받은 code = {}", loginRequestDto.getCode());
-    final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(),loginRequestDto.getCode());
-
+    final UserTokenDto userTokenDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
     log.info("JWT 토큰 등록 및 유저 저장 완료");
-    log.info("헤더에 토큰 담기 시작 진입");
+
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
     if (userTokenDto.isUserBefore()) {
       log.info("기존 유저에 대한 응답 response 전달(로그인 완료)");
 
       return ResponseEntity.status(HttpStatus.CREATED).body(
-          new LoginResponseDto(userTokenDto.getEmail(),userTokenDto.getAccessToken(), userTokenDto.getShouldReissueToken()));
+          new LoginResponseDto(userTokenDto.getEmail(),
+              userTokenDto.getAccessToken(),
+              userTokenDto.getShouldReissueToken(),
+              userTokenDto.isHasExtraDetails()
+          ));
     }
     log.info("새로운 유저에 대한 응답 response 전달(로그인 완료)");
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .email(userTokenDto.getEmail())
-        .hasExtraDetails(false)
         .accessToken(userTokenDto.getAccessToken())
+        .hasExtraDetails(false)
+        .shouldReissueToken(false)
         .build());
   }
 
@@ -66,10 +67,11 @@ public class AuthController {
     log.info("회원가입 닉네임 중복 체크 시작");
     String nickname = request.nickname();
     final boolean result = authService.checkNicknameDuplication(nickname);
-    log.info("회원가입 닉네임 중복 체크 결과 = {}",result);
-    if(result){
+    log.info("회원가입 닉네임 중복 체크 결과 = {}", result);
+    if (result) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new CheckDuplicationResponseDto(result));
-    };
+    }
+    ;
     return ResponseEntity.ok().body(new CheckDuplicationResponseDto(result));
   }
 

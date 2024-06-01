@@ -30,9 +30,9 @@ public class MypageArticleServiceImpl implements MypageArticleService {
   private final ReadBoxRepository readBoxRepository;
 
   public List<MypageArticle> getUserRecentArticles(String email) {
-    log.info("{}을 가진 ReadBox 조회 시작");
+    log.info("{}을 가진 ReadBox 조회 시작",email);
     final List<UserReadBoxDetail> userReadBoxDetails = getReadBoxDetailsByEmail(email);
-    log.info("{}을 가진 ReadBox 조회 완료");
+    log.info("{}을 가진 ReadBox 조회 완료",email);
     LocalDate endDate = LocalDate.now();
     LocalDate startDate = LocalDate.now().minusDays(6);
     log.info("조회 범위");

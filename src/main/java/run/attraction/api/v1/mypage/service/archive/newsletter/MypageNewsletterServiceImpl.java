@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.Subscribe;
 import run.attraction.api.v1.archive.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 
 @Component
@@ -15,16 +17,21 @@ import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewslet
 @Transactional(readOnly = true)
 public class MypageNewsletterServiceImpl implements MypageNewsletterService {
   private final SubscribeRepository subscribeRepository;
+  private final NewsletterRepository newsletterRepository;
 
   @Override
   public List<MypageNewsletterDetail> getSubscribesByEmail(String email) {
     final Optional<Subscribe> subscribe = subscribeRepository.findByUserEmail(email);
-    return subscribe.map(value -> value.getNewsletters().stream()
-            .map(newsletter -> new MypageNewsletterDetail(
-                newsletter.getId(),
-                newsletter.getThumbnailUrl(),
-                newsletter.getName()))
-            .toList())
+    return subscribe
+        .map(sub -> {
+          List<Newsletter> newsletters = newsletterRepository.findNewslettersByNewsletterIds(sub.getNewsletterIds());
+          return newsletters.stream()
+              .map(newsletter -> new MypageNewsletterDetail(
+                  newsletter.getId(),
+                  newsletter.getThumbnailUrl(),
+                  newsletter.getName()))
+              .toList();
+        })
         .orElseGet(ArrayList::new);
   }
 }

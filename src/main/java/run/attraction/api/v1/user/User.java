@@ -1,21 +1,13 @@
 package run.attraction.api.v1.user;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,28 +45,6 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  /*
-   * 간편로그인 후 추가로 받을 정보
-   */
-
-  @Column(name = "nick_Name", unique = true, length = 20)
-  private String nickname;
-
-  @ElementCollection(targetClass = Interest.class)
-  @Enumerated(EnumType.STRING)
-  @JoinTable(name = "interests", joinColumns = @JoinColumn(name = "email"))
-  private Set<Interest> interests = new HashSet<>();
-
-  @Column(name = "birth_date")
-  private LocalDate birthDate;
-
-  @Column(name = "user_expiration")
-  private LocalDate userExpiration;
-
-  @Enumerated(EnumType.STRING)
-  @Column(name = "occupation")
-  private Occupation occupation;
-
   @Builder
   private User(
       String email,
@@ -92,26 +62,8 @@ public class User implements UserDetails {
     this.role = role;
   }
 
-  public void addExtraDetails(UserValidator userValidator,
-                              String nickname, List<String> interests, LocalDate birthDate,
-                              LocalDate userExpiration, Occupation occupation) {
-    if (userValidator.isSpecialPatternInNickname(nickname)) {
-      throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
-    }
-    log.info("nickname 대입");
-    this.nickname = nickname;
-    log.info("interests 대입");
-    this.interests.addAll(getInterestFromString(interests));
-    log.info("birthDate 대입");
-    this.birthDate = birthDate;
-    log.info("userExpiration 대입");
-    this.userExpiration = userExpiration;
-    log.info("occupation 대입");
-    this.occupation = occupation;
-  }
-  public void renewUpdateAtAndExpirationAt(LocalDate updateAt,LocalDate userExpiration){
+  public void renewUpdateAt(LocalDate updateAt){
     this.updateAt = updateAt;
-    this.userExpiration = userExpiration;
   }
 
   public void updateProfileImg(String profileImg){
@@ -120,31 +72,6 @@ public class User implements UserDetails {
 
   public void updateBackgroundImg(String backgroundImg){
     this.backgroundImg = backgroundImg;
-  }
-
-  public void updateNickName(String nickname){
-    this.nickname = nickname;
-  }
-
-  public void updateExpiration(Integer month){
-    this.userExpiration = updateAt.plus(Period.ofMonths(month));
-  }
-
-  public void updateInterest(List<String> interests){
-    this.interests = interests.stream()
-        .map(Interest::valueOf)
-        .collect(Collectors.toSet());
-  }
-
-  public void updateOccupation(String occupation){
-    this.occupation = Occupation.valueOf(occupation);
-  }
-
-  private static List<Interest> getInterestFromString(List<String> interests) {
-    log.info("String -> Interest로 변환");
-    return interests.stream()
-        .map(Interest::valueOf)
-        .collect(Collectors.toList());
   }
 
   @Override

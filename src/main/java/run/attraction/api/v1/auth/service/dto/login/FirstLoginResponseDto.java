@@ -6,14 +6,16 @@ import lombok.Getter;
 @Getter
 public class FirstLoginResponseDto {
   private String email;
-  private boolean hasExtraDetails;
   private String accessToken;
+  private boolean shouldReissueToken;
+  private boolean hasExtraDetails;
 
   @Builder
-  private FirstLoginResponseDto(String email, boolean hasExtraDetails, String accessToken) {
+  private FirstLoginResponseDto(String email, String accessToken, boolean shouldReissueToken, boolean hasExtraDetails) {
     this.email = email;
-    this.hasExtraDetails = hasExtraDetails;
     this.accessToken = accessToken;
+    this.shouldReissueToken = shouldReissueToken;
+    this.hasExtraDetails = hasExtraDetails;
   }
 }
 

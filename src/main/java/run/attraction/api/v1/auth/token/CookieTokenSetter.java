@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 public class CookieTokenSetter {
   private static final String KEY = "Refresh-Token";
 
-  private static final int EXPIRE_TIME = 60 * 60 * 2;
-//  private static final int EXPIRE_TIME = 7 * 24 * 60 * 60;
+//  private static final int EXPIRE_TIME = 60 * 60 * 2;
+  private static final int EXPIRE_TIME = 7 * 24 * 60 * 60;
 
   @Value("${application.security.jwt.refresh-token.expiration}")
   private long expireTime;
 
   public void setCookieToken(HttpServletResponse response, String refreshToken) {
-
+    log.info("헤더에 토큰 담기 시작");
     Cookie cookie = new Cookie(KEY, refreshToken);
 
     cookie.setMaxAge((int) expireTime);
@@ -30,6 +30,7 @@ public class CookieTokenSetter {
     cookie.setHttpOnly(true);
     cookie.setPath("/");
     response.addCookie(cookie);
+    log.info("헤더에 토큰 담기 완료");
   }
 
   public void expireCookieToken(HttpServletResponse response) {
