@@ -32,7 +32,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
 
   public List<String> getDefaultCategories() {
     return Stream.concat(
-        Stream.of("RECOMMAND"),
+        Stream.of("RECOMMEND"),
         Stream.of(Category.values()).map(Enum::name)
     ).toList();
   }
@@ -45,7 +45,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
     UserDetail userDetail = userDetailRepository.findById(email)
         .orElseThrow(() -> new NoSuchElementException("추가 정보를 받지 않은 유저 입니다."));
     final Set<Interest> interests = userDetail.getInterests();
-    return Stream.concat(Stream.concat(Stream.of("RECOMMAND"), interests.stream().map(Interest::name)),
+    return Stream.concat(Stream.concat(Stream.of("RECOMMEND"), interests.stream().map(Interest::name)),
         Stream.of(Category.values())
             .map(Category::name)
             .filter(categoryName -> interests.stream().map(Interest::name)
