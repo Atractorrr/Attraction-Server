@@ -46,7 +46,7 @@ public class HomeController {
   }
 
   @GetMapping("/user/{email}/articles/received")
-  public ResponseEntity<?> getReceivedArticles(@Valid @PathVariable String email) {
+  public ResponseEntity<ReceivedArticlesResponseDto> getReceivedArticles(@Valid @PathVariable String email) {
     log.info("홈페이지 받은 아티클 API 시작");
     log.info("email= {}", email);
     final List<ArticleDetailDto> articles = service.getReceivedArticlesByEmail(email);
