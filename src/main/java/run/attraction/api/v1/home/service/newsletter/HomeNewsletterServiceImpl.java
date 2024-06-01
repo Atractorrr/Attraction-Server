@@ -113,11 +113,14 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
     List<Newsletter> mostNewsletters;
     log.info("id로 뉴스레터 조회");
     if (mostSubscribedNewsletterIds.size()>=size){
-      mostNewsletters = newsletterRepository.findAllById(mostSubscribedNewsletterIds.subList(0, size));
+      mostNewsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds.subList(0, size));
+      log.info("mostNewsletters.size = {}", mostNewsletters.size());
     }else{
-      final List<Newsletter> newsletters = newsletterRepository.findAllById(mostSubscribedNewsletterIds);
+      final List<Newsletter> newsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds);
+      log.info("newsletters.size = {}", newsletters.size());
       log.info("가장 많이 구독한 구독한 뉴스레터 조회 결과가 {}보다 적어 랜덤으로 추가합니다.",size);
       final List<Newsletter> newsletterRandom = newsletterRepository.findNewsletterRandom(mostSubscribedNewsletterIds, size - mostSubscribedNewsletterIds.size());
+      log.info("newsletterRandom.size = {}", newsletterRandom.size());
       mostNewsletters = Stream.concat(newsletters.stream(), newsletterRandom.stream()).toList();
     }
 
