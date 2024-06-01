@@ -14,11 +14,11 @@ import run.attraction.api.v1.user.repository.UserRepository;
 
 import java.time.LocalDate;
 
-@Component
-@Slf4j
-@RequiredArgsConstructor
-public class Userinit {
-
+//@Component
+//@Slf4j
+//@RequiredArgsConstructor
+//public class Userinit {
+//
 //  private final InitUserService initUserService;
 //
 //  @PostConstruct
@@ -46,4 +46,4 @@ public class Userinit {
 //      log.info("user email = {}", user.getEmail());
 //    }
 //  }
-}
+//}
