@@ -59,7 +59,7 @@ public class MypageController {
     log.info("최근 읽은 아티클 API 시작");
     log.info("email = {} ",email);
     final List<MypageArticle> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
-    log.info("조회 완료");
+    log.info("최근 읽은 아티클 API 완료");
     return ResponseEntity.ok(new RecentArticlesResponseDto(recentArticlesByEmail));
   }
 

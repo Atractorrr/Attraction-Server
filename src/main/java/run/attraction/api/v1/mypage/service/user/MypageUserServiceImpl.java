@@ -3,6 +3,7 @@ package run.attraction.api.v1.mypage.service.user;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,27 +25,30 @@ public class MypageUserServiceImpl implements MypageUserService {
 
   private static final int EXPIRATION_FOREVER = 120;
   public UserDetailDto getUserDetails(String email) {
-    log.info("유저 검색 시작");
+    log.info("User Detail 검색 시작");
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
-    UserDetail userDetail = userDetailRepository.findById(email).orElseThrow(() -> new NoSuchElementException("추가 정보를 입력하지 않은 유저입니다."));
-    log.info("유저 검색 완료");
-    log.info("닉네임 = {}", userDetail.getNickname());
-    log.info("프로필 url = {}", user.getProfileImg());
-    log.info("배경 이미지 url = {}", userDetail.getNickname());
-    log.info("관심사 = {}", userDetail.getInterests().toString());
-    log.info("직업 = {}", userDetail.getOccupation().name());
+    //추가정보를 입력하지 않을 수도 있기때문에 예외 X
+    final Optional<UserDetail> userDetail = userDetailRepository.findById(email);
+    log.info("User Detail 검색 완료");
+    log.info("조회결과 = {}", userDetail.isPresent());
     return getUserDetailDto(user,userDetail);
   }
 
-  private static UserDetailDto getUserDetailDto(User user,UserDetail userDetail) {
-    return new UserDetailDto(
-        user.getEmail(),
-        userDetail.getNickname(),
-        user.getProfileImg(),
-        user.getBackgroundImg(),
-        userDetail.getInterests(),
-        userDetail.getOccupation().name(),
-        calculateExpiration(user,userDetail));
+  private static UserDetailDto getUserDetailDto(User user,Optional<UserDetail> userDetail) {
+    return userDetail.map(detail -> UserDetailDto.builder()
+            .email(user.getEmail())
+            .name(detail.getNickname())
+            .profileImg(user.getProfileImg())
+            .backgroundImg(user.getBackgroundImg())
+            .interest(detail.getInterests())
+            .occupation(detail.getOccupation().name())
+            .userExpiration(calculateExpiration(user, detail))
+            .build())
+        .orElseGet(() -> UserDetailDto.builder()
+            .email(user.getEmail())
+            .profileImg(user.getProfileImg())
+            .backgroundImg(user.getBackgroundImg())
+            .build());
   }
 
   private static int calculateExpiration(User user,UserDetail userDetail){
@@ -85,8 +89,8 @@ public class MypageUserServiceImpl implements MypageUserService {
 
   @Transactional
   public boolean checkNicknameDuplication(String nickname) {
-    log.info("userRepository.existsByNickname() 시작");
-    final boolean result = userRepository.existsByNickname(nickname);
+    log.info("userDetailRepository.existsByNickname() 시작");
+    final boolean result = userDetailRepository.existsByNickname(nickname);
     log.info("result = {}", result);
     return result;
   }
