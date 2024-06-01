@@ -80,7 +80,6 @@ public class GoogleOAuthService implements OAuthService {
         .email(email)
         .profileImg(profileImg)
         .backgroundImg(null)
-        .createdAt(LocalDate.now())
         .updateAt(LocalDate.now())
         .role(Role.USER)
         .build();

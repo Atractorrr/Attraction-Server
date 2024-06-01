@@ -19,13 +19,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import run.attraction.api.v1.archive.AuditableEntity;
 
 @Slf4j
 @Entity
 @Table(name = "user_detail")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDetail {
+public class UserDetail extends AuditableEntity {
 
   @Id
   @Column(name = "email", length = 100)
