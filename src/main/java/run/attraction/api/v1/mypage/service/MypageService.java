@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.archive.article.MypageArticleService;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterService;
 import run.attraction.api.v1.mypage.service.calendar.MypageCalendarService;
@@ -18,6 +19,7 @@ import run.attraction.api.v1.mypage.service.user.MypageUserService;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MypageService {
   private final MypageUserService userService;
   private final MypageCalendarService calendarService;
@@ -41,11 +43,12 @@ public class MypageService {
     return articleService.getUserRecentArticles(email);
   }
 
-
+  @Transactional
   public void updateProfileImgByEmail(String email, String profileImg){
     userService.updateProfileImg(email, profileImg);
   }
 
+  @Transactional
   public void updateBackgroundImgByEmail(String email, String backgroundImg){
     userService.updateBackgroundImg(email, backgroundImg);
   }
@@ -54,10 +57,12 @@ public class MypageService {
     return newsletterService.getSubscribesByEmail(email);
   }
 
+  @Transactional
   public void updateUserDetails(UpdateUserDetailDto updateUserDetailDto){
     userService.updateUserDetail(updateUserDetailDto);
   }
 
+  @Transactional
   public boolean checkNicknameDuplication(String nickname) {
     return userService.checkNicknameDuplication(nickname);
   }
