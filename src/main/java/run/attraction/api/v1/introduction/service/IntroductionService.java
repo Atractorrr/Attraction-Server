@@ -41,7 +41,7 @@ public class IntroductionService {
 
     return previousArticles.stream()
         .limit(size)
-        .map(PreviousArticleResponse::from)
+        .map(previousArticle -> PreviousArticleResponse.from(previousArticle, newsletter.getName()))
         .collect(Collectors.toList());
   }
 
