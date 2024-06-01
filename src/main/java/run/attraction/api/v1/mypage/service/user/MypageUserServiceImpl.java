@@ -61,12 +61,14 @@ public class MypageUserServiceImpl implements MypageUserService {
   public void updateProfileImg(String email, String profileImg) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateProfileImg(profileImg);
+    userRepository.save(user);
   }
 
   @Transactional
   public void updateBackgroundImg(String email, String backgroundImg) {
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateBackgroundImg(backgroundImg);
+    userRepository.save(user);
   }
 
   @Transactional
@@ -85,6 +87,7 @@ public class MypageUserServiceImpl implements MypageUserService {
       final LocalDate newExpiration = user.getUpdateAt().plus(Period.ofMonths(expiration));
       userDetail.updateUserExpiration(newExpiration);
     });
+    userDetailRepository.save(userDetail);
   }
 
   @Transactional
