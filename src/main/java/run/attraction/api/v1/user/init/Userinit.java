@@ -19,31 +19,31 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class Userinit {
 
-  private final InitUserService initUserService;
-
-  @PostConstruct
-  public void init() {
-    initUserService.init();
-  }
-
-  @Service
-  @RequiredArgsConstructor
-  public static class InitUserService {
-    private final UserRepository userRepository;
-
-    private void init() {
-      final User user = User.builder()
-          .email("test@gmail.com")
-          .profileImg("test_profile_img")
-          .backgroundImg("test_background_img")
-          .createdAt(LocalDate.now())
-          .updateAt(LocalDate.now())
-          .role(Role.USER)
-          .build();
-
-      userRepository.save(user);
-
-      log.info("user email = {}", user.getEmail());
-    }
-  }
+//  private final InitUserService initUserService;
+//
+//  @PostConstruct
+//  public void init() {
+//    initUserService.init();
+//  }
+//
+//  @Service
+//  @RequiredArgsConstructor
+//  public static class InitUserService {
+//    private final UserRepository userRepository;
+//
+//    private void init() {
+//      final User user = User.builder()
+//          .email("test@gmail.com")
+//          .profileImg("test_profile_img")
+//          .backgroundImg("test_background_img")
+//          .createdAt(LocalDate.now())
+//          .updateAt(LocalDate.now())
+//          .role(Role.USER)
+//          .build();
+//
+//      userRepository.save(user);
+//
+//      log.info("user email = {}", user.getEmail());
+//    }
+//  }
 }
