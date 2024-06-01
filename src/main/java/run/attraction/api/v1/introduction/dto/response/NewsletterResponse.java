@@ -10,7 +10,7 @@ public record NewsletterResponse(
     Category category,
     String mainLink,
     String subscribeLink,
-    String thumbnail
+    String thumbnailUrl
 ) {
   public static NewsletterResponse from(Newsletter newsletter) {
     return new NewsletterResponse(

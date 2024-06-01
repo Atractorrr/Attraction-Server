@@ -12,7 +12,7 @@ public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
   @Query("SELECT COUNT(n) FROM Newsletter n WHERE n.category = :category AND n.id <> :id")
   int countByCategoryAndIdNot(@Param("id") Long id, @Param("category") Category category);
 
-  @Query(value = "SELECT * FROM Newsletter n WHERE n.category = :category AND n.id <> :id LIMIT :size OFFSET :offset", nativeQuery = true)
+  @Query(value = "SELECT * FROM newsletter n WHERE n.category = :category AND n.id <> :id LIMIT :size OFFSET :offset", nativeQuery = true)
   List<Newsletter> findByCategoryAndIdNotWithOffset(@Param("id") Long id, @Param("category") String category,
                                                     @Param("size") int size, @Param("offset") int offset);
 
