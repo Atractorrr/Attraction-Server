@@ -15,13 +15,14 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import run.attraction.api.v1.archive.AuditableEntity;
 
 @Slf4j
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User implements UserDetails {
+public class User extends AuditableEntity implements UserDetails {
 
   @Id
   @Column(name = "email", length = 100)
@@ -32,9 +33,6 @@ public class User implements UserDetails {
 
   @Column(name = "background_img")
   private String backgroundImg;
-
-  @Column(name = "created_at")
-  private LocalDate createdAt;
 
   @Column(name = "update_at")
   private LocalDate updateAt;
@@ -50,14 +48,12 @@ public class User implements UserDetails {
       String email,
       String profileImg,
       String backgroundImg,
-      LocalDate createdAt,
       LocalDate updateAt,
       Role role
   ) {
     this.email = email;
     this.profileImg = profileImg;
     this.backgroundImg = backgroundImg;
-    this.createdAt = createdAt;
     this.updateAt = updateAt;
     this.role = role;
   }

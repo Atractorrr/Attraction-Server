@@ -45,7 +45,7 @@ public class JoinHelper {
     log.info("유저 검색 완료");
 
     final LocalDate birthDate = convertToDate(stringBirthDate);
-    final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt(), userExpiration);
+    final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt().toLocalDate(), userExpiration);
     log.info("birthDate = {}", birthDate);
     log.info("userExpirationDate = {}", userExpirationDate);
     saveUserDetail(userValidator, nickname, interest, stringBirthDate, userExpiration, occupation, user);
