@@ -45,8 +45,8 @@ public class Article extends AuditableEntity {
 
   @Column(nullable = false, length = 30)
   private String newsletterNickname;
-  
-  @Column(nullable = false)
+
+  @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
   @Builder.Default
   boolean isDeleted = false;
 
