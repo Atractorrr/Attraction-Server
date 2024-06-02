@@ -8,7 +8,7 @@ import run.attraction.api.v1.user.Interest;
 @Builder
 public record UserDetailDto(
   String email,
-  String name,
+  String nickname,
   String profileImg,
   String backgroundImg,
   Set<Interest> interest,
