@@ -43,13 +43,13 @@ public class AdminArticle extends AuditableEntity {
     @Column(nullable = false)
     private LocalDate receivedAt;
 
-    @Column(nullable = false,  length = 100)
+    @Column(nullable = false,  length = 200)
     private String contentSummary;
 
     @Column(nullable = false, length = 30)
     private String newsletterNickname;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
     @Builder.Default
     boolean isDeleted = false;
 }
