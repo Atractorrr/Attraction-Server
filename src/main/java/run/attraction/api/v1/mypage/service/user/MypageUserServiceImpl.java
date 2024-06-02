@@ -35,7 +35,7 @@ public class MypageUserServiceImpl implements MypageUserService {
   private static UserDetailDto getUserDetailDto(User user,Optional<UserDetail> userDetail) {
     return userDetail.map(detail -> UserDetailDto.builder()
             .email(user.getEmail())
-            .name(detail.getNickname())
+            .nickname(detail.getNickname())
             .profileImg(user.getProfileImg())
             .backgroundImg(user.getBackgroundImg())
             .interest(detail.getInterests())
