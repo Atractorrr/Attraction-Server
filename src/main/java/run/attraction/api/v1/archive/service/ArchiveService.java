@@ -75,7 +75,10 @@ public class ArchiveService {
   }
 
   private Subscribe createSubscribe(String userEmail) {
-    return new Subscribe(userEmail);
+    return Subscribe.builder()
+        .userEmail(userEmail)
+        .newsletterIds(new ArrayList<>())
+        .build();
   }
 
   private void saveUserSubscribedNewsletterCategory(String userEmail, Category category) {
