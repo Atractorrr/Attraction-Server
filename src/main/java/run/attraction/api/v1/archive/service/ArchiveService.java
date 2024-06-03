@@ -1,5 +1,6 @@
 package run.attraction.api.v1.archive.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,12 @@ import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
 import run.attraction.api.v1.archive.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
+import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class ArchiveService {
   final private ReadBoxRepository readBoxRepository;
   final private NewsletterRepository newsletterRepository;
   final private SubscribeRepository subscribeRepository;
+  final private UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
 
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
@@ -62,14 +67,44 @@ public class ArchiveService {
     Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
         .orElse(createSubscribe(userEmail));
 
+    saveUserSubscribedNewsletterCategory(userEmail, newsletter.getCategory());
     subscribe.saveNewsletterId(newsletter.getId());
     subscribeRepository.save(subscribe);
+
     return new NewsletterEmail(newsletter.getEmail());
   }
 
   private Subscribe createSubscribe(String userEmail) {
     return new Subscribe(userEmail);
   }
+
+  private void saveUserSubscribedNewsletterCategory(String userEmail, Category category) {
+    UserSubscribedNewsletterCategory userSubscribedNewsletterCategory = userSubscribedNewsletterCategoryRepository.findByUserEmail(
+        userEmail).orElseGet(() -> {
+      var newCategory = createUserSubscribedNewsletterCategory(userEmail, category);
+      userSubscribedNewsletterCategoryRepository.save(newCategory);
+      return newCategory;
+    });
+
+    if(hasCategory(userSubscribedNewsletterCategory,category)) {
+      return;
+    }
+
+    userSubscribedNewsletterCategory.getCategories().add(category);
+    userSubscribedNewsletterCategoryRepository.save(userSubscribedNewsletterCategory);
+  }
+
+  private UserSubscribedNewsletterCategory createUserSubscribedNewsletterCategory(String userEmail, Category category) {
+    return UserSubscribedNewsletterCategory.builder()
+        .userEmail(userEmail)
+        .categories(new ArrayList<>(List.of(category)))
+        .build();
+  }
+
+  private boolean hasCategory(UserSubscribedNewsletterCategory userSubscribedNewsletterCategory, Category category) {
+    return userSubscribedNewsletterCategory.getCategories().contains(category);
+  }
+
 
   @Transactional
   public List<Newsletter> getSubscribedNewslettersByUser(String userEmail) {
