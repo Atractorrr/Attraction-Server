@@ -47,6 +47,12 @@ public class ArchiveService {
     return articleRepository.findArticlesByUserEmail(userEmail, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
   }
 
+  @Transactional(readOnly = true)
+  public ArticleDTO findArticleByArticleId(String userEmail, Long articleId) {
+    return articleRepository.findArticleByUserEmailAndArticleId(userEmail, articleId)
+        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_ARTICLE.getViewName()));
+  }
+
   @Transactional
   public void saveUserArticleProgress(String userEmail, Long articleId, int percentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)

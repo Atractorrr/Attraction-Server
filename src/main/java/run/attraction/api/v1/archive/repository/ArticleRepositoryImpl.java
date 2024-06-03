@@ -87,4 +87,15 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
             .fetchOne()
     ).orElse(0L);
   }
+
+  @Override
+  public Optional<ArticleDTO> findArticleByUserEmailAndArticleId(String userEmail, Long articleId) {
+    return Optional.ofNullable(queryFactory
+        .select(new QArticleDTO(this.article, readBox.percentage, newsletter))
+        .from(this.article)
+        .join(readBox).on(this.article.id.eq(readBox.articleId).and(this.article.userEmail.eq(readBox.userEmail)))
+        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
+        .where(article.id.eq(articleId).and(article.userEmail.eq(userEmail)))
+        .fetchOne());
+  }
 }
