@@ -43,6 +43,13 @@ public class ArchiveController {
     return ApiResponse.from(HttpStatus.OK, "성공", articles);
   }
 
+  @GetMapping("/{userEmail}/article/{articleId}")
+  public ApiResponse<ArticleDTO> getUserArticle(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long articleId) {
+    ArticleDTO article = archiveService.findArticleByArticleId(userEmail, articleId);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", article);
+  }
+
   @PutMapping("/{userEmail}/article/{articleId}")
   public ApiResponse<Void> saveUserArticleProgress(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long articleId, @RequestParam @NotNull int percentage) {
     archiveService.saveUserArticleProgress(userEmail, articleId, percentage);
