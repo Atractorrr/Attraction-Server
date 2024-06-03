@@ -47,6 +47,10 @@ public class AuthController {
     if (userTokenDto.isUserBefore()) {
       log.info("기존 유저에 대한 응답 response 전달(로그인 완료)");
 
+      log.info("Email = {}", userTokenDto.getEmail());
+      log.info("AccessToken = {}", userTokenDto.getAccessToken());
+      log.info("ShouldReissueToken = {}", userTokenDto.getShouldReissueToken());
+      log.info("hasExtraDetails = {}", userTokenDto.isHasExtraDetails());
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userTokenDto.getEmail(),
               userTokenDto.getAccessToken(),
@@ -54,6 +58,9 @@ public class AuthController {
               userTokenDto.isHasExtraDetails()
           ));
     }
+
+    log.info("Email = {}", userTokenDto.getEmail());
+    log.info("AccessToken = {}", userTokenDto.getAccessToken());
     log.info("새로운 유저에 대한 응답 response 전달(로그인 완료)");
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .email(userTokenDto.getEmail())
