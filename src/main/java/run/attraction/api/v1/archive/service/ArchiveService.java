@@ -112,4 +112,12 @@ public class ArchiveService {
 
     return newsletterRepository.findNewslettersByNewsletterIds(newsletterIds);
   }
+
+  @Transactional(readOnly = true)
+  public List<?> getUserSubscribedNewsletterCategories(String userEmail) {
+    return userSubscribedNewsletterCategoryRepository.findByUserEmail(userEmail)
+        .map(UserSubscribedNewsletterCategory::getCategories)
+        .orElseGet(ArrayList::new);
+  }
+
 }
