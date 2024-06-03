@@ -24,6 +24,7 @@ import run.attraction.api.v1.auth.service.dto.login.FirstLoginResponseDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginRequestDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginResponseDto;
 import run.attraction.api.v1.auth.token.CookieTokenSetter;
+import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -76,11 +77,11 @@ public class AuthController {
   }
 
   @PostMapping("/join")
-  public ResponseEntity<?> join(@Valid @RequestBody JoinRequestDto joinRequestDto) {
+  public ResponseEntity<MessageResponse> join(@Valid @RequestBody JoinRequestDto joinRequestDto) {
     log.info("[join] 추가정보 받기 시작");
     authService.join(joinRequestDto);
     log.info("[join] 추가정보 저장하기 완료");
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new MessageResponse("회원가입이 완료되었습니다."));
   }
 
 
