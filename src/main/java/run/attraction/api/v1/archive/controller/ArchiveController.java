@@ -62,8 +62,15 @@ public class ArchiveController {
     return ApiResponse.from(HttpStatus.OK, "성공", null);
   }
 
+  @GetMapping("/{userEmail}/categories")
+  public ApiResponse<List<?>> getUserSubscribedNewsletterCategories(@PathVariable String userEmail) {
+    List<?> userSubscribedNewsletterCategories = archiveService.getUserSubscribedNewsletterCategories(userEmail);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", userSubscribedNewsletterCategories);
+  }
+
   // DEPRECATED
-  @GetMapping("{userEmail}/subscribe")
+  @GetMapping("/{userEmail}/subscribe")
   public ApiResponse<List<Newsletter>> getSubscribedNewslettersByUser(@PathVariable String userEmail) {
     List<Newsletter> subscribeNewsletters = archiveService.getSubscribedNewslettersByUser(userEmail);
 
