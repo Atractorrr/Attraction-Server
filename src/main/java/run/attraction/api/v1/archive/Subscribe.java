@@ -37,10 +37,6 @@ public class Subscribe {
   @Column(nullable = false)
   private String userEmail;
 
-  public Subscribe(String userEmail) {
-    this.userEmail = userEmail;
-  }
-
   public void saveNewsletterId(Long newsletterId) {
     newsletterIds.add(newsletterId);
   }
