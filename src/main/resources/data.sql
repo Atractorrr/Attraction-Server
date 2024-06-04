@@ -41,13 +41,15 @@ INSERT INTO newsletter (id, email, name, description, category, main_link, subsc
 
 
 INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, created_at) VALUES
-     (1, 'techweekly@example.com', 'test@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1', "a",  false, '2024-05-01'),
-     (2, 'techweekly@example.com', 'test@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1' , "b", false, '2024-05-02'),
-     (3, 'healthinsights@example.com', 'test@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
-     (4, 'financedaily@example.com', 'user3@example.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01'),
+     (1, 'techweekly@example.com', 'test@gmail.com', '테스트 아티클1 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1', "a",  false, '2024-05-01'),
+     (2, 'techweekly@example.com', 'test@gmail.com', '테스트 아티클2 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1' , "b", false, '2024-05-02'),
+     (3, 'healthinsights@example.com', 'test@gmail.com', '테스트 아티클3 Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
+     (4, 'financedaily@example.com', 'user2@example.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3', "d" , false, '2024-05-01'),
      (5, 'gadgetworld@example.com', 'user4@example.com', 'Latest Gadgets', 'http://gadgetworld.com/thumbnails/latestgadgets.jpg', 'http://gadgetworld.com/articles/latestgadgets', 2, '2024-01-01', 'content test4' ,"e", false, '2024-05-01'),
      (6, 'healthwellness@example.com', 'user5@example.com', 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01', 'content test5',"f", false, '2024-05-01'),
-     (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g", false, '2024-05-01');
+     (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g", false, '2024-05-01'),
+    (12, 'healthwellness@example.com', 'user3@gmail.com', '테스트 1번 Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 12, '2024-07-01', 'content test6', "g", false, '2024-05-02'),
+    (13, 'healthwellness@example.com', 'user3@gmail.com', '테스트 2번 Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g", false, '2024-05-02');
 
 INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, created_at) VALUES
      (1, 'techweekly@example.com', 'user1@example.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1',  "a",false, '2024-05-01'),
@@ -61,12 +63,9 @@ INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_ur
 
 -- Readbox 데이터 삽입
 INSERT INTO read_box (user_email, article_id, percentage) VALUES
-   ("test@gmail.com", 4, 50),
-   ("test@gmail.com", 5, 60),
-   ("test@gmail.com", 6, 70),
-   ("test@gmail.com", 7, 80),
-   ("test@gmail.com", 8, 77),
-   ("test@gmail.com", 9, 66);
+   ("test@gmail.com", 1, 50),
+   ("test@gmail.com", 2, 60),
+   ("test@gmail.com", 3, 70);
 
 -- User 데이터 삽입
 INSERT  INTO users (email,profile_img,background_img,created_at,update_at,role) VALUES
@@ -92,30 +91,31 @@ INSERT INTO interests (email, interests) VALUES
     ("user3@gmail.com","IT_TECH");
 
 -- Readbox 데이터 삽입 (완독한 경우 추가)
-INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
-    ("user1@gmail.com","2024-04-20", 1, 100),
-    ("user1@gmail.com","2024-04-20", 2, 100),
-    ("user1@gmail.com",NULL, 3, 70),
-    ("user1@gmail.com",NULL, 4, 70),
-    ("user1@gmail.com","2024-04-20", 5, 100),
-    ("user1@gmail.com","2024-04-29", 6, 100),
-    ("user2@gmail.com","2024-05-02", 2, 100),
-    ("user2@gmail.com","2024-05-01", 4, 100),
-    ("user2@gmail.com",NULL, 5, 70),
-    ("user2@gmail.com",NULL, 6, 50);
+# INSERT INTO read_box (user_email,read_date,article_id, percentage) VALUES
+#     ("user1@gmail.com","2024-04-20", 1, 100),
+#     ("user1@gmail.com","2024-04-20", 2, 100),
+#     ("user1@gmail.com",NULL, 3, 70),
+#     ("user1@gmail.com",NULL, 4, 70),
+#     ("user1@gmail.com","2024-04-20", 5, 100),
+#     ("user1@gmail.com","2024-04-29", 6, 100),
+#     ("user2@gmail.com","2024-05-02", 2, 100),
+#     ("user2@gmail.com","2024-05-01", 4, 100),
+#     ("user2@gmail.com",NULL, 5, 70),
+#     ("user2@gmail.com",NULL, 6, 50);
 
 -- 마이페이지 최근 읽은 아티클 조회 Test용
 
 INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, created_at) VALUES
     (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01'),
-    (9, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-05-28', 'content test1' , "b", false, '2024-05-02'),
-    (10, 'healthinsights@example.com', 'user3@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-28', 'content test2', "c", false, '2024-05-01'),
-    (11, 'financedaily@example.com', 'user4@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-28', 'content test3', "d" , false, '2024-05-01');
+    (9, 'techweekly@example.com', 'user2@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-05-28', 'content test1' , "b", false, '2024-05-02'),
+    (10, 'healthinsights@example.com', 'user2@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-28', 'content test2', "c", false, '2024-05-01'),
+    (11, 'financedaily@example.com', 'user2@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-28', 'content test3', "d" , false, '2024-05-01'),
+    (15, 'techweekly@example.com', 'test@gmail.com', '테스트 아티클 15Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01');
 
 INSERT INTO read_box (user_email,modified_at,article_id, percentage) VALUES
-    ("user3@gmail.com","2024-04-20", 8, 50),
-    ("user3@gmail.com","2024-04-20", 9, 70),
-    ("user3@gmail.com","2024-04-20", 10, 100),
+    ("user3@gmail.com","2024-04-20", 8, 100),
+    ("user2@gmail.com","2024-04-20", 9, 70),
+    ("user2@gmail.com","2024-04-20", 10, 100),
     ("user4@gmail.com","2024-04-20", 11, 100);
 
 INSERT INTO subscribe (id,user_email) VALUES

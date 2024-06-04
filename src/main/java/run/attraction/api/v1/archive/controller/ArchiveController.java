@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +37,9 @@ public class ArchiveController {
   private final GmailClient gmailClient;
 
   @GetMapping("/{userEmail}/articles")
-  public ApiResponse<Page<ArticleDTO>> getUserArticles(@PathVariable String userEmail, UserArticlesRequest request) {
-    request.setUserEmail(userEmail);
-    Page<ArticleDTO> articles = archiveService.findArticlesByUserId(request.getUserEmail(), request);
+  public ApiResponse<Page<ArticleDTO>> getUserArticles(@PathVariable String userEmail, @ModelAttribute UserArticlesRequest request) {
+
+    Page<ArticleDTO> articles = archiveService.findArticlesByUserId(userEmail, request);
 
     return ApiResponse.from(HttpStatus.OK, "성공", articles);
   }
