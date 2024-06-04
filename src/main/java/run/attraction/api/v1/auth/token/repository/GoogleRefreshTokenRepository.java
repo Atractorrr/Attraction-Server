@@ -10,6 +10,10 @@ public interface GoogleRefreshTokenRepository extends JpaRepository<GoogleRefres
   Optional<GoogleRefreshToken> findInvalidTokenByEmail(String userEmail);
   GoogleRefreshToken findByEmail(String userEmail);
 
-  @Query("SELECT rt FROM GoogleRefreshToken rt WHERE rt.email = :userEmail AND rt.shouldReissueToken = true")
+  @Query("""
+      SELECT rt FROM GoogleRefreshToken rt 
+      WHERE rt.email = :userEmail
+        AND rt.shouldReissueToken = false 
+  """)
   Optional<GoogleRefreshToken> findTokenByEmail(String userEmail);
 }

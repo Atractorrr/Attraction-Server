@@ -68,8 +68,8 @@ public class MypageController {
   public final ResponseEntity<MessageResponse> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
     log.info("마이페이지 프로필 이미지 수정 시작");
     log.info("email = {} ",email);
-    log.info("img = {} ",request.profileImg());
-    mypageService.updateProfileImgByEmail(email,request.profileImg());
+    log.info("img = {} ",request.fileImgSrc());
+    mypageService.updateProfileImgByEmail(email,request.fileImgSrc());
     log.info("마이페이지 프로필이미지 수정 완료");
     return ResponseEntity.ok(new MessageResponse("프로필 이미지 변경 성공"));
   }
@@ -78,8 +78,8 @@ public class MypageController {
   public final ResponseEntity<MessageResponse> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
     log.info("마이페이지 배경이미지 수정 시작");
     log.info("email = {} ",email);
-    log.info("img = {} ",request.backgroundImg());
-    mypageService.updateBackgroundImgByEmail(email,request.backgroundImg());
+    log.info("img = {} ",request.fileImgSrc());
+    mypageService.updateBackgroundImgByEmail(email,request.fileImgSrc());
     log.info("마이페이지 배경이미지 수정 완료");
     return ResponseEntity.ok(new MessageResponse("배경 이미지 변경 성공"));
   }
