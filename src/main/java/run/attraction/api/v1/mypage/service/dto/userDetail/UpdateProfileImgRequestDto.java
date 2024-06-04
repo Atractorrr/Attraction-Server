@@ -3,9 +3,9 @@ package run.attraction.api.v1.mypage.service.dto.userDetail;
 import java.util.Objects;
 
 public record UpdateProfileImgRequestDto(
-    String profileImg
+    String fileImgSrc
 ) {
   public UpdateProfileImgRequestDto {
-    Objects.requireNonNull(profileImg);
+    Objects.requireNonNull(fileImgSrc);
   }
 }
