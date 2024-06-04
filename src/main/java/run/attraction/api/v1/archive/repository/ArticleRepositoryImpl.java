@@ -1,6 +1,7 @@
 package run.attraction.api.v1.archive.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -13,6 +14,7 @@ import run.attraction.api.v1.archive.QArticle;
 import run.attraction.api.v1.archive.QReadBox;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
+import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
 
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
@@ -37,13 +39,22 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   }
 
   private BooleanExpression buildPredicate(String userEmail, String category, boolean isHideRead, String search) {
-    BooleanExpression predicate = readBox.userEmail.eq(userEmail);
+
+    BooleanExpression predicate = article.userEmail.eq(userEmail);
 
     if (isNotNullAndNotEmpty(category)) {
-      predicate = predicate.and(null);
+      predicate = predicate.and(article.newsletterEmail.in(
+          JPAExpressions.select(newsletter.email)
+              .from(newsletter)
+              .where(newsletter.category.eq(Category.valueOf(category)))
+      ));
     }
     if (isHideRead) {
-      predicate = predicate.and(readBox.percentage.notIn(100));
+      predicate = predicate.and(article.id.notIn(
+          JPAExpressions.select(readBox.articleId)
+              .from(readBox)
+              .where(readBox.percentage.eq(100))
+      ));
     }
     if (isNotNullAndNotEmpty(search)) {
       predicate = predicate.and(article.title.containsIgnoreCase(search));
@@ -58,9 +69,9 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
   private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable) {
     JPAQuery<ArticleDTO> articles = queryFactory
-        .select(new QArticleDTO(this.article, readBox.percentage, newsletter))
+        .select(new QArticleDTO(this.article, readBox.percentage.coalesce(0), newsletter))
         .from(this.article)
-        .join(readBox).on(this.article.id.eq(readBox.articleId))
+        .leftJoin(readBox).on(this.article.id.eq(readBox.articleId))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
         .where(predicate)
         .offset(pageable.getOffset())
@@ -82,7 +93,6 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         queryFactory
             .select(article.count())
             .from(article)
-            .join(readBox).on(article.id.eq(readBox.articleId))
             .where(predicate)
             .fetchOne()
     ).orElse(0L);
