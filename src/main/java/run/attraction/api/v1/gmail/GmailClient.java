@@ -16,13 +16,16 @@ import com.google.api.services.gmail.model.FilterAction;
 import com.google.api.services.gmail.model.FilterCriteria;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.LabelColor;
+import com.google.api.services.gmail.model.ListFiltersResponse;
 import com.google.api.services.gmail.model.ListLabelsResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import run.attraction.AttractionApplication;
@@ -88,20 +91,20 @@ public class GmailClient {
 
   private Label executeNewsletterLabeling(Gmail service) {
     try {
-      final ListLabelsResponse me = service.users().labels().list("me").execute();
-      return me.getLabels().stream()
+      final ListLabelsResponse labelsResponse = service.users().labels().list("me").execute();
+
+      return labelsResponse.getLabels().stream()
           .filter(label -> APPLICATION_NAME.equals(label.getName()))
           .findAny()
-          .orElse(createLabel(service));
-
+          .orElseGet(() -> createLabel(service));
     } catch (IOException e) {
       throw new GmailApiAccessException(e);
     }
   }
 
   private Label createLabel(Gmail service) {
-    LabelColor labelColor = new LabelColor().setTextColor("#ffffff").setBackgroundColor("#16a765");
-    Label createLabel = new Label()
+    final LabelColor labelColor = new LabelColor().setTextColor("#ffffff").setBackgroundColor("#16a765");
+    final Label createLabel = new Label()
         .setColor(labelColor)
         .setName(APPLICATION_NAME)
         .setType("user")
@@ -116,7 +119,25 @@ public class GmailClient {
   }
 
   private void executeNewsletterFiltering(String newsletterEmail, Label label, Gmail service) {
-    Filter filter = new Filter()
+    try {
+      final ListFiltersResponse filtersResponse = service.users().settings().filters().list("me").execute();
+      if (filtersResponse == null) {
+        createFilter(newsletterEmail, label, service);
+        return;
+      }
+
+      filtersResponse.getFilter().stream()
+          .filter(filter -> newsletterEmail.equals(filter.getCriteria().getFrom()))
+          .findAny()
+          .orElseGet(() -> createFilter(newsletterEmail, label, service));
+
+    } catch (IOException e) {
+      throw new GmailApiAccessException(e);
+    }
+  }
+
+  private Filter createFilter(String newsletterEmail, Label label, Gmail service) {
+    final Filter filter = new Filter()
         .setCriteria(new FilterCriteria()
             .setFrom(newsletterEmail))
         .setAction(new FilterAction()
@@ -124,7 +145,7 @@ public class GmailClient {
             .setRemoveLabelIds(Collections.singletonList("INBOX")));
 
     try {
-      service.users().settings().filters().create("me", filter).execute();
+      return service.users().settings().filters().create("me", filter).execute();
     } catch (IOException e) {
       throw new GmailApiAccessException(e);
     }
