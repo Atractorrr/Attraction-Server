@@ -27,7 +27,7 @@ import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailRequestDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
-
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -39,10 +39,10 @@ public class MypageController {
 
   @GetMapping("/{email}")
   public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("email") String email) {
-    log.info("마이페이지 유저 정보 API 시작");
+    log.info("마이페이지 유저 정보 API 시작 ( {} )", LocalDateTime.now());
     log.info("email = {} ",email);
     final UserDetailDto userDetails = mypageService.getUserDetails(email);
-    log.info("마이페이지 유저 정보 추출 완료");
+    log.info("마이페이지 유저 정보 API 완료 ( {} )", LocalDateTime.now());
     return ResponseEntity.ok(new UserDetailsResponseDto(userDetails));
   }
 
@@ -97,11 +97,11 @@ public class MypageController {
   public final ResponseEntity<MessageResponse> updateUserDetails(@PathVariable("email") String email,
                                                    @RequestBody(required = false) UpdateUserDetailRequestDto request)
   {
-    log.info("마이페이지 개인설정 API 시작");
+    log.info("마이페이지 개인설정 API ( {} )", LocalDateTime.now());
     log.info("email = {} ",email);
     UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
     mypageService.updateUserDetails(updateUserDetailDto);
-    log.info("마이페이지 개인설정 API 완료");
+    log.info("마이페이지 개인설정 API ( {} )", LocalDateTime.now());
     return ResponseEntity.ok(new MessageResponse("개인 설정 완료"));
   }
 

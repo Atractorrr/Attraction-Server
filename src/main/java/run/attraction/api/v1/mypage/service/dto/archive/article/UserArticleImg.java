@@ -7,7 +7,7 @@ public record UserArticleImg(
     String profile
 ) {
   public UserArticleImg {
-    Objects.requireNonNull(thumbnail);
-    Objects.requireNonNull(profile);
+//    Objects.requireNonNull(thumbnail);
+//    Objects.requireNonNull(profile);
   }
 }
