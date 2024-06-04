@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import run.attraction.api.v1.home.service.HomeService;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesResponseDto;
 import run.attraction.api.v1.home.service.dto.categories.CategoriesResponseDto;
-import run.attraction.api.v1.home.service.HomeService;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewslettersResponseDto;
 
@@ -36,7 +36,7 @@ public class HomeController {
 
   @GetMapping("/newsletters/recommend")
   public ResponseEntity<NewslettersResponseDto> getNewsletterByCategory(@Valid @RequestParam String category,
-                                                   @Valid @RequestParam int size ) {
+                                                   @Valid @RequestParam int size) {
     log.info("홈페이지 뉴스레터 반환 API 시작");
     log.info("category= {}", category);
     log.info("size= {}", size);

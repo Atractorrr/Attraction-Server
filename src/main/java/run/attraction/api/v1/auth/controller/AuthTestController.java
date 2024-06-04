@@ -2,6 +2,7 @@ package run.attraction.api.v1.auth.controller;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,5 +79,13 @@ public class AuthTestController {
       userDetailRepository.delete(userDetail.get());
     }
     return ResponseEntity.ok(new MessageResponse("삭제 완료"));
+  }
+
+  @PostMapping("/api/test")
+  public ResponseEntity<MessageResponse> login(HttpServletRequest request){
+    log.info("Request 헤더 확인하기 API 시작");
+    log.info("cookie = {}", request.getHeader("Cookie"));
+    log.info("Request 헤더 확인하기 API 완료");
+    return ResponseEntity.ok(new MessageResponse("성공"));
   }
 }
