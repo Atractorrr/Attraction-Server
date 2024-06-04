@@ -58,10 +58,15 @@ public class MypageArticleServiceImpl implements MypageArticleService {
                                                 LocalDate endDate)
   {
     final List<Long> articleIds = extractArticleIds(userReadBoxDetails);
+    log.info("articleIds.size : {}", articleIds.size());
+    log.info("articleIds : {}", articleIds);
     final Map<Long, LocalDate> readDates = extractReadDates(userReadBoxDetails);
     final Map<Long, Integer> percentages = extractPercentage(userReadBoxDetails);
     final List<Article> articles = articleRepository.findArticleByIdAndUserEmail(articleIds, email, startDate, endDate);
+    log.info("articles.size : {}", articles.size());
+    log.info("articles : {}", articles.stream().map(article -> article.getNewsletterNickname()).toList());
     final Map<String, Newsletter> newsletters = extractNewsletterProfiles(articles);
+    log.info("newsletters.size : {}", newsletters.size());
 
     return articles.stream()
         .map(article -> {
