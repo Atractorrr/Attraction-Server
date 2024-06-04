@@ -2,17 +2,23 @@ package run.attraction.api.v1.auth.controller;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.auth.provider.AuthProvider;
 import run.attraction.api.v1.auth.provider.google.GoogleOAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
+import run.attraction.api.v1.mypage.service.dto.MessageResponse;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +30,7 @@ public class AuthTestController {
    */
   private final GoogleOAuthService googleOAuthService;
   private final AuthProvider authProvider;
+  private final UserDetailRepository userDetailRepository;
 
   @Value("${spring.security.oauth2.client.registration.google.client-id}")
   private String googleClientId;
@@ -62,5 +69,14 @@ public class AuthTestController {
     JsonElement element = JsonParser.parseString(responseBody);
     return element.getAsJsonObject().get("email").getAsString() + " / " + element.getAsJsonObject().get("picture")
         .getAsString();
+  }
+
+  @PostMapping("/api/v1/auth/{email}")
+  public ResponseEntity<MessageResponse> deleteUserDetail(@PathVariable(value = "email") String email){
+    final Optional<UserDetail> userDetail = userDetailRepository.findById(email);
+    if(userDetail.isPresent()){
+      userDetailRepository.delete(userDetail.get());
+    }
+    return ResponseEntity.ok(new MessageResponse("삭제 완료"));
   }
 }

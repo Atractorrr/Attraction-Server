@@ -44,13 +44,9 @@ public class AuthController {
     log.info("JWT 토큰 등록 및 유저 저장 완료");
 
     cookieTokenSetter.setCookieToken(response, userTokenDto.getRefreshToken());
+
     if (userTokenDto.isUserBefore()) {
       log.info("기존 유저에 대한 응답 response 전달(로그인 완료)");
-
-      log.info("Email = {}", userTokenDto.getEmail());
-      log.info("AccessToken = {}", userTokenDto.getAccessToken());
-      log.info("ShouldReissueToken = {}", userTokenDto.getShouldReissueToken());
-      log.info("hasExtraDetails = {}", userTokenDto.isHasExtraDetails());
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userTokenDto.getEmail(),
               userTokenDto.getAccessToken(),
@@ -59,8 +55,6 @@ public class AuthController {
           ));
     }
 
-    log.info("Email = {}", userTokenDto.getEmail());
-    log.info("AccessToken = {}", userTokenDto.getAccessToken());
     log.info("새로운 유저에 대한 응답 response 전달(로그인 완료)");
     return ResponseEntity.ok(FirstLoginResponseDto.builder()
         .email(userTokenDto.getEmail())
