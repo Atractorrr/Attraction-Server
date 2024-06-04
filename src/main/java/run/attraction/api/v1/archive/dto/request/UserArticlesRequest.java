@@ -1,6 +1,5 @@
 package run.attraction.api.v1.archive.dto.request;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,11 +8,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserArticlesRequest {
-  private  String userEmail;
-  private  int page = 0;
-  private  int size = 20;
-  private  String[] sort = {"receivedAt","asc"};
-  private  String isHideRead = "false";
-  private  String category;
-  private  String q; // search query
+  private int page = 0;
+  private int size = 20;
+  private String[] sort = {"receivedAt", "asc"};
+  private String isHideRead = "false";
+  private String category;
+  private String q; // search query
 }
