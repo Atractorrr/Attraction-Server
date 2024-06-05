@@ -57,7 +57,7 @@ public class MypageService {
     return newsletterService.getSubscribesByEmail(email);
   }
 
-  @Transactional
+  @Transactional(timeout = 1000)
   public void updateUserDetails(UpdateUserDetailDto updateUserDetailDto){
     userService.updateUserDetail(updateUserDetailDto);
   }
