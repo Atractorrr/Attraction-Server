@@ -36,16 +36,16 @@ public class ReadBox extends AuditableEntity {
 
   @Column(nullable = false)
   @Builder.Default
-  private int percentage = 0;
+  private int readPercentage = 0;
 
   private LocalDate readDate;
 
   @QueryProjection
-  public ReadBox(Long id, Long articleId, String userEmail, int percentage) {
+  public ReadBox(Long id, Long articleId, String userEmail, int readPercentage) {
     this.id = id;
     this.articleId = articleId;
     this.userEmail = userEmail;
-    this.percentage = percentage;
+    this.readPercentage = readPercentage;
   }
 
   public ReadBox(String userEmail, Long articleId) {
@@ -53,9 +53,9 @@ public class ReadBox extends AuditableEntity {
     this.userEmail = userEmail;
   }
 
-  public void updatePercentage(int percentage) {
-    this.percentage = percentage;
-    if(isFullPercentage(percentage)) {
+  public void updateReadPercentagePercentage(int readPercentage) {
+    this.readPercentage = readPercentage;
+    if(isFullPercentage(readPercentage)) {
       updateReadDate();
     }
   }

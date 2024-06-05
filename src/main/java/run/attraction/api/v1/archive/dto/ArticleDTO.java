@@ -12,11 +12,11 @@ public record ArticleDTO(
     String contentUrl,
     int readingTime,
     LocalDate receivedAt,
-    int percentage,
+    int readPercentage,
     NewsletterDTO newsletter
 ) {
   @QueryProjection
-  public ArticleDTO(Article article, int percentage, Newsletter newsletter) {
+  public ArticleDTO(Article article, int readPercentage, Newsletter newsletter) {
     this(
         article.getId(),
         article.getTitle(),
@@ -24,7 +24,7 @@ public record ArticleDTO(
         article.getContentUrl(),
         article.getReadingTime(),
         article.getReceivedAt(),
-        percentage,
+        readPercentage,
         new NewsletterDTO(newsletter)
     );
   }
