@@ -69,7 +69,7 @@ public class MypageUserServiceImpl implements MypageUserService {
     final String email = updateUserDetailDto.getEmail();
     User user = userRepository.findById(email)
          .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
-    UserDetail userDetail = userDetailRepository.findById(email)
+    UserDetail userDetail = userDetailRepository.findUserDetailByEmail(email)
         .orElseThrow(() -> new NoSuchElementException("추가정보를 입력하지 않은 유저입니다."));
 
     updateUserDetailDto.getNickname().ifPresent(userDetail::updateNickName);
