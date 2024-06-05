@@ -8,7 +8,7 @@ import run.attraction.api.v1.introduction.Newsletter;
 public record ArticleDTO(
     Long id,
     String title,
-    String thumbnail,
+    String thumbnailUrl,
     String contentUrl,
     int readingTime,
     LocalDate receivedAt,

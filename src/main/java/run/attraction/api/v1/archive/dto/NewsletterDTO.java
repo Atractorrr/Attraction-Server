@@ -9,7 +9,7 @@ public record NewsletterDTO(
     Long id,
     String name,
     Category category,
-    String thumbnail
+    String thumbnailUrl
 ) {
   @QueryProjection
   public NewsletterDTO(Newsletter newsletter) {
