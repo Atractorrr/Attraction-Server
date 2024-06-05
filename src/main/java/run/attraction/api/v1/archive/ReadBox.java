@@ -55,13 +55,13 @@ public class ReadBox extends AuditableEntity {
 
   public void updateReadPercentagePercentage(int readPercentage) {
     this.readPercentage = readPercentage;
-    if(isFullPercentage(readPercentage)) {
+    if(isFullReadPercentage(readPercentage)) {
       updateReadDate();
     }
   }
 
-  private boolean isFullPercentage(int percentage) {
-    return percentage == PULL_PERCENTAGE;
+  private boolean isFullReadPercentage(int readPercentage) {
+    return readPercentage == PULL_PERCENTAGE;
   }
 
   private void updateReadDate() {

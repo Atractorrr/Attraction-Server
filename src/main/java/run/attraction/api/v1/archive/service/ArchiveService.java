@@ -54,11 +54,11 @@ public class ArchiveService {
   }
 
   @Transactional
-  public void saveUserArticleProgress(String userEmail, Long articleId, int percentage) {
+  public void saveUserArticleProgress(String userEmail, Long articleId, int readPercentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
         .orElse(createReadBox(userEmail, articleId));
 
-    readBox.updateReadPercentagePercentage(percentage);
+    readBox.updateReadPercentagePercentage(readPercentage);
     readBoxRepository.save(readBox);
   }
 
