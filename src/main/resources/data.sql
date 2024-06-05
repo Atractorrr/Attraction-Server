@@ -62,7 +62,7 @@ INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_ur
 
 
 -- Readbox 데이터 삽입
-INSERT INTO read_box (user_email, article_id, percentage) VALUES
+INSERT INTO read_box (user_email, article_id, read_percentage) VALUES
    ("test@gmail.com", 1, 50),
    ("test@gmail.com", 2, 60),
    ("test@gmail.com", 3, 70);
@@ -112,7 +112,7 @@ INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, con
     (11, 'financedaily@example.com', 'user2@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-28', 'content test3', "d" , false, '2024-05-01'),
     (15, 'techweekly@example.com', 'test@gmail.com', '테스트 아티클 15Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01');
 
-INSERT INTO read_box (user_email,modified_at,article_id, percentage) VALUES
+INSERT INTO read_box (user_email,modified_at,article_id, read_percentage) VALUES
     ("user3@gmail.com","2024-04-20", 8, 100),
     ("user2@gmail.com","2024-04-20", 9, 70),
     ("user2@gmail.com","2024-04-20", 10, 100),

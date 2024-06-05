@@ -53,7 +53,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
       predicate = predicate.and(article.id.notIn(
           JPAExpressions.select(readBox.articleId)
               .from(readBox)
-              .where(readBox.percentage.eq(100))
+              .where(readBox.readPercentage.eq(100))
       ));
     }
     if (isNotNullAndNotEmpty(search)) {
@@ -69,7 +69,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
   private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable) {
     JPAQuery<ArticleDTO> articles = queryFactory
-        .select(new QArticleDTO(this.article, readBox.percentage.coalesce(0), newsletter))
+        .select(new QArticleDTO(this.article, readBox.readPercentage.coalesce(0), newsletter))
         .from(this.article)
         .leftJoin(readBox).on(this.article.id.eq(readBox.articleId))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
@@ -101,7 +101,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   @Override
   public Optional<ArticleDTO> findArticleByUserEmailAndArticleId(String userEmail, Long articleId) {
     return Optional.ofNullable(queryFactory
-        .select(new QArticleDTO(this.article, readBox.percentage, newsletter))
+        .select(new QArticleDTO(this.article, readBox.readPercentage, newsletter))
         .from(this.article)
         .join(readBox).on(this.article.id.eq(readBox.articleId).and(this.article.userEmail.eq(readBox.userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))

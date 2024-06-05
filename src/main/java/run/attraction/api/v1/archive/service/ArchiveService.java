@@ -58,7 +58,7 @@ public class ArchiveService {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
         .orElse(createReadBox(userEmail, articleId));
 
-    readBox.updatePercentage(percentage);
+    readBox.updateReadPercentagePercentage(percentage);
     readBoxRepository.save(readBox);
   }
 

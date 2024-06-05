@@ -48,7 +48,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
         .map(readBox -> new UserReadBoxDetail(
             readBox.getArticleId(),
             readBox.getModifiedAt().toLocalDate(),
-            readBox.getPercentage()))
+            readBox.getReadPercentage()))
         .toList();
   }
 

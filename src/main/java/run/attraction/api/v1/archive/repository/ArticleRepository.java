@@ -20,7 +20,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
 
   @Query("""
       SELECT new run.attraction.api.v1.home.service.dto.article.ArticleDetailDto(
-          a.id, n.thumbnailUrl, n.name, a.thumbnailUrl, a.title, a.receivedAt, a.readingTime, COALESCE(MAX(r.percentage), 0)
+          a.id, n.thumbnailUrl, n.name, a.thumbnailUrl, a.title, a.receivedAt, a.readingTime, COALESCE(MAX(r.readPercentage), 0)
       )
       FROM Article a
       JOIN Newsletter n ON a.newsletterEmail = n.email
