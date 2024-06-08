@@ -20,8 +20,8 @@ public record ArticleDetailDto(
     Objects.requireNonNull(articleThumbnailUrl);
     Objects.requireNonNull(title);
     Objects.requireNonNull(date);
-    if (readingTime == 0) {
-      throw new IllegalArgumentException("readingTime must be greater than 0");
+    if (readingTime < 0) {
+      throw new IllegalArgumentException("The readingTime value cannot be negative");
     }
     if (readPercentage < 0 || readPercentage > 100) {
       throw new IllegalArgumentException("readingPercentage must be between 0 and 100");
