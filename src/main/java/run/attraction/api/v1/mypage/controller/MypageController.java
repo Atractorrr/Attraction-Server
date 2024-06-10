@@ -116,14 +116,14 @@ public class MypageController {
   }
 
   @PostMapping("/username-duplicate")
-  public final ResponseEntity<CheckDuplicationResponseDto> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
+  public final ResponseEntity<MessageResponse> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
     String nickname = request.nickname();
     log.info("마이페이지 개인설정 닉네임 중복체크 시작");
     log.info("nickname = {} ",nickname);
     boolean result = mypageService.checkNicknameDuplication(nickname);
     if (result) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(new CheckDuplicationResponseDto(result));
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse("이미 사용중인 닉네임 입니다."));
     }
-    return ResponseEntity.ok(new CheckDuplicationResponseDto(result));
+    return ResponseEntity.ok(new MessageResponse("사용 가능한 닉네임입니다"));
   }
 }
