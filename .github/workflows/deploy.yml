@@ -52,9 +52,9 @@ jobs:
       - name: 배포 작업 생성
         uses: chrnorm/deployment-action@releases/v1
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.GITHUB_TOKEN }}
             environment: production
-            log_url: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+            ref: ${{ github.ref }}
 
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
@@ -79,5 +79,5 @@ jobs:
       - name: 배포 상태 업데이트 (성공)
         uses: chrnorm/deployment-status@releases/v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          state: success
+            token: ${{ secrets.GITHUB_TOKEN }}
+            state: success
