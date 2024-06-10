@@ -51,16 +51,12 @@ public class UserDetail extends AuditableEntity {
   private Occupation occupation;
 
   @Builder
-  private UserDetail(UserValidator userValidator,
-                     String email,
+  private UserDetail(String email,
                      String nickname,
                      List<String> interests,
                      LocalDate birthDate,
                      LocalDate userExpiration,
                      Occupation occupation) {
-    if (userValidator.isSpecialPatternInNickname(nickname)) {
-      throw new IllegalStateException("닉네임에 특수문자가 존재합니다.");
-    }
     log.info("email 입력");
     this.email = email;
     this.nickname = nickname;
