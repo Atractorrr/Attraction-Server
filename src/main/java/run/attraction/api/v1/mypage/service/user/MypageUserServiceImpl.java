@@ -13,6 +13,7 @@ import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.UserDetail;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
+import run.attraction.api.v1.user.validator.nickname.NicknameValidator;
 
 @Slf4j
 @Component
@@ -84,6 +85,7 @@ public class MypageUserServiceImpl implements MypageUserService {
 
   public boolean checkNicknameDuplication(String nickname) {
     log.info("userDetailRepository.existsByNickname() 시작");
+    NicknameValidator.checkNickname(nickname);
     final boolean result = userDetailRepository.existsByNickname(nickname);
     log.info("result = {}", result);
     return result;

@@ -11,7 +11,6 @@ import run.attraction.api.v1.auth.service.dto.join.JoinRequestDto;
 import run.attraction.api.v1.auth.service.helper.AuthProviderAndTokenHelper;
 import run.attraction.api.v1.auth.service.helper.JoinHelper;
 import run.attraction.api.v1.user.User;
-import run.attraction.api.v1.user.UserValidator;
 
 @Slf4j
 @Service
@@ -22,7 +21,6 @@ public class AuthService {
   private final AuthProvider authProvider;
   private final JoinHelper joinHelper;
   private final AuthProviderAndTokenHelper authProviderAndTokenHelper;
-  private final UserValidator userValidator;
 
   public UserTokenDto login(String provider, final String code) {
     log.info("로그인 진입");
@@ -38,14 +36,15 @@ public class AuthService {
   }
 
   public void join(JoinRequestDto joinRequestDto) {
-    joinHelper.joinUser(userValidator,
+    joinHelper.joinUser(
         joinRequestDto.getEmail(),
         joinRequestDto.getNickname(),
         joinRequestDto.getInterest(),
         joinRequestDto.getBirthDate(),
         joinRequestDto.getUserExpiration(),
         joinRequestDto.getOccupation(),
-        joinRequestDto.isAdPolices());
+        joinRequestDto.isAdPolices()
+    );
   }
 
   public void logout(String accessToken) {

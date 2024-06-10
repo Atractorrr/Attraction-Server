@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.user.Occupation;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.UserDetail;
-import run.attraction.api.v1.user.UserValidator;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
+import run.attraction.api.v1.user.validator.nickname.NicknameValidator;
 
 @Component
 @RequiredArgsConstructor
@@ -26,11 +26,12 @@ public class JoinHelper {
 
   @Transactional
   public boolean checkNicknameDuplication(String nickname) {
+    NicknameValidator.checkNickname(nickname);
     return userDetailRepository.existsByNickname(nickname);
   }
 
   @Transactional
-  public void joinUser(UserValidator userValidator, String email, String nickname, List<String> interest,
+  public void joinUser(String email, String nickname, List<String> interest,
                        String stringBirthDate, int userExpiration, String occupation, boolean adPolices) {
     // adPolices 처리 어떻게 할건지 정해야함.
     log.info("email = {} ", email);
@@ -48,19 +49,17 @@ public class JoinHelper {
     final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt().toLocalDate(), userExpiration);
     log.info("birthDate = {}", birthDate);
     log.info("userExpirationDate = {}", userExpirationDate);
-    saveUserDetail(userValidator, nickname, interest, stringBirthDate, userExpiration, occupation, user);
+    saveUserDetail(nickname, interest, stringBirthDate, userExpiration, occupation, user);
     log.info("유저 추가 정보 넣기 완료");
   }
 
-  private void saveUserDetail(UserValidator userValidator,
-                         String nickname,
+  private void saveUserDetail(String nickname,
                          List<String> interest,
                          String stringBirthDate,
                          int userExpiration,
                          String occupation,
                          User user) {
     UserDetail userDetail = UserDetail.builder()
-        .userValidator(userValidator)
         .email(user.getEmail())
         .nickname(nickname)
         .interests(interest)
