@@ -49,7 +49,7 @@ public class AdminArticle extends AuditableEntity {
     @Column(nullable = false, length = 30)
     private String newsletterNickname;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     @Builder.Default
     boolean isDeleted = false;
 }
