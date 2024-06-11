@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 import run.attraction.api.v1.user.validator.exception.InvalidNicknameException;
 import run.attraction.api.v1.user.validator.nickname.NicknameValidator;
 
