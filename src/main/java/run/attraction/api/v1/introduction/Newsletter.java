@@ -51,7 +51,7 @@ public class Newsletter extends AuditableEntity {
 
   private String nickname;
 
-  @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
+  @Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isDeleted;
 
   @Builder

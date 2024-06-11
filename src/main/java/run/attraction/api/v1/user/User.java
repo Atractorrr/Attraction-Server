@@ -37,7 +37,7 @@ public class User extends AuditableEntity implements UserDetails {
   @Column(name = "update_at")
   private LocalDate updateAt;
 
-  @Column(nullable = false, columnDefinition = "TINYINT(1) default 0")
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isDeleted;
 
   @Enumerated(EnumType.STRING)
