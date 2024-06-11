@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
-import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationResponseDto;
 import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;

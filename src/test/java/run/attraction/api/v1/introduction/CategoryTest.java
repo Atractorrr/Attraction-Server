@@ -3,6 +3,7 @@ package run.attraction.api.v1.introduction;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 
 class CategoryTest {
   @Test
