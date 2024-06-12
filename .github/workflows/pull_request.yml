@@ -50,12 +50,15 @@ jobs:
       - name: application.yml 파일 만들기
         run: echo '${{ secrets.APPLICATION_PROPERTIES }}' > ./src/main/resources/application.yml
 
+      - name: application-test.yml 파일 만들기
+        run: echo '${{ secrets.APPLICATION_TEST_PROPERTIES }}' > ./src/main/resources/application-test.yml
+
       - name: credentials.json 파일 만들기
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
 
-      - name: 테스트 및 빌드하기
+      - name: 빌드하기
         run: ./gradlew clean build
-      - name: Run Tests
+      - name: 테스트 동작
         run: ./gradlew test
         env:
           SPRING_PROFILES_ACTIVE: test
