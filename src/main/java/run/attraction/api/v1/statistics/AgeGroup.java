@@ -16,7 +16,7 @@ public enum AgeGroup {
   FIFTIES("50대", 50),
   SIXTIES("60대", 60),
   SEVENTIES("70대", 70),
-  EIGHTIES("80대", 80);
+  OVER_EIGHTY("80대 이상", 80);
 
   private final String viewName;
   private final int ageGroup;
@@ -31,7 +31,7 @@ public enum AgeGroup {
       age--;
     }
 
-    int ageGroup = (age / 10) * 10;
+    int ageGroup = Math.min((age / 10) * 10, 80);
 
     return Arrays.stream(AgeGroup.values())
         .filter(group -> group.getAgeGroup() == ageGroup)
