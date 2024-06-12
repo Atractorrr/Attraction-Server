@@ -32,5 +32,6 @@ public class UserSubscribedNewsletterCategory extends AuditableEntity {
 
   @ElementCollection
   @Enumerated(EnumType.STRING)
+  @Builder.Default
   List<Category> categories = new ArrayList<>();
 }
