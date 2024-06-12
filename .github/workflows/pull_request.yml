@@ -7,7 +7,7 @@ on:
       - dev
 
 jobs:
-  Deploy:
+  dev-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -55,3 +55,7 @@ jobs:
 
       - name: 테스트 및 빌드하기
         run: ./gradlew clean build
+      - name: Run Tests
+        run: ./gradlew test
+        env:
+          SPRING_PROFILES_ACTIVE: test
