@@ -11,7 +11,7 @@ import run.attraction.api.v1.user.UserDetail;
 public interface UserDetailRepository extends JpaRepository<UserDetail,String > {
   boolean existsByNickname(String nickname);
 
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
+//  @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("SELECT u FROM UserDetail u WHERE u.email = :email")
   Optional<UserDetail> findUserDetailByEmail(@Param("email") String email);
   //  @QueryHints({
