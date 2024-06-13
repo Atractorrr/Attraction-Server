@@ -19,4 +19,10 @@ public class StatisticsController {
     statisticsService.makeOccupationStatistics(LocalDate.now());
     return ResponseEntity.ok().build();
   }
+
+  @GetMapping("/ageGroup")
+  public ResponseEntity<?> makeAgeGroupStatistics(){
+    statisticsService.makeAgeGroupStatistics(LocalDate.now());
+    return ResponseEntity.ok().build();
+  }
 }

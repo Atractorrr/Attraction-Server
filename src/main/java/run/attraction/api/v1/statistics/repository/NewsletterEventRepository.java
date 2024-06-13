@@ -22,4 +22,15 @@ public interface NewsletterEventRepository extends JpaRepository<NewsletterEvent
           WHERE rn = 1
        """,nativeQuery = true)
   List<Object[]> findMostPopularNewsletterOccupationPairs(LocalDateTime endDate);
+
+  @Query(value = """
+          SELECT age_group, newsletter_id 
+          FROM (SELECT age_group, newsletter_id, 
+                       ROW_NUMBER() OVER (PARTITION BY age_group ORDER BY COUNT(newsletter_id) DESC) as rn 
+                FROM statistics_newsletter_event
+                WHERE created_at < :endDate
+                GROUP BY age_group, newsletter_id) subquery 
+          WHERE rn = 1
+       """,nativeQuery = true)
+  List<Object[]> findMostPopularNewsletterAgeGroupPairs(LocalDateTime endDate);
 }
