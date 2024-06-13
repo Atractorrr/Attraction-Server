@@ -19,10 +19,12 @@ public interface ReadBoxRepository extends JpaRepository<ReadBox, Long> {
   @Query("""  
     SELECT rb.userEmail, COUNT(rb)
     FROM ReadBox rb 
-    WHERE rb.readDate <= :date
+    WHERE rb.readDate BETWEEN :startDate AND :endDate
+    AND rb.readDate <> :excludeDate
     AND rb.readPercentage = 100 
     GROUP BY rb.userEmail
+    ORDER BY COUNT(rb) DESC
   """)
-  List<Object[]> findTop10ExtensiveUsers(LocalDate date);
+  List<Object[]> findTop10ExtensiveUsers(LocalDate startDate, LocalDate endDate,LocalDate excludeDate);
 
 }

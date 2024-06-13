@@ -20,7 +20,7 @@ public class RankController {
 
   @GetMapping("/extensive")
   public ResponseEntity<?> getExtensiveRank(){
-    final List<RankDetailDto> rankDetails = rankService.getTop10ExtensiveRank(LocalDate.now().minusDays(1));
+    final List<RankDetailDto> rankDetails = rankService.getTop10ExtensiveRank(LocalDate.now());
     return ResponseEntity.ok(new ExtensiveRankResponseDto(rankDetails));
   }
 }
