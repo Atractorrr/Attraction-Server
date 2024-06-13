@@ -20,8 +20,8 @@ public interface ReadBoxRepository extends JpaRepository<ReadBox, Long> {
     SELECT rb.userEmail, COUNT(rb)
     FROM ReadBox rb 
     WHERE rb.readDate BETWEEN :startDate AND :endDate
-    AND rb.readDate <> :excludeDate
-    AND rb.readPercentage = 100 
+     AND rb.readDate <> :excludeDate
+     AND rb.readPercentage = 100 
     GROUP BY rb.userEmail
     ORDER BY COUNT(rb) DESC
   """)

@@ -23,12 +23,12 @@ public class RankCalculator {
   }
 
   private List<ExtensiveRank> calculateExtensiveRank(LocalDate date) {
-    log.info("저장된 데이터가 존재하지 않아, 새로 계산합니다.")
+    log.info("저장된 데이터가 존재하지 않아, 새로 계산합니다.");
     LocalDate[] dateRange = getDateRange(date);
 
     LocalDate startDate = dateRange[0];
     LocalDate endDate = dateRange[1];
-    log.info("조회 범위")
+    log.info("조회 범위");
     log.info("startDate: {}, endDate: {}", startDate, endDate);
 
     final List<Object[]> top10Emails = readBoxRepository.findTop10ExtensiveUsers(startDate,endDate,date);
