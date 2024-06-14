@@ -113,12 +113,15 @@ class BookmarkServiceTest {
     String userEmail = "user3@gmail.com"; // 이미 데이터베이스에 존재하는 사용자
     Long articleId = 13L; // 이미 북마크에 존재하는 아티클 ID
 
-    // when
-    bookmarkService.addArticle(userEmail, articleId);
+    // when & then
+    assertThatThrownBy(() -> bookmarkService.addArticle(userEmail, articleId))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("이미 북마크에 추가된 아티클입니다");
 
-    // then
+    // 북마크가 여전히 존재하는지 확인
     Optional<Bookmark> bookmark = bookmarkRepository.findByUserEmail(userEmail);
     assertThat(bookmark).isPresent();
+    // articleId가 북마크에 여전히 한 번만 존재하는지 확인
     assertThat(bookmark.get().getArticleIds()).containsOnlyOnce(articleId);
   }
 
@@ -145,13 +148,16 @@ class BookmarkServiceTest {
     String userEmail = "user3@gmail.com"; // 이미 데이터베이스에 존재하는 사용자
     Long articleId = 99L; // 존재하지 않는 아티클 ID
 
-    // when
-    bookmarkService.deleteArticle(userEmail, articleId);
+    // when & then
+    assertThatThrownBy(() -> bookmarkService.deleteArticle(userEmail, articleId))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("북마크에 존재하지 않는 아티클입니다");
 
-    // then
+    // 북마크가 여전히 존재하는지 확인
     Optional<Bookmark> bookmark = bookmarkRepository.findByUserEmail(userEmail);
     assertThat(bookmark).isPresent();
-    assertThat(bookmark.get().getArticleIds()).doesNotContain(articleId); // 원래 없으므로 여전히 없어야 함
+    // articleId가 북마크에 없는지 확인
+    assertThat(bookmark.get().getArticleIds()).doesNotContain(articleId);
   }
 
   @Test
