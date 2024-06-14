@@ -1,4 +1,4 @@
-package run.attraction.api.v1.auth.token;
+package run.attraction.api.v1.gmail.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class GoogleRefreshToken {
   @Column(name = "refresh_token")
   private String token;
 
-  @Column(name = "should_reissue_token", nullable = false, columnDefinition = "TINYINT(1) default 0")
+  @Column(name = "should_reissue_token", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean shouldReissueToken;
 
   @Builder
