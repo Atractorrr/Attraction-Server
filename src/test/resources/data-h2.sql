@@ -12,9 +12,9 @@ CREATE TABLE newsletter_ids (
 
 
 CREATE TABLE interests (
-    email VARCHAR(255) NOT NULL,
-    interests VARCHAR(255) NOT NULL,
-    PRIMARY KEY (email, interests)
+   email VARCHAR(255) NOT NULL,
+   interests VARCHAR(255) NOT NULL,
+   PRIMARY KEY (email, interests)
 );
 
 CREATE TABLE IF NOT EXISTS newsletter (
@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS newsletter (
     subscribe_link VARCHAR(255),
     thumbnail_url VARCHAR(255),
     upload_days VARCHAR(255)
+
     );
 
 INSERT INTO `interests` (email, interests) VALUES
