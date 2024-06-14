@@ -9,14 +9,12 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
-@Table(name = "extensive_rank")
+@Table(name = "consistency_rank")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExtensiveRank implements Rank{
+public class ConsistencyRank implements Rank{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -31,7 +29,7 @@ public class ExtensiveRank implements Rank{
   private LocalDate createdAt;
 
   @Builder
-  private ExtensiveRank(String email, int value, LocalDate createdAt) {
+  private ConsistencyRank(String email, int value, LocalDate createdAt) {
     this.email = email;
     this.value = value;
     this.createdAt = createdAt;
