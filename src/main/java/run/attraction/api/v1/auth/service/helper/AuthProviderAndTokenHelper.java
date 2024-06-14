@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import run.attraction.api.v1.mail.UserLoggedEvent;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
 import run.attraction.api.v1.auth.token.GoogleRefreshToken;
 import run.attraction.api.v1.auth.token.LogoutAccessToken;
@@ -34,6 +36,7 @@ public class AuthProviderAndTokenHelper {
   private final GoogleRefreshTokenRepository googleRefreshTokenRepository;
   private final UserDetailRepository userDetailRepository;
   private final UserServiceImpl userService;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
@@ -84,6 +87,11 @@ public class AuthProviderAndTokenHelper {
 
   private boolean getShouldReissueToken(User user) {
     final GoogleRefreshToken googleRefreshToken = googleRefreshTokenRepository.findByEmail(user.getEmail());
+
+    if (!googleRefreshToken.getShouldReissueToken()) {
+      eventPublisher.publishEvent(new UserLoggedEvent(googleRefreshToken.getEmail(), googleRefreshToken.getToken()));
+    }
+
     return googleRefreshToken.getShouldReissueToken();
   }
 
