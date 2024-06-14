@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import run.attraction.api.v1.rank.ConsistencyRank;
 import run.attraction.api.v1.rank.ExtensiveRank;
+import run.attraction.api.v1.rank.Rank;
+import run.attraction.api.v1.rank.service.calculator.ConsistencyRankCalculator;
+import run.attraction.api.v1.rank.service.calculator.ExtensiveRankCalculator;
 import run.attraction.api.v1.rank.service.dto.RankDetailDto;
-import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
 
 @Service
@@ -17,18 +20,34 @@ import run.attraction.api.v1.user.repository.UserRepository;
 @Transactional(readOnly = true)
 public class RankService {
 
-  private final RankCalculator rankCalculator;
+  private final ExtensiveRankCalculator extensiveRankCalculator;
+  private final ConsistencyRankCalculator consistencyRankCalculator;
   private final UserRepository userRepository;
 
   public List<RankDetailDto> getTop10ExtensiveRank(LocalDate date) {
-    List<ExtensiveRank> ranks = rankCalculator.getExtensiveRank(date);
+    List<ExtensiveRank> ranks = extensiveRankCalculator.getExtensiveRank(date);
 
     final List<String> emails = ranks.stream().map(ExtensiveRank::getEmail).toList();
-    final List<Object[]> userInfo = userRepository.findProfileImgAndNicknameByUseremails(emails);
+    final List<Object[]> userInfos = userRepository.findProfileImgAndNicknameByUseremails(emails);
 
-    final Map<String, Integer> emailValueMap = getemailValudMap(ranks);
-    final Map<String, String> emailProfileImgMap = getEmailProfileImgMap(userInfo);
-    final Map<String, String> emailNicknameMap = getEmailNicknameMap(userInfo);
+    return getRankDetailDtos(ranks, userInfos, emails);
+  }
+
+  public List<RankDetailDto> getTop10ConsistencyRank(LocalDate date) {
+    List<ConsistencyRank> ranks = consistencyRankCalculator.getConsistencyRank(date);
+
+    final List<String> emails = ranks.stream().map(ConsistencyRank::getEmail).toList();
+    final List<Object[]> userInfos = userRepository.findProfileImgAndNicknameByUseremails(emails);
+
+    return getRankDetailDtos(ranks, userInfos, emails);
+  }
+
+  private List<RankDetailDto> getRankDetailDtos(List< ? extends Rank> ranks,
+                                                List<Object[]> userInfos,
+                                                List<String> emails) {
+    final Map<String, Integer> emailValueMap = getEmailValueMap(ranks);
+    final Map<String, String> emailProfileImgMap = getEmailProfileImgMap(userInfos);
+    final Map<String, String> emailNicknameMap = getEmailNicknameMap(userInfos);
 
     return emails.stream().map(email -> new RankDetailDto(
         emailNicknameMap.get(email),
@@ -37,11 +56,11 @@ public class RankService {
     ).toList();
   }
 
-  private static Map<String, Integer> getemailValudMap(List<ExtensiveRank> ranks) {
+  private static Map<String, Integer> getEmailValueMap(List<? extends Rank> ranks) {
     return ranks.stream()
         .collect(Collectors.toMap(
-            ExtensiveRank::getEmail,
-            ExtensiveRank::getValue
+            Rank::getEmail,
+            Rank::getValue
         ));
   }
 

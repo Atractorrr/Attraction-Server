@@ -1,4 +1,4 @@
-package run.attraction.api.v1.rank.service;
+package run.attraction.api.v1.rank.service.calculator;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -13,7 +13,7 @@ import run.attraction.api.v1.rank.repository.ExtensiveRankRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RankCalculator {
+public class ExtensiveRankCalculator {
   private final ReadBoxRepository readBoxRepository;
   private final ExtensiveRankRepository extensiveRankRepository;
 
