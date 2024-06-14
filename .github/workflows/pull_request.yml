@@ -28,9 +28,5 @@ jobs:
       - name: credentials.json 파일 만들기
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
 
-      - name: 빌드하기
+      - name: 빌드 및 테스트
         run: ./gradlew clean build
-      - name: 테스트 동작
-        run: ./gradlew test
-        env:
-          SPRING_PROFILES_ACTIVE: test
