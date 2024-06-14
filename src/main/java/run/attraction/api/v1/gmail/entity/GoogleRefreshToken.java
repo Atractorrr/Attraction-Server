@@ -1,4 +1,4 @@
-package run.attraction.api.v1.auth.token;
+package run.attraction.api.v1.gmail.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
