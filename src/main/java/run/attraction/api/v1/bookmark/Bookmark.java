@@ -1,27 +1,27 @@
-package run.attraction.api.v1.introduction;
+package run.attraction.api.v1.bookmark;
 
+
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import run.attraction.api.v1.archive.AuditableEntity;
 
-@Getter
-@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSubscribedNewsletterCategory extends AuditableEntity {
+@Getter
+@Builder
+public class Bookmark {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,14 @@ public class UserSubscribedNewsletterCategory extends AuditableEntity {
   @Column(nullable = false)
   String userEmail;
 
+  @Column(nullable = false, name = "article_id")
   @ElementCollection
-  @Enumerated(EnumType.STRING)
+  @CollectionTable(name = "bookmark_article_ids", joinColumns = @JoinColumn(name = "bookmark_id"))
   @Builder.Default
-  List<Category> categories = new ArrayList<>();
+  List<Long> articleIds = new ArrayList<>();
+
+  public Bookmark(String userEmail) {
+    this.userEmail = userEmail;
+    this.articleIds = new ArrayList<>();
+  }
 }

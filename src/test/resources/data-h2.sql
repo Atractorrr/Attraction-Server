@@ -18,8 +18,8 @@ CREATE TABLE interests (
 );
 
 CREATE TABLE IF NOT EXISTS newsletter (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  category VARCHAR(255),
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255),
     created_at TIMESTAMP,
     description VARCHAR(255),
     email VARCHAR(255),
@@ -31,26 +31,27 @@ CREATE TABLE IF NOT EXISTS newsletter (
     subscribe_link VARCHAR(255),
     thumbnail_url VARCHAR(255),
     upload_days VARCHAR(255)
-);
+
+    );
 
 INSERT INTO `interests` (email, interests) VALUES
-   ('test1@gmail.com', 'LIVING_INTERIOR'),
-   ('test1@gmail.com', 'FOOD'),
-   ('test1@gmail.com', 'LOCAL_TRAVEL'),
-   ('test1@gmail.com', 'HOBBY_SELF_DEVELOPMENT'),
-   ('test2@gmail.com', 'LIVING_INTERIOR'),
-   ('test2@gmail.com', 'IT_TECH'),
-   ('test2@gmail.com', 'BUSINESS_FINANCIAL_TECHNOLOGY'),
-   ('test2@gmail.com', 'CURRENT_AFFAIRS_SOCIETY'),
-   ('test3@gmail.com', 'DESIGN'),
-   ('test3@gmail.com', 'TREND_LIFE'),
-   ('test3@gmail.com', 'LOCAL_TRAVEL');
+    ('test1@gmail.com', 'LIVING_INTERIOR'),
+    ('test1@gmail.com', 'FOOD'),
+    ('test1@gmail.com', 'LOCAL_TRAVEL'),
+    ('test1@gmail.com', 'HOBBY_SELF_DEVELOPMENT'),
+    ('test2@gmail.com', 'LIVING_INTERIOR'),
+    ('test2@gmail.com', 'IT_TECH'),
+    ('test2@gmail.com', 'BUSINESS_FINANCIAL_TECHNOLOGY'),
+    ('test2@gmail.com', 'CURRENT_AFFAIRS_SOCIETY'),
+    ('test3@gmail.com', 'DESIGN'),
+    ('test3@gmail.com', 'TREND_LIFE'),
+    ('test3@gmail.com', 'LOCAL_TRAVEL');
 
 INSERT INTO `newsletter_ids` (subscribe_id, newsletter_id) VALUES
-   (2, 6),
-   (2, 18),
-   (2, 44),
-   (2, 50),
-   (2, 62),
-   (3, 28),
-   (3, 31);
+    (2, 6),
+    (2, 18),
+    (2, 44),
+    (2, 50),
+    (2, 62),
+    (3, 28),
+    (3, 31);
