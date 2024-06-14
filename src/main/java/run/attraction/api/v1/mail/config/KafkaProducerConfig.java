@@ -1,4 +1,4 @@
-package run.attraction.api.v1.common.config;
+package run.attraction.api.v1.mail.config;
 
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
