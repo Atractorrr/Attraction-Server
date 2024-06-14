@@ -20,8 +20,8 @@ import run.attraction.api.v1.archive.dto.NewsletterEmail;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.archive.service.ArchiveService;
-import run.attraction.api.v1.auth.token.dto.UserGmailToken;
-import run.attraction.api.v1.auth.token.service.GoogleTokenService;
+import run.attraction.api.v1.gmail.dto.UserGmailToken;
+import run.attraction.api.v1.gmail.service.GoogleTokenService;
 import run.attraction.api.v1.introduction.Newsletter;
 
 

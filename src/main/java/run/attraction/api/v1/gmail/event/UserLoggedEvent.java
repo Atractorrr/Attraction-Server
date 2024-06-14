@@ -1,4 +1,4 @@
-package run.attraction.api.v1.mail;
+package run.attraction.api.v1.gmail.event;
 
 import io.jsonwebtoken.lang.Assert;
 

@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
 import run.attraction.api.v1.auth.provider.oauth.OAuthToken;
-import run.attraction.api.v1.auth.token.GoogleRefreshToken;
-import run.attraction.api.v1.auth.token.repository.GoogleRefreshTokenRepository;
+import run.attraction.api.v1.gmail.entity.GoogleRefreshToken;
+import run.attraction.api.v1.gmail.repository.GoogleRefreshTokenRepository;
 import run.attraction.api.v1.user.User;
 
 public class AuthProvider {

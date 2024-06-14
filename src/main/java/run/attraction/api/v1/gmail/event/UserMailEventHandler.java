@@ -1,4 +1,4 @@
-package run.attraction.api.v1.mail;
+package run.attraction.api.v1.gmail.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

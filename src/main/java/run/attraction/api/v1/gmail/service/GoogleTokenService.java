@@ -1,11 +1,11 @@
-package run.attraction.api.v1.auth.token.service;
+package run.attraction.api.v1.gmail.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import run.attraction.api.v1.auth.token.GoogleRefreshToken;
-import run.attraction.api.v1.auth.token.dto.UserGmailToken;
-import run.attraction.api.v1.auth.token.repository.GoogleRefreshTokenRepository;
+import run.attraction.api.v1.gmail.entity.GoogleRefreshToken;
+import run.attraction.api.v1.gmail.dto.UserGmailToken;
+import run.attraction.api.v1.gmail.repository.GoogleRefreshTokenRepository;
 
 @Service
 @RequiredArgsConstructor

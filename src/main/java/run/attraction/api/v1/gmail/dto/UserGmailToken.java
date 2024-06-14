@@ -1,4 +1,4 @@
-package run.attraction.api.v1.auth.token.dto;
+package run.attraction.api.v1.gmail.dto;
 
 import io.jsonwebtoken.lang.Assert;
 
