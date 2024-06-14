@@ -45,7 +45,7 @@ public class BookmarkService {
         .orElse(createBookmark(userEmail));
 
     if(hasArticleId(bookmark, articleId)) {
-      return;
+      throw new IllegalArgumentException("이미 북마크에 추가된 아티클입니다");
     }
 
     bookmark.getArticleIds().add(articleId);
@@ -61,14 +61,16 @@ public class BookmarkService {
   }
 
   @Transactional
-  public void deleteArticle(String userEmail, Long articleId) {
+  public Bookmark deleteArticle(String userEmail, Long articleId) {
     Bookmark bookmark = bookmarkRepository.findByUserEmail(userEmail)
         .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_BOOKMARK.getViewName()));
 
     if(hasArticleId(bookmark, articleId)) {
       bookmark.getArticleIds().remove(articleId);
-      bookmarkRepository.save(bookmark);
+      return bookmarkRepository.save(bookmark);
     }
+
+    throw new IllegalArgumentException("북마크에 존재하지 않는 아티클입니다");
   }
 
   @Transactional(readOnly = true)
