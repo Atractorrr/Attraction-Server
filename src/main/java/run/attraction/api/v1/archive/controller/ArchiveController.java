@@ -20,9 +20,8 @@ import run.attraction.api.v1.archive.dto.NewsletterEmail;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.archive.service.ArchiveService;
-import run.attraction.api.v1.auth.token.dto.UserGmailToken;
-import run.attraction.api.v1.auth.token.service.GoogleTokenService;
-import run.attraction.api.v1.gmail.GmailClient;
+import run.attraction.api.v1.gmail.dto.UserGmailDto;
+import run.attraction.api.v1.gmail.service.GmailService;
 import run.attraction.api.v1.introduction.Newsletter;
 
 
@@ -33,8 +32,7 @@ import run.attraction.api.v1.introduction.Newsletter;
 public class ArchiveController {
 
   private final ArchiveService archiveService;
-  private final GoogleTokenService tokenService;
-  private final GmailClient gmailClient;
+  private final GmailService gmailService;
 
   @GetMapping("/{userEmail}/articles")
   public ApiResponse<Page<ArticleDTO>> getUserArticles(@PathVariable String userEmail, @ModelAttribute UserArticlesRequest request) {
@@ -61,12 +59,8 @@ public class ArchiveController {
   @PutMapping("/{userEmail}/subscribe/{newsletterId}")
   public ApiResponse<Void> addNewsletter(@PathVariable String userEmail, @PathVariable @NotNull @Min(1) Long newsletterId) {
     final NewsletterEmail newsletterEmail = archiveService.addNewsletter(userEmail, newsletterId);
-    final UserGmailToken userToken = tokenService.findUserToken(userEmail);
+    gmailService.applyLabelAndFilter(new UserGmailDto(userEmail, newsletterEmail.email()));
 
-    gmailClient.applyLabelAndFilterForNewsletterEmail(
-        newsletterEmail.email(),
-        userToken.token()
-    );
     return ApiResponse.from(HttpStatus.OK, "성공", null);
   }
 

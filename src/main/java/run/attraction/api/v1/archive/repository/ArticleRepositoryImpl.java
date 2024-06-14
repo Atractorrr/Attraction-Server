@@ -108,4 +108,32 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         .where(article.id.eq(articleId).and(article.userEmail.eq(userEmail)))
         .fetchOne());
   }
+
+  @Override
+  public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search, Pageable pageable) {
+    BooleanExpression predicate = buildPredicateByArticleIds(articleIds, category, search);
+    List<ArticleDTO> articles = getArticles(predicate, pageable);
+    Long total = getTotal(predicate);
+
+    return new PageImpl<>(articles, pageable, total);
+  }
+
+  private BooleanExpression buildPredicateByArticleIds(List<Long> articleIds, String category, String search) {
+
+    BooleanExpression predicate = article.id.in(articleIds);
+
+    if (isNotNullAndNotEmpty(category)) {
+      predicate = predicate.and(article.newsletterEmail.in(
+          JPAExpressions.select(newsletter.email)
+              .from(newsletter)
+              .where(newsletter.category.eq(Category.valueOf(category)))
+      ));
+    }
+
+    if (isNotNullAndNotEmpty(search)) {
+      predicate = predicate.and(article.title.containsIgnoreCase(search));
+    }
+
+    return predicate;
+  }
 }

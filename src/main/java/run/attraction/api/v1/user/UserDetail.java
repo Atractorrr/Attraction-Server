@@ -32,7 +32,7 @@ public class UserDetail extends AuditableEntity {
   @Column(name = "email", length = 100)
   private String email;
 
-  @Column(name = "nick_Name", unique = true, length = 20)
+  @Column(name = "nick_name", columnDefinition = "VARCHAR(20) BINARY")
   private String nickname;
 
   @ElementCollection(targetClass = Interest.class)
