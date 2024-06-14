@@ -3,10 +3,10 @@ package run.attraction.api.v1.rank.service.dto;
 import java.util.List;
 import java.util.Objects;
 
-public record ExtensiveRankResponseDto(
+public record RankResponseDto(
     List<RankDetailDto> userExtensiveRank
 ) {
-  public ExtensiveRankResponseDto {
+  public RankResponseDto {
     Objects.requireNonNull(userExtensiveRank);
   }
 }

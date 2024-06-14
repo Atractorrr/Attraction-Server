@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "extensive_rank")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExtensiveRank {
+public class ExtensiveRank implements Rank{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -35,6 +35,16 @@ public class ExtensiveRank {
     this.email = email;
     this.value = value;
     this.createdAt = createdAt;
+  }
+
+  @Override
+  public String getEmail() {
+    return email;
+  }
+
+  @Override
+  public int getValue() {
+    return value;
   }
 
 }
