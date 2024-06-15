@@ -17,8 +17,7 @@ public record UserDetailDto(
   String occupation,
   int userExpiration,
   LocalDate userExpirationDate,
-  LocalDate createdAt
-
+  LocalDate agreeAt
 ){
   public UserDetailDto {
     // 추가정보를 입력하지 않은 경우도 존재하기 때문에, 모든 필드 null 검사 X

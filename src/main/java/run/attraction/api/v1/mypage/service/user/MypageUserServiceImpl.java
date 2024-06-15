@@ -44,7 +44,7 @@ public class MypageUserServiceImpl implements MypageUserService {
             .occupation(detail.getOccupation().name())
             .userExpiration(calculateExpiration(user, detail))
             .userExpirationDate(detail.getUserExpiration())
-            .createdAt(detail.getCreatedAt().toLocalDate())
+            .agreeAt(detail.getCreatedAt().toLocalDate())
             .build())
         .orElseGet(() -> UserDetailDto.builder()
             .email(user.getEmail())
