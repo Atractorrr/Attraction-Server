@@ -1,8 +1,5 @@
 package run.attraction.api.v1.mypage.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +10,12 @@ import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarDay;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.user.MypageUserService;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -53,13 +53,28 @@ public class MypageService {
     userService.updateBackgroundImg(email, backgroundImg);
   }
 
-  public List<MypageNewsletterDetail> getSubscribeByEmail(String email){
-    return newsletterService.getSubscribesByEmail(email);
+  @Transactional
+  public void updateNicknameByEmail(String email, String nickname){
+    userService.updateNickname(email, nickname);
   }
 
-  @Transactional(timeout = 1000)
-  public void updateUserDetails(UpdateUserDetailDto updateUserDetailDto){
-    userService.updateUserDetail(updateUserDetailDto);
+  @Transactional
+  public void updateUserExpirationByEmail(String email, Integer expiration){
+    userService.updateUserExpiration(email, expiration);
+  }
+
+  @Transactional
+  public void updateInterestByEmail(String email, List<String> interest){
+    userService.updateInterest(email, interest);
+  }
+
+  @Transactional
+  public void updateOccupationByEmail(String email, String occupation){
+    userService.updateOccupation(email, occupation);
+  }
+
+  public List<MypageNewsletterDetail> getSubscribeByEmail(String email){
+    return newsletterService.getSubscribesByEmail(email);
   }
 
   @Transactional
