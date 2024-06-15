@@ -73,10 +73,10 @@ INSERT  INTO users (email,profile_img,background_img,created_at,update_at,role) 
     ("user2@gmail.com","profileImgUrl2","backgroundImgUrl2","2024-04-17","2024-04-29","USER"),
     ("user3@gmail.com","profileImgUrl3","backgroundImgUrl3","2024-05-01","2024-05-02","USER");
 
-INSERT INTO user_detail (email,nick_Name,birth_date,user_expiration,occupation) VALUES
-    ("user1@gmail.com","KIM","1998-02-19","2025-05-10","OFFICE"),
-    ("user2@gmail.com","RYU","1999-05-22","2024-10-29","SELLING"),
-    ("user3@gmail.com","KANG","1996-11-18","2034-05-02","SERVICE");
+INSERT INTO user_detail (email,nick_Name,birth_date,user_expiration,occupation,created_at,modified_at) VALUES
+    ("user1@gmail.com","KIM","1998-02-19","2025-05-10","OFFICE","2024-03-10","2024-03-10"),
+    ("user2@gmail.com","RYU","1999-05-22","2024-10-29","SELLING","2024-04-17","2024-04-17"),
+    ("user3@gmail.com","KANG","1996-11-18","2034-05-02","SERVICE","2024-05-01","2024-05-01");
 
 -- Interest 데이터 삽입
 INSERT INTO interests (email, interests) VALUES
