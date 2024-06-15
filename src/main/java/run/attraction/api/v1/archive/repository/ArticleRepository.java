@@ -1,7 +1,5 @@
 package run.attraction.api.v1.archive.repository;
 
-import java.time.LocalDate;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long>, ArticleRepositoryCustom {
   @Query("""
@@ -44,4 +45,16 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
     AND a.id IN :articleIds
    """)
   Page<ArticleDTO> findArticlesByIdsAndUserEmail(List<Long> articleIds, String userEmail, Pageable pageable);
+
+  @Query("""
+    SELECT DISTINCT new run.attraction.api.v1.archive.dto.ArticleDTO(
+        a.id, a.title, a.thumbnailUrl, a.contentUrl, a.readingTime, a.receivedAt, 0,
+        new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl)
+    )
+    FROM Article a JOIN Newsletter n ON a.newsletterEmail = n.email
+    WHERE (a.title LIKE %:search%) AND a.isDeleted = false
+    ORDER BY a.receivedAt DESC
+    """)
+  Page<ArticleDTO> findArticleBySearch(String search, Pageable pageable);
+
 }
