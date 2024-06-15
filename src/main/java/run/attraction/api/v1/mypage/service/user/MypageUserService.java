@@ -10,7 +10,7 @@ public interface MypageUserService {
   void updateBackgroundImg(String email, String backgroundImg);
   void updateNickname(String email, String nickname);
   void updateUserExpiration(String email, Integer expiration);
-  void updateInterest(String email, List<String> expiration);
+  void updateInterest(String email, List<String> interest);
   void updateOccupation(String email, String occupation);
   boolean checkNicknameDuplication(String nikeName);
 }
