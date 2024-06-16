@@ -1,17 +1,10 @@
 package run.attraction.api.v1.mypage.controller;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
 import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.MessageResponse;
@@ -20,13 +13,10 @@ import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesRe
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.SubscribeResponseDto;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateBackgroundImgRequestDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateProfileImgRequestDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailRequestDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDto;
+import run.attraction.api.v1.mypage.service.dto.userDetail.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -64,7 +54,7 @@ public class MypageController {
   }
 
   @PatchMapping("/{email}/profile")
-  public final ResponseEntity<MessageResponse> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateProfileImgRequestDto request){
+  public final ResponseEntity<MessageResponse> updateProfileImg(@PathVariable("email") String email, @RequestBody UpdateImgRequestDto request){
     log.info("마이페이지 프로필 이미지 수정 시작");
     log.info("email = {} ",email);
     log.info("img = {} ",request.fileImgSrc());
@@ -74,7 +64,7 @@ public class MypageController {
   }
 
   @PatchMapping("/{email}/background")
-  public final ResponseEntity<MessageResponse> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateBackgroundImgRequestDto request){
+  public final ResponseEntity<MessageResponse> updateBackgroundImg(@PathVariable("email") String email, @RequestBody UpdateImgRequestDto request){
     log.info("마이페이지 배경이미지 수정 시작");
     log.info("email = {} ",email);
     log.info("img = {} ",request.fileImgSrc());
@@ -92,27 +82,6 @@ public class MypageController {
     return ResponseEntity.ok(new SubscribeResponseDto(subscribeByEmail));
   }
 
-  @PatchMapping("/{email}")
-  public final ResponseEntity<MessageResponse> updateUserDetails(@PathVariable("email") String email,
-                                                   @RequestBody(required = false) UpdateUserDetailRequestDto request)
-  {
-    log.info("마이페이지 개인설정 API ( {} )", LocalDateTime.now());
-    log.info("email = {} ",email);
-    UpdateUserDetailDto updateUserDetailDto = getUpdateUserDetailDto(email, request);
-    mypageService.updateUserDetails(updateUserDetailDto);
-    log.info("마이페이지 개인설정 API ( {} )", LocalDateTime.now());
-    return ResponseEntity.ok(new MessageResponse("개인 설정 완료"));
-  }
-
-  private UpdateUserDetailDto getUpdateUserDetailDto(String email, UpdateUserDetailRequestDto request) {
-    return UpdateUserDetailDto.builder()
-        .email(email)
-        .nickname(request.nickname())
-        .userExpiration(request.userExpiration())
-        .interest(request.interest())
-        .occupation(request.occupation())
-        .build();
-  }
 
   @PostMapping("/username-duplicate")
   public final ResponseEntity<MessageResponse> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {
@@ -125,4 +94,49 @@ public class MypageController {
     }
     return ResponseEntity.ok(new MessageResponse("사용 가능한 닉네임입니다"));
   }
+
+  @PatchMapping("/{email}/nickname")
+  public final ResponseEntity<MessageResponse> updateNickname(@PathVariable("email") String email,
+                                                              @RequestBody UpdateNicknameRequestDto request){
+    String nickname = request.nickname();
+    log.info("닉네임 변경 시작");
+    log.info("nickname = {} ",nickname);
+    mypageService.updateNicknameByEmail(email, nickname);
+    log.info("닉네임 변경 완료");
+    return ResponseEntity.ok(new MessageResponse("닉네임 설정 완료"));
+  }
+
+  @PatchMapping("/{email}/expiration")
+  public final ResponseEntity<MessageResponse> updateUserExpiration(@PathVariable("email") String email,
+                                                                    @RequestBody UpdateUserExpirationRequestDto request){
+    Integer expiration = request.userExpiration();
+    log.info("계정 만료일 변경 시작");
+    log.info("user_expiration = {} ",expiration);
+    mypageService.updateUserExpirationByEmail(email, expiration);
+    log.info("계정 만료일 변경 완료");
+    return ResponseEntity.ok(new MessageResponse("계정 만료일 설정 완료"));
+  }
+
+  @PatchMapping("/{email}/interest")
+  public final ResponseEntity<MessageResponse> updateInterest(@PathVariable("email") String email,
+                                                              @RequestBody UpdateInterestRequestDto request){
+    List<String> interest = request.interest();
+    log.info("관심사 변경 시작");
+    log.info("interest = {} ",interest.toString());
+    mypageService.updateInterestByEmail(email, interest);
+    log.info("관심사 변경 완료");
+    return ResponseEntity.ok(new MessageResponse("계정 만료일 설정 완료"));
+  }
+
+  @PatchMapping("/{email}/occupation")
+  public final ResponseEntity<MessageResponse> updateOccupation(@PathVariable("email") String email,
+                                                                @RequestBody UpdateOccupationRequestDto request){
+    String occupation = request.occupation();
+    log.info("직업군 변경 시작");
+    log.info("occupation = {} ",occupation);
+    mypageService.updateOccupationByEmail(email, occupation);
+    log.info("직업군 변경 완료");
+    return ResponseEntity.ok(new MessageResponse("계정 만료일 설정 완료"));
+  }
+
 }

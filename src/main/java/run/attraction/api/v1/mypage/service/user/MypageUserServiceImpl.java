@@ -1,19 +1,20 @@
 package run.attraction.api.v1.mypage.service.user;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.UserDetail;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
 import run.attraction.api.v1.user.repository.UserRepository;
 import run.attraction.api.v1.user.validator.nickname.NicknameValidator;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -23,6 +24,7 @@ public class MypageUserServiceImpl implements MypageUserService {
   private final UserDetailRepository userDetailRepository;
 
   private static final int EXPIRATION_FOREVER = 120;
+
   public UserDetailDto getUserDetails(String email) {
     log.info("User Detail 검색 시작");
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
@@ -42,6 +44,8 @@ public class MypageUserServiceImpl implements MypageUserService {
             .interest(detail.getInterests())
             .occupation(detail.getOccupation().name())
             .userExpiration(calculateExpiration(user, detail))
+            .userExpirationDate(detail.getUserExpiration())
+            .agreeAt(detail.getCreatedAt().toLocalDate())
             .build())
         .orElseGet(() -> UserDetailDto.builder()
             .email(user.getEmail())
@@ -66,21 +70,28 @@ public class MypageUserServiceImpl implements MypageUserService {
     user.updateBackgroundImg(backgroundImg);
   }
 
-  public void updateUserDetail(UpdateUserDetailDto updateUserDetailDto) {
-    final String email = updateUserDetailDto.getEmail();
-    User user = userRepository.findById(email)
-         .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
-    UserDetail userDetail = userDetailRepository.findUserDetailByEmail(email)
-        .orElseThrow(() -> new NoSuchElementException("추가정보를 입력하지 않은 유저입니다."));
+  public void updateNickname(String email, String nickname) {
+    UserDetail userDetail = userDetailRepository.findById(email).orElseThrow(() -> new NoSuchElementException("추가 정보를 입력하지 않은 유저입니다."));
+    userDetail.updateNickName(nickname);
+  }
 
-    updateUserDetailDto.getNickname().ifPresent(userDetail::updateNickName);
-    updateUserDetailDto.getInterest().ifPresent(userDetail::updateInterest);
-    updateUserDetailDto.getOccupation().ifPresent(userDetail::updateOccupation);
-    updateUserDetailDto.getUserExpiration().ifPresent(exp -> {
-      final int expiration = exp == 0 ? EXPIRATION_FOREVER : exp;
-      final LocalDate newExpiration = user.getUpdateAt().plus(Period.ofMonths(expiration));
-      userDetail.updateUserExpiration(newExpiration);
-    });
+  public void updateUserExpiration(String email, Integer expiration) {
+    User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
+    UserDetail userDetail = userDetailRepository.findById(email).orElseThrow(() -> new NoSuchElementException("추가 정보를 입력하지 않은 유저입니다."));
+
+    final int exp = expiration == 0 ? EXPIRATION_FOREVER : expiration;
+    final LocalDate newExpiration = user.getUpdateAt().plus(Period.ofMonths(exp));
+    userDetail.updateUserExpiration(newExpiration);
+  }
+
+  public void updateInterest(String email, List<String> interest) {
+    UserDetail userDetail = userDetailRepository.findById(email).orElseThrow(() -> new NoSuchElementException("추가 정보를 입력하지 않은 유저입니다."));
+    userDetail.updateInterest(interest);
+  }
+
+  public void updateOccupation(String email, String occupation) {
+    UserDetail userDetail = userDetailRepository.findById(email).orElseThrow(() -> new NoSuchElementException("추가 정보를 입력하지 않은 유저입니다."));
+    userDetail.updateOccupation(occupation);
   }
 
   public boolean checkNicknameDuplication(String nickname) {
