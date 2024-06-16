@@ -1,21 +1,23 @@
 package run.attraction.api.v1.home.controller;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import run.attraction.api.v1.archive.dto.ArticleDTO;
+import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.home.service.HomeService;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesResponseDto;
 import run.attraction.api.v1.home.service.dto.categories.CategoriesResponseDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewslettersResponseDto;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/api/v1")
@@ -54,4 +56,29 @@ public class HomeController {
     return ResponseEntity.ok(new ReceivedArticlesResponseDto(articles));
   }
 
+  @GetMapping("/search/article")
+  public ApiResponse<Page<ArticleDTO>> getArticleBySearch(@RequestParam("q") String q,
+                                                          @RequestParam("page") int page,
+                                                          @RequestParam("size") int size)
+  {
+    // 검색에 없을때, 자음 혹은 모음만 있을때 예외처리
+    log.info("아티클 통합검색 시작");
+    log.info("검색어= {}, page= {}, size= {}", q, page, size);
+    Page<ArticleDTO> searchResult = service.getArticleSearchResult(q, page, size);
+    log.info("아티클 통합검색 완료");
+    return ApiResponse.from(HttpStatus.OK, "성공,", searchResult);
+  }
+
+  @GetMapping("/search/newsletter")
+  public ApiResponse<Page<NewslettersByCategoryResponse>> getNewsletterBySearch(@RequestParam("q") String q,
+                                                          @RequestParam("page") int page,
+                                                          @RequestParam("size") int size)
+  {
+    // 검색에 없을때, 자음 혹은 모음만 있을때 예외처리
+    log.info("뉴스레터 통합검색 시작");
+    log.info("검색어= {}, page= {}, size= {}", q, page, size);
+    Page<NewslettersByCategoryResponse> searchResult = service.getNewsletterSearchResult(q, page, size);
+    log.info("뉴스레터 통합검색 완료");
+    return ApiResponse.from(HttpStatus.OK, "성공,", searchResult);
+  }
 }
