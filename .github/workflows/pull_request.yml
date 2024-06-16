@@ -7,37 +7,9 @@ on:
       - dev
 
 jobs:
-  Deploy:
+  dev-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: PR 정보 가져오기
-        id: get_pr_info
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 커밋메시지에서 prefix 추출하기
-        id: extract_prefix
-        run: |
-          prefix=$(git log --format=%s ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -o '\[\w*-[0-9]*\]' | head -n 1)
-          echo "::set-output name=prefix::${prefix}"
-
-      - name: Update PR title
-        if: steps.extract_prefix.outputs.prefix
-        run: |
-          new_title="${{ steps.extract_prefix.outputs.prefix }} ${{ github.event.pull_request.title }}"
-          echo "New PR title: ${new_title}"
-          curl -X PATCH \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} \
-            -d "{\"title\": \"${new_title}\"}"
-
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
 
@@ -50,9 +22,12 @@ jobs:
       - name: application.yml 파일 만들기
         run: echo '${{ secrets.APPLICATION_PROPERTIES }}' > ./src/main/resources/application.yml
 
+      - name: application-test.yml 파일 만들기
+        run: echo '${{ secrets.APPLICATION_TEST_PROPERTIES }}' > ./src/main/resources/application-test.yml
+
       - name: credentials.json 파일 만들기
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
 
-      - name: 빌드 및 테스트
+      - name: 빌드하기 및 테스트 하기
+        
         run: ./gradlew clean build
-
