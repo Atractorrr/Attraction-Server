@@ -52,7 +52,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
         new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl)
     )
     FROM Article a JOIN Newsletter n ON a.newsletterEmail = n.email
-    WHERE (a.title LIKE %:search%) AND a.isDeleted = false
+    WHERE (a.title LIKE %:search%) 
+      AND a.isDeleted = false
     ORDER BY a.receivedAt DESC
     """)
   Page<ArticleDTO> findArticleBySearch(String search, Pageable pageable);
