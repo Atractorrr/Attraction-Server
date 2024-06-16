@@ -1,15 +1,19 @@
 package run.attraction.api.v1.home.service;
 
-import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.home.service.article.HomeArticleService;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
 import run.attraction.api.v1.home.service.newsletter.HomeNewsletterService;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -43,5 +47,13 @@ public class HomeService {
     log.info("startDate = {}",startDate);
     log.info("endDate = {}",endDate);
     return articleService.getReceivedArticles(email,startDate,endDate);
+  }
+
+  public Page<ArticleDTO> getArticleSearchResult(String search, int page, int size){
+    return articleService.getArticleBySearch(search, page, size);
+  }
+
+  public Page<NewslettersByCategoryResponse> getNewsletterSearchResult(String search, int page, int size) {
+    return newsletterService.getNewsletterBySearch(search, page, size);
   }
 }

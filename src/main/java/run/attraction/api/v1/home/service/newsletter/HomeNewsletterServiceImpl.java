@@ -1,31 +1,34 @@
 package run.attraction.api.v1.home.service.newsletter;
 
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+import run.attraction.api.v1.archive.repository.SubscribeRepository;
+import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
+import run.attraction.api.v1.introduction.Category;
+import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+import run.attraction.api.v1.introduction.repository.NewsletterRepository;
+import run.attraction.api.v1.user.Interest;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import run.attraction.api.v1.archive.repository.SubscribeRepository;
-import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
-import run.attraction.api.v1.introduction.Category;
-import run.attraction.api.v1.introduction.Newsletter;
-import run.attraction.api.v1.introduction.repository.NewsletterRepository;
-import run.attraction.api.v1.user.Interest;
-import run.attraction.api.v1.user.UserDetail;
-import run.attraction.api.v1.user.repository.UserDetailRepository;
-import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
 public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
 
   private static final Logger log = LoggerFactory.getLogger(HomeNewsletterServiceImpl.class);
-  private final UserRepository userRepository;
   private final NewsletterRepository newsletterRepository;
   private final SubscribeRepository subscribeRepository;
   private final UserDetailRepository userDetailRepository;
@@ -127,5 +130,10 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
     return mostNewsletters.stream()
         .map(this::getNewsletterDetailDto)
         .toList();
+  }
+
+  public Page<NewslettersByCategoryResponse> getNewsletterBySearch(String search, int page, int size){
+    Pageable pageable = PageRequest.of(page,size);
+    return newsletterRepository.findNewsletterBySearch(search, pageable);
   }
 }
