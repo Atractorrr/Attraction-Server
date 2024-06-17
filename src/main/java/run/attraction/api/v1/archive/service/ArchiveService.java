@@ -73,6 +73,10 @@ public class ArchiveService {
     Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
         .orElse(createSubscribe(userEmail));
 
+    if(subscribe.getNewsletterIds().contains(newsletterId)) {
+      throw new IllegalArgumentException(ErrorMessages.ALREADY_EXIST_NEWSLETTER.getViewName());
+    }
+
     saveUserSubscribedNewsletterCategory(userEmail, newsletter.getCategory());
     subscribe.saveNewsletterId(newsletter.getId());
     subscribeRepository.save(subscribe);
