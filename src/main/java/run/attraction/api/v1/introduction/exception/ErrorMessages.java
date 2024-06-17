@@ -13,7 +13,8 @@ public enum ErrorMessages {
   REQUEST_PARAMETER_MISSING("필수 요청 파라미터가 누락되었습니다: "),
   NOT_EXIST_NEWSLETTER_BY_CATEGORY("카테고리에 맞는 뉴스레터가 존재하지않습니다"),
   NOT_EXIST_ARTICLE("존재 하지 않는 아티클입니다"),
-  NOT_EXIST_BOOKMARK("존재 하지 않는 북마크입니다");
+  NOT_EXIST_BOOKMARK("존재 하지 않는 북마크입니다"),
+  ALREADY_EXIST_NEWSLETTER("이미 존재하는 뉴스레터입니다");
 
   private final String viewName;
 }
