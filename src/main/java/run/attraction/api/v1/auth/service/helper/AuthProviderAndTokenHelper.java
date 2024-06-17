@@ -5,20 +5,18 @@ import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import run.attraction.api.v1.gmail.event.UserLoggedEvent;
 import run.attraction.api.v1.auth.service.dto.UserTokenDto;
-import run.attraction.api.v1.gmail.entity.GoogleRefreshToken;
 import run.attraction.api.v1.auth.token.LogoutAccessToken;
 import run.attraction.api.v1.auth.token.RefreshToken;
 import run.attraction.api.v1.auth.token.exception.InvalidTokenException;
 import run.attraction.api.v1.auth.token.exception.TokenNotFoundException;
 import run.attraction.api.v1.auth.token.jwt.JwtService;
-import run.attraction.api.v1.gmail.repository.GoogleRefreshTokenRepository;
 import run.attraction.api.v1.auth.token.repository.LogoutAccessTokenRepository;
 import run.attraction.api.v1.auth.token.repository.RefreshTokenRepository;
+import run.attraction.api.v1.gmail.entity.GoogleRefreshToken;
+import run.attraction.api.v1.gmail.repository.GoogleRefreshTokenRepository;
 import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.UserDetail;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
@@ -36,7 +34,6 @@ public class AuthProviderAndTokenHelper {
   private final GoogleRefreshTokenRepository googleRefreshTokenRepository;
   private final UserDetailRepository userDetailRepository;
   private final UserServiceImpl userService;
-  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public UserTokenDto getTokenAndRegisterUserByAuthUser(User authUser) {
@@ -87,10 +84,6 @@ public class AuthProviderAndTokenHelper {
 
   private boolean getShouldReissueToken(User user) {
     final GoogleRefreshToken googleRefreshToken = googleRefreshTokenRepository.findByEmail(user.getEmail());
-
-    if (!googleRefreshToken.getShouldReissueToken()) {
-      eventPublisher.publishEvent(new UserLoggedEvent(googleRefreshToken.getEmail(), googleRefreshToken.getToken()));
-    }
 
     return googleRefreshToken.getShouldReissueToken();
   }
