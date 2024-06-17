@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.AdminArticle;
-import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.repository.AdminArticleRepository;
-import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.dto.response.NewsletterResponse;
@@ -25,7 +23,6 @@ public class IntroductionService {
 
   private final NewsletterRepository newsletterRepository;
   private final AdminArticleRepository adminArticleRepository;
-  private final ArticleRepository articleRepository;
 
   @Transactional(readOnly = true)
   public NewsletterResponse getNewsletter(Long newsletterId) {
@@ -81,16 +78,6 @@ public class IntroductionService {
     return newsletters.stream()
         .map(NewslettersByCategoryResponse::from)
         .collect(Collectors.toList());
-  }
-
-  @Transactional(readOnly = true)
-  public PreviousArticleResponse getPreviousArticle(Long newsletterId, Long articleId) {
-    Newsletter newsletter = newsletterRepository.findById(newsletterId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
-    Article article = articleRepository.findById(articleId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_ARTICLE.getViewName()));
-
-    return PreviousArticleResponse.from(article, newsletter);
   }
 }
 

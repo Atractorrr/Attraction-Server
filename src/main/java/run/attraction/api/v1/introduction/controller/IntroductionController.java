@@ -33,14 +33,6 @@ public class IntroductionController {
     return ApiResponse.from(HttpStatus.OK, "성공", newsletter);
   }
 
-  @GetMapping("/{newsletterId}/articles/prev/{articleId}")
-  public ApiResponse<PreviousArticleResponse> getPreviousArticle(@PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId,
-                                                    @PathVariable("articleId") @NotNull @Min(1) Long articleId) {
-    PreviousArticleResponse previousArticle = introductionService.getPreviousArticle(newsletterId, articleId);
-
-    return ApiResponse.from(HttpStatus.OK, "성공", previousArticle);
-  }
-
   @GetMapping("/{newsletterId}/articles/prev")
   public ApiResponse<List<PreviousArticleResponse>> getPreviousArticles(
       @PathVariable("newsletterId") @NotNull @Min(1) Long newsletterId, @RequestParam @Min(1) int size) {
