@@ -14,8 +14,8 @@ import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesResponseDt
 import run.attraction.api.v1.home.service.dto.categories.CategoriesResponseDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewslettersResponseDto;
+import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
-import run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse;
 
 import java.util.List;
 
@@ -57,14 +57,14 @@ public class HomeController {
   }
 
   @GetMapping("/search/article")
-  public ApiResponse<Page<PreviousArticleResponse>> getArticleBySearch(@RequestParam("q") String q,
-                                                                       @RequestParam("page") int page,
-                                                                       @RequestParam("size") int size)
+  public ApiResponse<Page<ArticleSearchDto>> getArticleBySearch(@RequestParam("q") String q,
+                                                                @RequestParam("page") int page,
+                                                                @RequestParam("size") int size)
   {
     // 검색에 없을때, 자음 혹은 모음만 있을때 예외처리
     log.info("아티클 통합검색 시작");
     log.info("검색어= {}, page= {}, size= {}", q, page, size);
-    Page<PreviousArticleResponse> searchResult = service.getArticleSearchResult(q, page, size);
+    Page<ArticleSearchDto> searchResult = service.getArticleSearchResult(q, page, size);
     log.info("아티클 통합검색 완료");
     return ApiResponse.from(HttpStatus.OK, "성공,", searchResult);
   }
