@@ -1,11 +1,12 @@
 package run.attraction.api.v1.introduction.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.time.LocalDate;
 import run.attraction.api.v1.archive.AdminArticle;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.dto.NewsletterDTO;
 import run.attraction.api.v1.introduction.Newsletter;
+
+import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record PreviousArticleResponse(
