@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
-import run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse;
+import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,7 +48,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
   Page<ArticleDTO> findArticlesByIdsAndUserEmail(List<Long> articleIds, String userEmail, Pageable pageable);
 
   @Query("""
-    SELECT DISTINCT new run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse(
+    SELECT DISTINCT new run.attraction.api.v1.home.service.dto.search.ArticleSearchDto(
         a.id, a.title, a.thumbnailUrl, a.contentUrl, a.contentSummary, a.readingTime, a.receivedAt,n.name,
         new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl)
     )
@@ -57,6 +57,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
       AND a.isDeleted = false
     ORDER BY a.receivedAt DESC
     """)
-  Page<PreviousArticleResponse> findArticleBySearch(String search, Pageable pageable);
+  Page<ArticleSearchDto> findArticleBySearch(String search, Pageable pageable);
 
 }
