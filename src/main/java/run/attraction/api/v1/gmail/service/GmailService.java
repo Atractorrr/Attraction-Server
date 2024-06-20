@@ -18,7 +18,12 @@ public class GmailService {
   @Transactional
   public void applyLabelAndFilter(UserGmailDto userGmailDto) {
     final String userToken = findUserToken(userGmailDto.userEmail());
-    eventPublisher.publishEvent(new UserSubscribedEvent(userGmailDto.newsletterEmail(), userToken));
+
+    eventPublisher.publishEvent(new UserSubscribedEvent(
+        userGmailDto.userEmail(),
+        userGmailDto.newsletterEmail(),
+        userToken
+    ));
   }
 
   private String findUserToken(String userEmail) {
