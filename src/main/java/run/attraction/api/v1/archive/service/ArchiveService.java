@@ -1,7 +1,5 @@
 package run.attraction.api.v1.archive.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,16 +21,29 @@ import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
+import run.attraction.api.v1.statistics.AgeGroup;
+import run.attraction.api.v1.statistics.NewsletterEvent;
+import run.attraction.api.v1.statistics.repository.NewsletterEventRepository;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class ArchiveService {
+
+  private static int PULL_PERCENTAGE = 100;
 
   final private ArticleRepository articleRepository;
   final private ReadBoxRepository readBoxRepository;
   final private NewsletterRepository newsletterRepository;
   final private SubscribeRepository subscribeRepository;
   final private UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
+  private final UserDetailRepository userDetailRepository;
+  private final NewsletterEventRepository newsletterEventRepository;
 
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
@@ -60,10 +71,26 @@ public class ArchiveService {
 
     readBox.updateReadPercentagePercentage(readPercentage);
     readBoxRepository.save(readBox);
+
+    if(readPercentage==PULL_PERCENTAGE){
+      saveNewsletterEvent(userEmail, articleId);
+    }
   }
 
   private ReadBox createReadBox(String userEmail, Long articleId) {
     return new ReadBox(userEmail, articleId);
+  }
+
+  private void saveNewsletterEvent(String userEmail, Long articleId) {
+    UserDetail userDetail = userDetailRepository.findById(userEmail)
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
+    Long newsletterId = articleRepository.findNewsletterIdByArticleId(articleId);
+
+    newsletterEventRepository.save(NewsletterEvent.builder()
+            .newsletterId(newsletterId)
+            .occupation(userDetail.getOccupation())
+            .ageGroup(AgeGroup.calculateAge(userDetail.getBirthDate()))
+            .build());
   }
 
   @Transactional
