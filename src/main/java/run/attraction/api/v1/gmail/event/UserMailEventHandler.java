@@ -27,8 +27,8 @@ public class UserMailEventHandler {
     log.info("구독 event 진입");
     ProducerRecord<String, SubscribeVo> record = new ProducerRecord<>(
         subscribeTopicName,
-        subscribedEvent.newsletterEmail(),
-        new SubscribeVo(subscribedEvent.userEmail(), subscribedEvent.token())
+        subscribedEvent.userEmail(),
+        new SubscribeVo(subscribedEvent.newsletterEmail(), subscribedEvent.token())
     );
 
     subscribeKafkaTemplate.send(record);

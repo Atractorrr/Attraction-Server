@@ -22,7 +22,6 @@ public class SubscribeProducerListener implements ProducerListener<String, Subsc
   public void onError(ProducerRecord<String, SubscribeVo> producerRecord, RecordMetadata recordMetadata,
                       Exception exception) {
     ProducerListener.super.onError(producerRecord, recordMetadata, exception);
-    log.info("error!!!");
-    log.info("error!!! user={} topic={}",producerRecord.key(), recordMetadata.toString());
+    log.error("error!!! user={} topic={}",producerRecord.key(), recordMetadata.toString());
   }
 }
