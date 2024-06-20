@@ -83,7 +83,7 @@ jobs:
             docker run -d --name redis-server -p 6379:6379 redis:latest
             
             # Spring Boot 애플리케이션 컨테이너 실행
-            docker run -d --name attraction-api-server --link redis-server:redis -p 8080:8080 ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
+            docker run -d --name attraction-api-server --link redis-server:redis -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
 
       - name: 배포 상태 업데이트 (성공)
         if: success()
