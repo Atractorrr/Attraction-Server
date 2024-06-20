@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <!-- 로그 파일 디렉토리 경로 -->
+        <Property name="LOG_FILE_PATH">logs</Property>
+        <!-- 로그 패턴 -->
+        <property name="LOG_PATTERN"
+                  value="[%equals{%X{request_id}}{}{startup}] %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <SpringProfile name="!prod">
+                <AppenderRef ref="STDOUT"/>
+            </SpringProfile>
+        </Root>
+    </Loggers>
+</Configuration>
