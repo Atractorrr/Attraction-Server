@@ -91,11 +91,11 @@ jobs:
             docker run -d \
               --name=filebeat \
               --user=root \
-              --volume="/home/ec2-user/workspace/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro" \
+              --volume="/home/***/workspace/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro" \
               --volume="/var/lib/docker/containers:/var/lib/docker/containers:ro" \
               --volume="/var/run/docker.sock:/var/run/docker.sock:ro" \
-              --volume="registry:usr/share/filebeat/data:rw" \
-              --volume="/home/ec2-user/workspace/logs:/logs:ro"  \
+              --volume="/home/***/workspace/registry:/usr/share/filebeat/data:rw" \
+              --volume="/home/***/workspace/logs:/logs:ro" \
               docker.elastic.co/beats/filebeat:8.14.1 filebeat -e --strict.perms=false \
               -E output.elasticsearch.hosts=["elasticsearch:9200"]
       - name: 배포 상태 업데이트 (성공)
