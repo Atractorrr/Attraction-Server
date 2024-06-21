@@ -20,7 +20,7 @@ class CategoryTest {
     assertThat(Category.HOBBY_SELF_DEVELOPMENT.getViewName()).isEqualTo("취미/자기개발");
     assertThat(Category.CULTURE_ART.getViewName()).isEqualTo("문화/예술");
     assertThat(Category.LIVING_INTERIOR.getViewName()).isEqualTo("리빙/인테리어");
-    assertThat(Category.HEALTH_MEDICINE.getViewName()).isEqualTo("건강/의학");
+    assertThat(Category.ECONOMY.getViewName()).isEqualTo("경제");
   }
 
   @Test
@@ -43,6 +43,6 @@ class CategoryTest {
     assertThat(Category.valueOf("HOBBY_SELF_DEVELOPMENT")).isNotNull();
     assertThat(Category.valueOf("CULTURE_ART")).isNotNull();
     assertThat(Category.valueOf("LIVING_INTERIOR")).isNotNull();
-    assertThat(Category.valueOf("HEALTH_MEDICINE")).isNotNull();
+    assertThat(Category.valueOf("ECONOMY")).isNotNull();
   }
 }
