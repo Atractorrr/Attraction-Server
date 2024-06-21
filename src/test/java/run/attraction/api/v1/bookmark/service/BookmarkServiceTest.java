@@ -182,7 +182,7 @@ class BookmarkServiceTest {
     request.setPage(0);
     request.setSize(10);
     request.setSort(new String[]{"receivedAt", "desc"});
-    request.setCategory("HEALTH_MEDICINE");
+    request.setCategory("ECONOMY");
 
     // when
     Page<ArticleDTO> articles = bookmarkService.getUserBookmarkArticle(userEmail, request);
