@@ -10,7 +10,8 @@ public record NewsletterResponse(
     Category category,
     String mainLink,
     String subscribeLink,
-    String thumbnailUrl
+    String thumbnailUrl,
+    boolean isAutoSubscribeEnabled
 ) {
   public static NewsletterResponse from(Newsletter newsletter) {
     return new NewsletterResponse(
@@ -20,7 +21,8 @@ public record NewsletterResponse(
         newsletter.getCategory(),
         newsletter.getMainLink(),
         newsletter.getSubscribeLink(),
-        newsletter.getThumbnailUrl()
+        newsletter.getThumbnailUrl(),
+        newsletter.isAutoSubscribeEnabled()
     );
   }
 }

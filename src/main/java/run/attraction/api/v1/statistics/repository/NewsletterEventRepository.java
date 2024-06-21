@@ -1,12 +1,13 @@
 package run.attraction.api.v1.statistics.repository;
 
-import java.util.List;
-import java.time.LocalDateTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import run.attraction.api.v1.statistics.AgeGroup;
 import run.attraction.api.v1.statistics.NewsletterEvent;
 import run.attraction.api.v1.user.Occupation;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface NewsletterEventRepository extends JpaRepository<NewsletterEvent,Long> {
   List<NewsletterEvent> findByOccupation(Occupation occupation);

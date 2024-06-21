@@ -59,4 +59,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
     """)
   Page<ArticleSearchDto> findArticleBySearch(String search, Pageable pageable);
 
+  @Query("""
+    SELECT n.id 
+    FROM Article a
+    JOIN Newsletter n ON a.newsletterEmail = n.email
+    WHERE a.id = :articleId
+    """)
+  Long findNewsletterIdByArticleId(Long articleId);
 }

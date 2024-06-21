@@ -1,8 +1,7 @@
 package run.attraction.api.v1.archive.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +22,35 @@ import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
+import run.attraction.api.v1.rank.ReadBoxEvent;
+import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
+import run.attraction.api.v1.statistics.AgeGroup;
+import run.attraction.api.v1.statistics.NewsletterEvent;
+import run.attraction.api.v1.statistics.repository.NewsletterEventRepository;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArchiveService {
+
+  private static final int PULL_PERCENTAGE = 100;
 
   final private ArticleRepository articleRepository;
   final private ReadBoxRepository readBoxRepository;
   final private NewsletterRepository newsletterRepository;
   final private SubscribeRepository subscribeRepository;
   final private UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
+  private final UserDetailRepository userDetailRepository;
+  private final NewsletterEventRepository newsletterEventRepository;
+  private final ReadBoxEventRepository readBoxEventRepository;
 
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
@@ -60,10 +78,69 @@ public class ArchiveService {
 
     readBox.updateReadPercentagePercentage(readPercentage);
     readBoxRepository.save(readBox);
+
+    if(readPercentage==PULL_PERCENTAGE){
+      log.info("NewsletterEvent 저장 시작 ");
+      saveNewsletterEvent(userEmail, articleId);
+      log.info("ReadBoxEvent 저장 시작 ");
+      updateReadBoxEvent(userEmail,LocalDate.now());
+    }
   }
 
   private ReadBox createReadBox(String userEmail, Long articleId) {
     return new ReadBox(userEmail, articleId);
+  }
+
+  private void saveNewsletterEvent(String userEmail, Long articleId) {
+    UserDetail userDetail = userDetailRepository.findById(userEmail)
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
+    Long newsletterId = articleRepository.findNewsletterIdByArticleId(articleId);
+
+    newsletterEventRepository.save(NewsletterEvent.builder()
+            .newsletterId(newsletterId)
+            .occupation(userDetail.getOccupation())
+            .ageGroup(AgeGroup.calculateAge(userDetail.getBirthDate()))
+            .build());
+  }
+
+  private void updateReadBoxEvent(String userEmail, LocalDate date){
+    Optional<ReadBoxEvent> readBoxEventOptional = readBoxEventRepository.findById(userEmail);
+
+    readBoxEventOptional.ifPresentOrElse(
+            readBoxEvent -> updateReadBoxEvent(readBoxEvent,date),
+            () -> readBoxEventRepository.save(ReadBoxEvent.builder()
+                                                          .email(userEmail)
+                                                          .consistencyValue(1)
+                                                          .build())
+    );
+  }
+
+  private void updateReadBoxEvent(ReadBoxEvent readBoxEvent, LocalDate date) {
+    LocalDate modifiedAtDate = readBoxEvent.getModifiedAt().toLocalDate();
+
+    if (isToday(modifiedAtDate, date)) {
+
+    } else if (shouldResetConsistency(modifiedAtDate, date)) {
+      readBoxEvent.updateConsistencyValue(1);
+    } else if (isPreviousDay(modifiedAtDate, date)) {
+      readBoxEvent.updateConsistencyValue(readBoxEvent.getConsistencyValue() + 1);
+    }
+  }
+
+  private boolean isToday(LocalDate readBoxEventModifiedAt, LocalDate now) {
+    return readBoxEventModifiedAt.equals(now);
+  }
+
+  private boolean shouldResetConsistency(LocalDate readBoxEventModifiedAt, LocalDate now) {
+    return !isSameMonth(readBoxEventModifiedAt, now) || !isPreviousDay(readBoxEventModifiedAt, now);
+  }
+
+  private boolean isSameMonth(LocalDate readBoxEventModifiedAt, LocalDate now) {
+    return readBoxEventModifiedAt.getYear() == now.getYear() && readBoxEventModifiedAt.getMonth() == now.getMonth();
+  }
+
+  private boolean isPreviousDay(LocalDate readBoxEventModifiedAt, LocalDate now) {
+    return readBoxEventModifiedAt.plusDays(1).equals(now);
   }
 
   @Transactional

@@ -17,22 +17,25 @@ CREATE TABLE interests (
    PRIMARY KEY (email, interests)
 );
 
-CREATE TABLE IF NOT EXISTS newsletter (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    category VARCHAR(255),
-    created_at TIMESTAMP,
-    description VARCHAR(255),
-    email VARCHAR(255),
-    is_deleted BOOLEAN,
-    main_link VARCHAR(255),
-    modified_at TIMESTAMP,
-    name VARCHAR(255),
-    nickname VARCHAR(255),
-    subscribe_link VARCHAR(255),
-    thumbnail_url VARCHAR(255),
-    upload_days VARCHAR(255)
+CREATE TABLE IF NOT EXISTS newsletter
+(
+    id                        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category                  VARCHAR(255),
+    created_at                TIMESTAMP,
+    description               VARCHAR(255),
+    email                     VARCHAR(255),
+    is_deleted                BOOLEAN,
+    main_link                 VARCHAR(255),
+    modified_at               TIMESTAMP,
+    name                      VARCHAR(255),
+    nickname                  VARCHAR(255),
+    subscribe_link            VARCHAR(255),
+    thumbnail_url             VARCHAR(255),
+    upload_days               VARCHAR(255),
+    has_confirmation_email    BOOLEAN,
+    is_auto_subscribe_enabled BOOLEAN
+);
 
-    );
 
 INSERT INTO `interests` (email, interests) VALUES
     ('test1@gmail.com', 'LIVING_INTERIOR'),

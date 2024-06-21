@@ -1,16 +1,17 @@
 package run.attraction.api.v1.rank.service.calculator;
 
-import java.util.List;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.rank.ConsistencyRank;
 import run.attraction.api.v1.rank.repository.ConsistencyRankRepository;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -37,7 +38,7 @@ public class ConsistencyRankCalculator {
     log.info("Top 10 조회 완료");
 
     final List<ConsistencyRank> ranks = top10Emails.stream()
-        .map(obj -> makeConsistencyRank(obj,date))
+        .map(obj -> createConsistencyRank(obj,date))
         .toList();
 
     consistencyRankRepository.saveAll(ranks);
@@ -72,7 +73,7 @@ public class ConsistencyRankCalculator {
     return lastDayOfMonth.atTime(23, 59, 59, 999999999);
   }
 
-  private ConsistencyRank makeConsistencyRank(Object[] obj, LocalDate date){
+  private ConsistencyRank createConsistencyRank(Object[] obj, LocalDate date){
     String email = (String) obj[0];
     int baseValue = ((Number) obj[1]).intValue();
     LocalDate modifiedAt = ((Timestamp) obj[2]).toLocalDateTime().toLocalDate();
