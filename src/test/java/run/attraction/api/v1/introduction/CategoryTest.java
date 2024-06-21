@@ -10,7 +10,7 @@ class CategoryTest {
   public void testEnumValues() {
     // Category enum의 모든 값이 제대로 설정되었는지 테스트
     assertThat(Category.TREND_LIFE.getViewName()).isEqualTo("트렌드/라이프");
-    assertThat(Category.ENTERTAINMENT.getViewName()).isEqualTo("엔터테이먼트");
+    assertThat(Category.ENTERTAINMENT.getViewName()).isEqualTo("엔터테인먼트");
     assertThat(Category.BUSINESS_FINANCIAL_TECHNOLOGY.getViewName()).isEqualTo("비즈/재테크");
     assertThat(Category.LOCAL_TRAVEL.getViewName()).isEqualTo("지역/여행");
     assertThat(Category.FOOD.getViewName()).isEqualTo("푸드");
