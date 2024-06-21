@@ -77,6 +77,9 @@ jobs:
             docker rm attraction-api-server || true
             docker pull ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
             
+            # filebeat 실행
+            docker run -d --name filebeat -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" -v "$HOME/workspace/logs:/logs" docker.elastic.co/beats/filebeat:8.14.1
+            
             # Redis 컨테이너 실행
             docker stop redis-server || true
             docker rm redis-server || true
