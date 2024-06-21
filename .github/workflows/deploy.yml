@@ -97,7 +97,6 @@ jobs:
               --volume="/home/ec2-user/workspace/registry:/usr/share/filebeat/data:rw" \
               --volume="/home/ec2-user/workspace/logs:/logs:ro" \
               docker.elastic.co/beats/filebeat:8.14.1 filebeat -e --strict.perms=false \
-              -E output.elasticsearch.hosts=["elasticsearch:9200"]
       - name: 배포 상태 업데이트 (성공)
         if: success()
         uses: chrnorm/deployment-status@releases/v2
