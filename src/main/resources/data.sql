@@ -1,6 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE TABLE article;
-TRUNCATE TABLE admin_article;
 TRUNCATE TABLE newsletter;
 TRUNCATE TABLE read_box;
 TRUNCATE TABLE users;
@@ -51,14 +50,6 @@ INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, con
     (12, 'healthwellness@example.com', 'user3@gmail.com', '테스트 1번 Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 12, '2024-07-01', 'content test6', "g", false, '2024-05-02'),
     (13, 'healthwellness@example.com', 'user3@gmail.com', '테스트 2번 Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g", false, '2024-05-02');
 
-INSERT INTO admin_article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, created_at) VALUES
-     (1, 'techweekly@example.com', 'user1@example.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-01', 'content test1',  "a",false, '2024-05-01'),
-     (2, 'techweekly@example.com', 'userTest@example.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-04-05', 'content test1', "b" , false, '2024-05-02'),
-     (3, 'healthinsights@example.com', 'user2@example.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-02', 'content test2', "c", false, '2024-05-01'),
-     (4, 'financedaily@example.com', 'user3@example.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-03', 'content test3',  "d", false, '2024-05-01'),
-     (5, 'gadgetworld@example.com', 'user4@example.com', 'Latest Gadgets', 'http://gadgetworld.com/thumbnails/latestgadgets.jpg', 'http://gadgetworld.com/articles/latestgadgets', 2, '2024-01-01', 'content test4',  "e", false, '2024-05-01'),
-     (6, 'healthwellness@example.com', 'user5@example.com', 'Wellness Tips', 'http://healthwellness.com/thumbnails/wellnesstips.jpg', 'http://healthwellness.com/articles/wellnesstips', 4, '2024-08-01', 'content test5',"f", false, '2024-05-01'),
-     (7, 'healthwellness@example.com', 'user6@example.com', 'Test Article', 'http://test.com/thumbnails/wellnesstips.jpg', 'http://test.com/articles/wellnesstips', 10, '2024-07-01', 'content test6', "g",false, '2024-05-01');
 
 
 -- Readbox 데이터 삽입
