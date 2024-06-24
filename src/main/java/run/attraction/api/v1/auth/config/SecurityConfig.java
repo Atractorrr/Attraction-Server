@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,8 +29,8 @@ public class SecurityConfig {
             configurer.configurationSource(corsConfigurationSource()))
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
-        .sessionManagement(session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//        .sessionManagement(session ->
+//            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req ->
             // auth 관련 요청은 모두 허가
 //            req.requestMatchers("/api/v1/auth/**").permitAll()
