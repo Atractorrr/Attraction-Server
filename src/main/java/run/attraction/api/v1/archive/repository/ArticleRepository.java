@@ -66,4 +66,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
     WHERE a.id = :articleId
     """)
   Long findNewsletterIdByArticleId(Long articleId);
+
+  List<Article> findArticlesByNewsletterEmail(String newsletterEmail);
 }

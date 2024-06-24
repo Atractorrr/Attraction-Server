@@ -1,7 +1,6 @@
 package run.attraction.api.v1.introduction.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import run.attraction.api.v1.archive.AdminArticle;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.dto.NewsletterDTO;
 import run.attraction.api.v1.introduction.Newsletter;
@@ -22,7 +21,7 @@ public record PreviousArticleResponse(
 ) {
   private static final String BASE_URL = "https://attraction-bucket.s3.ap-northeast-2.amazonaws.com/";
 
-  public static PreviousArticleResponse from(AdminArticle article, String newsletterName) {
+  public static PreviousArticleResponse from(Article article, String newsletterName) {
     return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
