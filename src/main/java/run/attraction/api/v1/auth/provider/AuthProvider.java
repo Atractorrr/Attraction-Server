@@ -23,29 +23,19 @@ public class AuthProvider {
   public User getUserProfileByCode(String provider, final String code) {
     OAuthService oAuthService = getOAuthService(provider);
 
-    log.info("code로 구글 Token 받기 시작");
     final OAuthToken token = oAuthService.getToken(code);
-    log.info("code로 구글 Token 받기 완료");
-    log.info("googleRefreshToken = {}", token.getRefresh_token());
-    log.info("googleAccessToken = {}", token.getAccess_token());
-
-    log.info("googleAccessToken으로 구글 유저정보 받기 시작");
     final String responseBody = oAuthService.getResponseBody(token.getAccess_token());
-    log.info("googleAccessToken으로 구글 유저정보 받기 완료");
 
     final User authUser = oAuthService.getAuthUser(responseBody);
-    log.info("유저 eamil = {}", authUser.getEmail());
 
     String googleRefreshToken = token.getRefresh_token();
     if (!(googleRefreshToken==null)) {
-      log.info("googleRefreshToken가 존재합니다. 구글 refreshToken을 저장합니다.");
       saveGoogleRefreshToken(googleRefreshToken, authUser.getEmail());
     }
     return authUser;
   }
 
   private void saveGoogleRefreshToken(String refreshToken, String email) {
-    log.info("saveGoogleRefreshToken 진입");
     googleRefreshTokenRepository.findInvalidTokenByEmail(email)
         .ifPresentOrElse(
             token -> updateGoogleRefreshToken(token, refreshToken),
@@ -54,22 +44,16 @@ public class AuthProvider {
   }
 
   private void saveNewGoogleRefreshToken(String refreshToken, String email) {
-    log.info("첫 로그인한 유저입니다.");
     final GoogleRefreshToken googleRefreshToken = GoogleRefreshToken.builder()
         .token(refreshToken)
         .email(email)
         .build();
     googleRefreshTokenRepository.save(googleRefreshToken);
-    log.info("Google refresh Token 저장완료.");
-    log.info("Google refresh Token 저장완료.");
-
   }
 
   private void updateGoogleRefreshToken(GoogleRefreshToken googleRefreshToken, String refreshToken) {
-    log.info("기존에 있던 유저 입니다. Google refresh Token을 갱신합니다.");
     googleRefreshToken.updateStateAndToken(false, refreshToken);
     googleRefreshTokenRepository.save(googleRefreshToken);
-    log.info("Google refresh Token 갱신완료.");
   }
 
   private OAuthService getOAuthService(String provider) {
