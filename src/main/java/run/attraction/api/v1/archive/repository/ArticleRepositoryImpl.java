@@ -107,9 +107,9 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     return Optional.ofNullable(queryFactory
         .select(new QArticleDTO(this.article, readBox.readPercentage, newsletter))
         .from(this.article)
-        .join(readBox).on(this.article.id.eq(readBox.articleId).and(this.article.userEmail.eq(readBox.userEmail)))
+        .join(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
-        .where(article.id.eq(articleId).and(article.userEmail.eq(userEmail)))
+        .where(article.id.eq(articleId))
         .fetchOne());
   }
 
