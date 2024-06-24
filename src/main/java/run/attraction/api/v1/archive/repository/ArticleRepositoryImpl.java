@@ -1,6 +1,7 @@
 package run.attraction.api.v1.archive.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +18,8 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
+import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
+import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
@@ -24,6 +27,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   private final QArticle article = QArticle.article;
   private final QReadBox readBox = QReadBox.readBox;
   private final QNewsletter newsletter = QNewsletter.newsletter;
+
 
   LocalDate currentDate = LocalDate.now();
   LocalDate sixDaysAgo = currentDate.minusDays(6);
@@ -140,5 +144,19 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     }
 
     return predicate;
+  }
+
+  public List<RecentArticlesDto> findRecentArticlesByUserEmail(String userEmail) {
+    JPAQuery<RecentArticlesDto> articles = queryFactory
+        .select(new QRecentArticlesDto(this.article, readBox.readPercentage.coalesce(0), newsletter))
+        .from(this.article)
+        .join(readBox).on(this.article.id.eq(readBox.articleId)
+            .and(readBox.userEmail.eq(userEmail)))
+        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
+        .where(readBox.modifiedAt.isNotNull()
+            .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt).between(sixDaysAgo, currentDate)))
+        .orderBy(readBox.modifiedAt.desc());
+
+    return articles.fetch();
   }
 }

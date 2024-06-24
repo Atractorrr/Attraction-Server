@@ -5,10 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
 import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.MessageResponse;
-import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
+import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesResponseDto;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.SubscribeResponseDto;
@@ -45,12 +46,10 @@ public class MypageController {
   }
 
   @GetMapping("/{email}/articles/recent")
-  public final ResponseEntity<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email) {
-    log.info("최근 읽은 아티클 API 시작");
-    log.info("email = {} ",email);
-    final List<MypageArticle> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
-    log.info("최근 읽은 아티클 API 완료");
-    return ResponseEntity.ok(new RecentArticlesResponseDto(recentArticlesByEmail));
+  public final ApiResponse<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email) {
+    final List<RecentArticlesDto> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", new RecentArticlesResponseDto(recentArticlesByEmail));
   }
 
   @PatchMapping("/{email}/profile")
