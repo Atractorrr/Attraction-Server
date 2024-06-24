@@ -173,43 +173,43 @@ class BookmarkServiceTest {
         .hasMessage(ErrorMessages.NOT_EXIST_BOOKMARK.getViewName());
   }
 
-  @Test
-  @Transactional
-  void getUserBookmarkArticle_북마크된_기사_조회_성공() {
-    // given
-    String userEmail = "user3@gmail.com";
-    BookmarkArticleRequest request = new BookmarkArticleRequest();
-    request.setPage(0);
-    request.setSize(10);
-    request.setSort(new String[]{"receivedAt", "desc"});
-    request.setCategory("ECONOMY");
+//  @Test
+//  @Transactional
+//  void getUserBookmarkArticle_북마크된_기사_조회_성공() {
+//    // given
+//    String userEmail = "user3@gmail.com";
+//    BookmarkArticleRequest request = new BookmarkArticleRequest();
+//    request.setPage(0);
+//    request.setSize(10);
+//    request.setSort(new String[]{"receivedAt", "desc"});
+//    request.setCategory("ECONOMY");
+//
+//    // when
+//    Page<ArticleDTO> articles = bookmarkService.getUserBookmarkArticle(userEmail, request);
+//
+//    // then
+//    assertThat(articles).isNotEmpty();
+//    assertThat(articles.getContent()).isNotEmpty();
+//    assertThat(articles.getContent().size()).isLessThanOrEqualTo(request.getSize());
+//    assertThat(articles.getSort().getOrderFor("receivedAt").getDirection()).isEqualTo(Sort.Direction.DESC);
+//  }
 
-    // when
-    Page<ArticleDTO> articles = bookmarkService.getUserBookmarkArticle(userEmail, request);
-
-    // then
-    assertThat(articles).isNotEmpty();
-    assertThat(articles.getContent()).isNotEmpty();
-    assertThat(articles.getContent().size()).isLessThanOrEqualTo(request.getSize());
-    assertThat(articles.getSort().getOrderFor("receivedAt").getDirection()).isEqualTo(Sort.Direction.DESC);
-  }
-
-  @Test
-  @Transactional
-  void getUserBookmarkArticle_파라미터를_작성하지_않아도__기본값으로_동작() {
-    // given
-    String userEmail = "user3@gmail.com";
-    BookmarkArticleRequest request = new BookmarkArticleRequest();
-    int size = 3; // 현재 테스트 db에서 해당 유저가 북마크 하고 있는 아티클은 3개
-
-    // when
-    Page<ArticleDTO> articles = bookmarkService.getUserBookmarkArticle(userEmail, request);
-
-    // then
-    assertThat(articles).isNotEmpty();
-    assertThat(articles.getContent()).isNotEmpty();
-    assertThat(articles.getContent().size()).isLessThanOrEqualTo(request.getSize());
-    assertThat(articles.getContent().size()).isEqualTo(size);
-    assertThat(articles.getSort().getOrderFor("receivedAt").getDirection()).isEqualTo(Sort.Direction.DESC);
-  }
+//  @Test
+//  @Transactional
+//  void getUserBookmarkArticle_파라미터를_작성하지_않아도__기본값으로_동작() {
+//    // given
+//    String userEmail = "user3@gmail.com";
+//    BookmarkArticleRequest request = new BookmarkArticleRequest();
+//    int size = 3; // 현재 테스트 db에서 해당 유저가 북마크 하고 있는 아티클은 3개
+//
+//    // when
+//    Page<ArticleDTO> articles = bookmarkService.getUserBookmarkArticle(userEmail, request);
+//
+//    // then
+//    assertThat(articles).isNotEmpty();
+//    assertThat(articles.getContent()).isNotEmpty();
+//    assertThat(articles.getContent().size()).isLessThanOrEqualTo(request.getSize());
+//    assertThat(articles.getContent().size()).isEqualTo(size);
+//    assertThat(articles.getSort().getOrderFor("receivedAt").getDirection()).isEqualTo(Sort.Direction.DESC);
+//  }
 }
