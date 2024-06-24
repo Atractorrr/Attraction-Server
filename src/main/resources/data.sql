@@ -106,10 +106,10 @@ INSERT INTO interests (email, interests) VALUES
 -- 마이페이지 최근 읽은 아티클 조회 Test용
 
 INSERT INTO article (id, newsletter_email, user_email, title, thumbnail_url, content_url, reading_time, received_at, content_summary, newsletter_nickname, is_deleted, created_at) VALUES
-    (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01'),
-    (9, 'techweekly@example.com', 'user2@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-05-28', 'content test1' , "b", false, '2024-05-02'),
-    (10, 'healthinsights@example.com', 'user2@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-05-28', 'content test2', "c", false, '2024-05-01'),
-    (11, 'financedaily@example.com', 'user2@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-05-28', 'content test3', "d" , false, '2024-05-01'),
+    (8, 'techweekly@example.com', 'user3@gmail.com', 'Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-06-22', 'content test1', "a",  false, '2024-06-22'),
+    (9, 'techweekly@example.com', 'user2@gmail.com', 'Tech Trends 2022', 'http://tecsdffe.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2022', 5, '2024-06-16', 'content test1' , "b", false, '2024-06-16'),
+    (10, 'techweekly@example.com', 'user2@gmail.com', 'Healthy Living Tips', 'http://healthinsights.com/thumbnails/healthyliving.jpg', 'http://healthinsights.com/articles/healthyliving', 3, '2024-06-15', 'content test2', "c", false, '2024-06-05'),
+    (11, 'financedaily@example.com', 'user2@gmail.com', 'Stock Market Analysis', 'http://financedaily.com/thumbnails/stockmarket.jpg', 'http://financedaily.com/articles/stockmarket', 7, '2024-06-17', 'content test3', "d" , false, '2024-05-01'),
     (15, 'techweekly@example.com', 'test@gmail.com', '테스트 아티클 15Tech Trends 2024', 'http://techweekly.com/thumbnails/trends2024.jpg', 'http://techweekly.com/articles/trends2024', 5, '2024-05-28', 'content test1', "a",  false, '2024-05-01');
 
 INSERT INTO read_box (user_email,modified_at,article_id, read_percentage) VALUES
@@ -123,19 +123,20 @@ INSERT INTO subscribe (id,user_email) VALUES
     (2,"user2@gmail.com"),
     (3,"user3@gmail.com");
 
-INSERT INTO newsletter_ids (subscribe_id, newsletter_id) VALUES
-    (1, 1),
-    (1, 2),
-    (2, 1),
-    (2, 2),
-    (2, 3),
-    (2, 4),
-    (3, 1),
-    (3, 2),
-    (3, 3),
-    (3, 4),
-    (3, 5),
-    (3, 6);
+INSERT INTO newsletter_ids (subscribe_id, newsletter_id)
+VALUES (1, 1),
+       (1, 3),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (3, 1),
+       (3, 2),
+       (3, 3),
+       (3, 4),
+       (3, 5),
+       (3, 6);
+
 
 
 

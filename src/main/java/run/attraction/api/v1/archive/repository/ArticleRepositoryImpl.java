@@ -5,6 +5,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -24,23 +25,25 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   private final QReadBox readBox = QReadBox.readBox;
   private final QNewsletter newsletter = QNewsletter.newsletter;
 
+  LocalDate currentDate = LocalDate.now();
+  LocalDate sixDaysAgo = currentDate.minusDays(6);
+
   public ArticleRepositoryImpl(EntityManager em) {
     this.queryFactory = new JPAQueryFactory(em);
   }
 
   @Override
-  public Page<ArticleDTO> findArticlesByUserEmail(String userEmail, String category, Boolean isHideRead, String search,
+  public Page<ArticleDTO> findArticlesByUserEmail(String userEmail, List<String> newsletterEmails, String category, Boolean isHideRead, String search,
                                                Pageable pageable) {
-    BooleanExpression predicate = buildPredicate(userEmail, category, isHideRead, search);
-    List<ArticleDTO> articles = getArticles(predicate, pageable);
+    BooleanExpression predicate = buildPredicate(newsletterEmails,  category, isHideRead, search);
+    List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
     Long total = getTotal(predicate);
 
     return new PageImpl<>(articles, pageable, total);
   }
 
-  private BooleanExpression buildPredicate(String userEmail, String category, boolean isHideRead, String search) {
-
-    BooleanExpression predicate = article.userEmail.eq(userEmail);
+  private BooleanExpression buildPredicate(List<String> newsletterEmails, String category, boolean isHideRead, String search) {
+    BooleanExpression predicate = article.newsletterEmail.in(newsletterEmails);
 
     if (isNotNullAndNotEmpty(category)) {
       predicate = predicate.and(article.newsletterEmail.in(
@@ -67,13 +70,14 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     return value != null && !value.isEmpty();
   }
 
-  private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable) {
+  private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable, String userEmail) {
     JPAQuery<ArticleDTO> articles = queryFactory
         .select(new QArticleDTO(this.article, readBox.readPercentage.coalesce(0), newsletter))
         .from(this.article)
-        .leftJoin(readBox).on(this.article.id.eq(readBox.articleId))
+        .leftJoin(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
         .where(predicate)
+        .where(article.receivedAt.between(sixDaysAgo, currentDate))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
 
@@ -103,16 +107,17 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     return Optional.ofNullable(queryFactory
         .select(new QArticleDTO(this.article, readBox.readPercentage, newsletter))
         .from(this.article)
-        .join(readBox).on(this.article.id.eq(readBox.articleId).and(this.article.userEmail.eq(readBox.userEmail)))
+        .join(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
-        .where(article.id.eq(articleId).and(article.userEmail.eq(userEmail)))
+        .where(article.id.eq(articleId))
         .fetchOne());
   }
 
   @Override
   public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search, Pageable pageable) {
     BooleanExpression predicate = buildPredicateByArticleIds(articleIds, category, search);
-    List<ArticleDTO> articles = getArticles(predicate, pageable);
+    String userEmail = "";
+    List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
     Long total = getTotal(predicate);
 
     return new PageImpl<>(articles, pageable, total);

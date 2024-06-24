@@ -1,8 +1,10 @@
 package run.attraction.api.v1.archive.service;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,12 +59,24 @@ public class ArchiveService {
     String DESC = "desc";
     String HIDE_READ_TRUE = "true";
 
+    Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
+        .orElse(null);
+
+    if(subscribe == null) {
+      return new PageImpl<>(Collections.emptyList(), PageRequest.of(request.getPage(), request.getSize()), 0);
+    }
+
+    List<String> newsletterEmails = subscribe.getNewsletterIds()
+        .stream()
+        .map(id -> newsletterRepository.findById(id).get().getEmail())
+        .toList();
+
     String sortDirection = request.getSort().length > 1 ? request.getSort()[1] : DESC;
     Boolean isHideReadFilter = request.getIsHideRead().equalsIgnoreCase(HIDE_READ_TRUE);
     Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(DESC) ? Sort.Order.desc(request.getSort()[0]) : Sort.Order.asc(request.getSort()[0]));
     Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sortObj);
 
-    return articleRepository.findArticlesByUserEmail(userEmail, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
+    return articleRepository.findArticlesByUserEmail(userEmail, newsletterEmails, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
   }
 
   @Transactional(readOnly = true)
