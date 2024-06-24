@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.archive.article.MypageArticleService;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterService;
 import run.attraction.api.v1.mypage.service.calendar.MypageCalendarService;
-import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
+import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarDay;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
@@ -39,7 +39,7 @@ public class MypageService {
     return new CalendarResponseDto(calendarDays);
   }
 
-  public List<MypageArticle> getRecentArticlesByEmail(String email){
+  public List<RecentArticlesDto> getRecentArticlesByEmail(String email){
     return articleService.getUserRecentArticles(email);
   }
 
