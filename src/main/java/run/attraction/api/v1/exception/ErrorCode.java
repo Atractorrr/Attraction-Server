@@ -9,6 +9,12 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+  /*
+   * 기본 10개, 예외가 많을 것 같다면 20개 단위로 코드 번호 부여
+   * 1. Common : C001 ~ C030
+   * 2. Session : C031 ~ C040
+   */
+
   // Common
   INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST.value(), "C001", " 잘못된 입력값입니다."),
   METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED.value(), "C002", " 요청메서드가 허용되지 않습니다."),
@@ -23,7 +29,7 @@ public enum ErrorCode {
   ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST.value(), "C011", "illegalArgument error"),
 
   // Session
-  SESSION_ID_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C012", "세션이 존재하지 않거나 세션 ID가 존재하지 않습니다.");
+  SESSION_ID_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C031", "세션이 존재하지 않거나 세션 ID가 존재하지 않습니다.");
 
   private final int status;
   private final String code;
