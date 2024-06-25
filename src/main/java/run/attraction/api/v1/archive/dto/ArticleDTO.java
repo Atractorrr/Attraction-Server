@@ -20,8 +20,8 @@ public record ArticleDTO(
     this(
         article.getId(),
         article.getTitle(),
-        buildUrl("thumbnail/", article.getThumbnailUrl()),
-        buildUrl("article/", article.getContentUrl()),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getReadingTime(),
         article.getReceivedAt(),
         readPercentage,

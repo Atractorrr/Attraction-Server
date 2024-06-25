@@ -24,8 +24,8 @@ public record PreviousArticleResponse(
     return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
-        buildUrl("thumbnail/", article.getThumbnailUrl()),
-        buildUrl("article/", article.getContentUrl()),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getContentSummary(),
         article.getReadingTime(),
         article.getReceivedAt(),
@@ -38,8 +38,8 @@ public record PreviousArticleResponse(
     return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
-        buildUrl("thumbnail/", article.getThumbnailUrl()),
-        buildUrl("article/", article.getContentUrl()),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getContentSummary(),
         article.getReadingTime(),
         article.getReceivedAt(),
