@@ -14,7 +14,7 @@ public record RecentArticlesDto(
     int readPercentage,
     RecentArticleNewsletterDto newsletter
 ) {
-  private static final String THUMBNAIL = "/thumbnails/";
+  private static final String THUMBNAIL = "/thumbnail/";
 
   @QueryProjection
   public RecentArticlesDto(Article article, int readPercentage, Newsletter newsletter) {
