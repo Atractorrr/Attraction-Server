@@ -15,13 +15,14 @@ public record ReceivedArticlesDto(
     int readPercentage,
     RecentArticleNewsletterDto newsletter
 ) {
+  private static final String THUMBNAIL = "/thumbnails/";
 
   @QueryProjection
   public ReceivedArticlesDto(Article article, int readPercentage, Newsletter newsletter) {
     this(
         article.getId(),
         article.getTitle(),
-        article.getThumbnailUrl(),
+        THUMBNAIL + article.getThumbnailUrl(),
         article.getReadingTime(),
         article.getReceivedAt(),
         readPercentage,
