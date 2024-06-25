@@ -16,6 +16,8 @@ import run.attraction.api.v1.archive.QArticle;
 import run.attraction.api.v1.archive.QReadBox;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
+import run.attraction.api.v1.home.service.dto.article.QReceivedArticlesDto;
+import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
 import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
@@ -156,6 +158,20 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         .where(readBox.modifiedAt.isNotNull()
             .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt).between(sixDaysAgo, currentDate)))
         .orderBy(readBox.modifiedAt.desc());
+
+    return articles.fetch();
+  }
+
+  public List<ReceivedArticlesDto> findReceivedArticlesByUserEmail(String userEmail, List<String> newsletterEmails, int size) {
+    JPAQuery<ReceivedArticlesDto> articles = queryFactory
+        .select(new QReceivedArticlesDto(this.article, readBox.readPercentage.coalesce(0), newsletter))
+        .from(this.article)
+        .leftJoin(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
+        .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
+        .where(article.newsletterEmail.in(newsletterEmails))
+        .where(article.receivedAt.between(sixDaysAgo, currentDate))
+        .orderBy(article.receivedAt.desc())
+        .limit(size);
 
     return articles.fetch();
   }
