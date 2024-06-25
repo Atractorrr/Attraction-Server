@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.auth.service.AuthService;
 import run.attraction.api.v1.auth.service.dto.UserStateDto;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
@@ -18,6 +20,7 @@ import run.attraction.api.v1.auth.service.dto.login.FirstLoginResponseDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginRequestDto;
 import run.attraction.api.v1.auth.service.dto.login.LoginResponseDto;
 import run.attraction.api.v1.auth.session.SessionService;
+import run.attraction.api.v1.auth.session.dto.UserDetailBySession;
 import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 
 @RestController
@@ -74,6 +77,12 @@ public class AuthController {
   public ResponseEntity<?> logout(HttpServletRequest request) {
     sessionService.removeSession(request);
     return ResponseEntity.ok(new MessageResponse("로그아웃 완료되었습니다."));
+  }
+
+  @GetMapping("/session")
+  public ApiResponse<UserDetailBySession> getUserDetail(HttpServletRequest request){
+    UserDetailBySession userDetail = sessionService.getUserDetail(request);
+    return ApiResponse.from(HttpStatus.OK, "성공,", userDetail);
   }
 
 }
