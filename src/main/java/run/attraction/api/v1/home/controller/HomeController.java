@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.home.service.HomeService;
-import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
+import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesResponseDto;
 import run.attraction.api.v1.home.service.dto.categories.CategoriesResponseDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
@@ -48,12 +48,11 @@ public class HomeController {
   }
 
   @GetMapping("/user/{email}/articles/received")
-  public ResponseEntity<ReceivedArticlesResponseDto> getReceivedArticles(@Valid @PathVariable String email) {
-    log.info("홈페이지 받은 아티클 API 시작");
-    log.info("email= {}", email);
-    final List<ArticleDetailDto> articles = service.getReceivedArticlesByEmail(email);
-    log.info("홈페이지 받은 아티클 API 완료");
-    return ResponseEntity.ok(new ReceivedArticlesResponseDto(articles));
+  public ApiResponse<ReceivedArticlesResponseDto> getReceivedArticles(@Valid @PathVariable String email,
+                                                                         @RequestParam(value = "size", defaultValue = "10") int size) {
+    final List<ReceivedArticlesDto> articles = service.getReceivedArticlesByEmail(email, size);
+
+    return ApiResponse.from(HttpStatus.OK, "성공,", new ReceivedArticlesResponseDto(articles));
   }
 
   @GetMapping("/search/article")
