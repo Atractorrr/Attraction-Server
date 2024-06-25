@@ -19,7 +19,6 @@ public record PreviousArticleResponse(
     String newsletterName,
     NewsletterDTO newsletter
 ) {
-  private static final String BASE_URL = "https://attraction-bucket.s3.ap-northeast-2.amazonaws.com/";
 
   public static PreviousArticleResponse from(Article article, String newsletterName) {
     return new PreviousArticleResponse(
@@ -50,6 +49,6 @@ public record PreviousArticleResponse(
   }
 
   private static String buildUrl(String type, String path) {
-    return BASE_URL + type + path;
+    return type + path;
   }
 }
