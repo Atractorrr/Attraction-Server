@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
+import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
 public interface ArticleRepositoryCustom {
@@ -13,4 +14,5 @@ public interface ArticleRepositoryCustom {
   Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search, Pageable pageable);
   Optional<ArticleDTO> findArticleByUserEmailAndArticleId(String userEmail, Long articleId);
   List<RecentArticlesDto> findRecentArticlesByUserEmail(String userEmail);
+  List<ReceivedArticlesDto> findReceivedArticlesByUserEmail(String userEmail, List<String> newsletterEmails,  int size);
 }
