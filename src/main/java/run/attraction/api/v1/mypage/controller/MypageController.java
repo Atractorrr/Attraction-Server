@@ -139,4 +139,10 @@ public class MypageController {
     return ResponseEntity.ok(new MessageResponse("계정 만료일 설정 완료"));
   }
 
+  @DeleteMapping("/{email}")
+  public final ResponseEntity<MessageResponse> resignUser(@PathVariable("email") String email){
+    mypageService.resignByEmail(email);
+    return ResponseEntity.ok(new MessageResponse("탈퇴 완료되었습니다."));
+  }
+
 }

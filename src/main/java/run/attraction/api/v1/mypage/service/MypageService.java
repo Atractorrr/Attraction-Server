@@ -1,5 +1,8 @@
 package run.attraction.api.v1.mypage.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +15,6 @@ import run.attraction.api.v1.mypage.service.dto.calendar.CalendarDay;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.user.MypageUserService;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -82,4 +81,8 @@ public class MypageService {
     return userService.checkNicknameDuplication(nickname);
   }
 
+  @Transactional
+  public void resignByEmail(String email){
+    userService.updateIsDeleted(email);
+  }
 }

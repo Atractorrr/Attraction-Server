@@ -70,6 +70,10 @@ public class User extends AuditableEntity implements UserDetails {
     this.backgroundImg = backgroundImg;
   }
 
+  public void updateIsDeleted(boolean isDeleted){
+    this.isDeleted = isDeleted;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role.getAuthorities();

@@ -13,4 +13,5 @@ public interface MypageUserService {
   void updateInterest(String email, List<String> interest);
   void updateOccupation(String email, String occupation);
   boolean checkNicknameDuplication(String nikeName);
+  void updateIsDeleted(String email);
 }

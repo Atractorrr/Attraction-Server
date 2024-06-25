@@ -30,6 +30,7 @@ public class LoginHelper {
     // 이전에 로그인했던 유저라면
     if (findUser.isPresent()) {
       User user = findUser.get();
+      checkIsDeleted(user);
       renewUserUpdateAt(user);
       return createUserStateDto(user, true);
     }
@@ -38,6 +39,11 @@ public class LoginHelper {
     return createUserStateDto(authUser, false);
   }
 
+  private void checkIsDeleted(User user){
+    if(user.isDeleted()){
+      user.updateIsDeleted(false);
+    }
+  }
   private void renewUserUpdateAt(User user) {
     if (user.getUpdateAt().isBefore(LocalDate.now())){
       userService.updateUserExpiration(user,LocalDate.now());
