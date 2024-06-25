@@ -8,14 +8,12 @@ public record ReceivedArticleNewsletterDto(
     String name,
     String thumbnailUrl
 ) {
-  private static final String THUMBNAIL = "/thumbnails/";
-
   @QueryProjection
   public ReceivedArticleNewsletterDto(Newsletter newsletter) {
     this(
         newsletter.getId(),
         newsletter.getName(),
-        THUMBNAIL + newsletter.getThumbnailUrl()
+        newsletter.getThumbnailUrl()
     );
   }
 
@@ -23,7 +21,7 @@ public record ReceivedArticleNewsletterDto(
     return new ReceivedArticleNewsletterDto(
         newsletter.getId(),
         newsletter.getName(),
-        THUMBNAIL + newsletter.getThumbnailUrl()
+        newsletter.getThumbnailUrl()
     );
   }
 }
