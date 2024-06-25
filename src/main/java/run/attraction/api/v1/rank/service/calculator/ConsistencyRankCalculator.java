@@ -26,23 +26,18 @@ public class ConsistencyRankCalculator {
   }
 
   private List<ConsistencyRank> calculateConsistencyRank(LocalDate date) {
-    log.info("저장된 데이터가 존재하지 않아, 새로 계산합니다.");
     LocalDateTime[] dateRange = getDateRange(date);
 
     LocalDateTime startDate = dateRange[0];
     LocalDateTime endDate = dateRange[1];
-    log.info("조회 범위");
-    log.info("startDate: {}, endDate: {}", startDate, endDate);
 
     final List<Object[]> top10Emails = readBoxEventRepository.findTop10ConsistencyUserEmail(startDate, endDate);
-    log.info("Top 10 조회 완료");
 
     final List<ConsistencyRank> ranks = top10Emails.stream()
         .map(obj -> createConsistencyRank(obj,date))
         .toList();
 
     consistencyRankRepository.saveAll(ranks);
-    log.info("Top 10 저장 완료");
     return ranks;
 }
 

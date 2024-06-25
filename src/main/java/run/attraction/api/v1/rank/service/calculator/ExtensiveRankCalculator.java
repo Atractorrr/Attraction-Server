@@ -23,16 +23,13 @@ public class ExtensiveRankCalculator {
   }
 
   private List<ExtensiveRank> calculateExtensiveRank(LocalDate date) {
-    log.info("저장된 데이터가 존재하지 않아, 새로 계산합니다.");
     LocalDate[] dateRange = getDateRange(date);
 
     LocalDate startDate = dateRange[0];
     LocalDate endDate = dateRange[1];
-    log.info("조회 범위");
-    log.info("startDate: {}, endDate: {}", startDate, endDate);
 
     final List<Object[]> top10Emails = readBoxRepository.findTop10ExtensiveUsers(startDate,endDate,date);
-    log.info("Top 10 조회 완료");
+
     final List<ExtensiveRank> ranks = top10Emails.stream()
         .map(obj -> ExtensiveRank.builder()
             .email((String) obj[0])
@@ -42,7 +39,6 @@ public class ExtensiveRankCalculator {
         .toList();
 
     extensiveRankRepository.saveAll(ranks);
-    log.info("Top 10 저장 완료");
     return ranks;
   }
 

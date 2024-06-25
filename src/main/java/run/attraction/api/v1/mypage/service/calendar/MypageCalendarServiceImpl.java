@@ -22,14 +22,10 @@ public class MypageCalendarServiceImpl implements MypageCalendarService {
   private static final LocalDate LAST_DAY = LocalDate.of(LocalDate.now().getYear(), 12, 31);
 
   public Map<LocalDate, Integer> getUserCalendar(String email) {
-    log.info("ReadBox에서 percentage가 100인 객체 검색 시작");
     final List<ReadBox> completedArticles = readBoxRepository.findCompletedReadBoxByEmail(email);
-    log.info("ReadBox에서 percentage가 100인 객체 검색 완료");
     Map<LocalDate, Integer> countMap = completedArticles.stream()
         .collect(Collectors.groupingBy(ReadBox::getReadDate, Collectors.summingInt(e -> 1)));
-    log.info("1월 1일 / 12월 31 데이터 처리 시작");
     getFirstDayAndLastDay(countMap);
-    log.info("1월 1일 / 12월 31 데이터 처리 완료");
     return countMap;
   }
 

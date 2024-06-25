@@ -29,21 +29,14 @@ public class HomeController {
 
   @GetMapping("/newsletters/categories")
   public ResponseEntity<CategoriesResponseDto> getCategories(@RequestParam String email) {
-    log.info("홈페이지 카테고리 반환 API 시작");
-    log.info("email= {}", email);
     final List<String> categories = service.getCategoriesByEmail(email);
-    log.info("홈페이지 카테고리 반환 API 완료");
     return ResponseEntity.ok(new CategoriesResponseDto(categories));
   }
 
   @GetMapping("/newsletters/recommend")
   public ResponseEntity<NewslettersResponseDto> getNewsletterByCategory(@Valid @RequestParam String category,
                                                    @Valid @RequestParam int size) {
-    log.info("홈페이지 뉴스레터 반환 API 시작");
-    log.info("category= {}", category);
-    log.info("size= {}", size);
     final List<NewsletterDetailDto> newsletterDetails = service.getNewsletter(category, size);
-    log.info("홈페이지 뉴스레터 반환 API 완료");
     return ResponseEntity.ok(new NewslettersResponseDto(newsletterDetails));
   }
 
@@ -61,10 +54,7 @@ public class HomeController {
                                                                 @RequestParam("size") int size)
   {
     // 검색에 없을때, 자음 혹은 모음만 있을때 예외처리
-    log.info("아티클 통합검색 시작");
-    log.info("검색어= {}, page= {}, size= {}", q, page, size);
     Page<ArticleSearchDto> searchResult = service.getArticleSearchResult(q, page, size);
-    log.info("아티클 통합검색 완료");
     return ApiResponse.from(HttpStatus.OK, "성공,", searchResult);
   }
 
@@ -74,10 +64,7 @@ public class HomeController {
                                                           @RequestParam("size") int size)
   {
     // 검색에 없을때, 자음 혹은 모음만 있을때 예외처리
-    log.info("뉴스레터 통합검색 시작");
-    log.info("검색어= {}, page= {}, size= {}", q, page, size);
     Page<NewslettersByCategoryResponse> searchResult = service.getNewsletterSearchResult(q, page, size);
-    log.info("뉴스레터 통합검색 완료");
     return ApiResponse.from(HttpStatus.OK, "성공,", searchResult);
   }
 }

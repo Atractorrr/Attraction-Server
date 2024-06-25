@@ -15,15 +15,13 @@ public record ArticleDTO(
     int readPercentage,
     NewsletterDTO newsletter
 ) {
-  private static final String BASE_URL = "https://attraction-bucket.s3.ap-northeast-2.amazonaws.com/";
-
   @QueryProjection
   public ArticleDTO(Article article, int readPercentage, Newsletter newsletter) {
     this(
         article.getId(),
         article.getTitle(),
-        buildUrl("thumbnail/", article.getThumbnailUrl()),
-        buildUrl("article/", article.getContentUrl()),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getReadingTime(),
         article.getReceivedAt(),
         readPercentage,
@@ -32,7 +30,7 @@ public record ArticleDTO(
   }
 
   private static String buildUrl(String type, String path) {
-    return BASE_URL + type + path;
+    return type + path;
   }
 }
 
