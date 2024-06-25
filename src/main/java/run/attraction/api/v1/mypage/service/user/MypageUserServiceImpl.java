@@ -26,12 +26,9 @@ public class MypageUserServiceImpl implements MypageUserService {
   private static final int EXPIRATION_FOREVER = 120;
 
   public UserDetailDto getUserDetails(String email) {
-    log.info("User Detail 검색 시작");
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
     //추가정보를 입력하지 않을 수도 있기때문에 예외 X
     final Optional<UserDetail> userDetail = userDetailRepository.findById(email);
-    log.info("User Detail 검색 완료");
-    log.info("조회결과 = {}", userDetail.isPresent());
     return getUserDetailDto(user,userDetail);
   }
 

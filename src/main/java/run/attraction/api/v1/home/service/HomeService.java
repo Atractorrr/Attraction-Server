@@ -25,10 +25,8 @@ public class HomeService {
 
   public List<String> getCategoriesByEmail(String email) {
     if (email.isEmpty()||(!newsletterService.hasUserDetail(email))) {
-      log.info("email값이 없습니다. 고정된 카테고리를 반환합니다.");
       return newsletterService.getDefaultCategories();
     }
-    log.info("유저의 관심사와 관련된 카테고리를 반환합니다.");
     return newsletterService.getUserCategories(email);
   }
 

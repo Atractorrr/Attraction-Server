@@ -57,10 +57,8 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   }
 
   public List<NewsletterDetailDto> getMostNewsletterByCategory(String category, int size) {
-    log.info("카테고리로 뉴스레터 검색");
     List<Object[]> newslettersByCategory = newsletterRepository.findByCategory(Category.valueOf(category));
     Map<Long, Newsletter> categoryNewsletterMap = getNewsletterMap(newslettersByCategory);
-    log.info("가장 많이 구독한 뉴스레터 id 조회");
     List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
 
     // 추가해야되는 상황이 발생할 수도 있어서 .collect(Collectors.toList()) 으로 생성
@@ -72,7 +70,6 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
         .collect(Collectors.toList());
 
     if (trendyNewsletters.size()<size){
-      log.info("조회 결과가 {}보다 적어 추가로 뉴스레터를 넣습니다.",size);
       addExtraTrendyNewsletters(size, categoryNewsletterMap, trendyNewsletters);
     }
     return trendyNewsletters;
@@ -110,20 +107,14 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   }
 
   public List<NewsletterDetailDto> getMostNewsletter(int size) {
-    log.info("가장 많이 구독한 뉴스레터 id 조회");
     final List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
 
     List<Newsletter> mostNewsletters;
-    log.info("id로 뉴스레터 조회");
     if (mostSubscribedNewsletterIds.size()>=size){
       mostNewsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds.subList(0, size));
-      log.info("mostNewsletters.size = {}", mostNewsletters.size());
     }else{
       final List<Newsletter> newsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds);
-      log.info("newsletters.size = {}", newsletters.size());
-      log.info("가장 많이 구독한 구독한 뉴스레터 조회 결과가 {}보다 적어 랜덤으로 추가합니다.",size);
       final List<Newsletter> newsletterRandom = newsletterRepository.findNewsletterRandom(mostSubscribedNewsletterIds, size - mostSubscribedNewsletterIds.size());
-      log.info("newsletterRandom.size = {}", newsletterRandom.size());
       mostNewsletters = Stream.concat(newsletters.stream(), newsletterRandom.stream()).toList();
     }
 

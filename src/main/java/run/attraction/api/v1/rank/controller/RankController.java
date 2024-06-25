@@ -23,17 +23,13 @@ public class RankController {
 
   @GetMapping("/article")
   public ResponseEntity<?> getExtensiveRank(){
-    log.info("다독 랭킹 조회 시작");
     final List<RankDetailDto> rankDetails = rankService.getTop10ExtensiveRank(LocalDate.now());
-    log.info("다독 랭킹 조회 완료");
     return ResponseEntity.ok(new ExtensiveRankResponseDto(rankDetails));
   }
 
   @GetMapping("/streak")
   public ResponseEntity<?> getConsistencyRank(){
-    log.info("꾸준함 랭킹 조회 시작");
     final List<RankDetailDto> rankDetails = rankService.getTop10ConsistencyRank(LocalDate.now());
-    log.info("꾸준함 랭킹 조회 완료");
     return ResponseEntity.ok(new ConsistencyRankResponseDto(rankDetails));
   }
 }
