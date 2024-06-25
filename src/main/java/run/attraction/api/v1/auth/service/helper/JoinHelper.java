@@ -34,23 +34,8 @@ public class JoinHelper {
   public void joinUser(String email, String nickname, List<String> interest,
                        String stringBirthDate, int userExpiration, String occupation, boolean adPolices) {
     // adPolices 처리 어떻게 할건지 정해야함.
-    log.info("email = {} ", email);
-    log.info("nickname = {} ", nickname);
-    log.info("interest = {} ", interest.toString());
-    log.info("stringBirthDate = {} ", stringBirthDate);
-    log.info("userExpiration = {} ", userExpiration);
-    log.info("occupation = {} ", occupation);
-
-    log.info("유저 검색 시작");
     final User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저 입니다."));
-    log.info("유저 검색 완료");
-
-    final LocalDate birthDate = convertToDate(stringBirthDate);
-    final LocalDate userExpirationDate = calculateExpirationDate(user.getCreatedAt().toLocalDate(), userExpiration);
-    log.info("birthDate = {}", birthDate);
-    log.info("userExpirationDate = {}", userExpirationDate);
     saveUserDetail(nickname, interest, stringBirthDate, userExpiration, occupation, user);
-    log.info("유저 추가 정보 넣기 완료");
   }
 
   private void saveUserDetail(String nickname,
