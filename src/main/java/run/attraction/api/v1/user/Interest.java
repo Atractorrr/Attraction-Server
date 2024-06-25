@@ -17,7 +17,7 @@ public enum Interest {
   HOBBY_SELF_DEVELOPMENT("취미/자기개발"),
   CULTURE_ART("문화/예술"),
   LIVING_INTERIOR("리빙/인테리어"),
-  HEALTH_MEDICINE("건강/의학");
+  ECONOMY("경제");
 
   private final String viewName;
 }
