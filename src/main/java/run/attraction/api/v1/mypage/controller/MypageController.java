@@ -1,5 +1,6 @@
 package run.attraction.api.v1.mypage.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
+import run.attraction.api.v1.auth.session.SessionService;
 import run.attraction.api.v1.mypage.service.MypageService;
 import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
@@ -37,6 +39,7 @@ import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDt
 public class MypageController {
 
   private final MypageService mypageService;
+  private final SessionService sessionService;
 
   @GetMapping("/{email}")
   public final ResponseEntity<UserDetailsResponseDto> getUserDetails(@PathVariable("email") String email) {
@@ -119,8 +122,10 @@ public class MypageController {
   }
 
   @DeleteMapping("/{email}")
-  public final ResponseEntity<MessageResponse> resignUser(@PathVariable("email") String email){
+  public final ResponseEntity<MessageResponse> resignUser(@PathVariable("email") String email,
+                                                          HttpServletRequest request){
     mypageService.resignByEmail(email);
+    sessionService.removeSession(request);
     return ResponseEntity.ok(new MessageResponse("탈퇴 완료되었습니다."));
   }
 
