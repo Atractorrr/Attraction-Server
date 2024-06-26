@@ -26,12 +26,16 @@ public class LoginHelper {
 
   @Transactional
   public UserStateDto getUserState(User authUser) {
+    log.info("유저 상태 조회 시작");
     final Optional<User> findUser = userRepository.findById(authUser.getEmail());
     // 이전에 로그인했던 유저라면
     if (findUser.isPresent()) {
+      log.info("기존 유저");
       User user = findUser.get();
       checkIsDeleted(user);
+      log.info("탈퇴 회원 검사 완료");
       renewUserUpdateAt(user);
+      log.info("접속 시간 갱시 완료");
       return createUserStateDto(user, true);
     }
     // 처음 로그인하는 유저라면
