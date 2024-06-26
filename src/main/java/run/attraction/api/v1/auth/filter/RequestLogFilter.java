@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.logging.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,13 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 public class RequestLogFilter extends OncePerRequestFilter {
     private static final String REQUEST_ID = "request_id";
     public static final int LENGTH = 8;
-    public static final String PROMETHEUS_URI = "/actuator/prometheus";
+
+    @Value("${path.prometheus}")
+    public String prometheusUri;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (PROMETHEUS_URI.equals(request.getRequestURI())) {
+        if (prometheusUri.equals(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
