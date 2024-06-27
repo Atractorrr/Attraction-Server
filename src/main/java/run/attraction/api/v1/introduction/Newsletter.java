@@ -58,6 +58,14 @@ public class Newsletter extends AuditableEntity {
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean hasConfirmationEmail = false;
 
+  @Default
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+  private boolean isAgreePersonalInfoCollection = true;
+
+  @Default
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean isAgreeAdInfoReception = false;
+
   private String nickname;
 
   @Default
