@@ -51,6 +51,10 @@ public class SessionService {
 
   public HttpSession getSession(HttpServletRequest request){
     HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute(LOGIN_MEMBER) == null){
+      log.error("세션 NULL");
+      throw new SessionNotFoundException();
+    }
     log.info("getCreationTime={}",session.getCreationTime());
     log.info("getAttributeNames={}",session.getAttributeNames());
     log.info("getLastAccessedTime={}",session.getLastAccessedTime());
@@ -58,9 +62,6 @@ public class SessionService {
     log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
     log.info("getServletContext={}",session.getServletContext());
     log.info("getId={}",session.getId());
-    if (session == null || session.getAttribute(LOGIN_MEMBER) == null){
-      throw new SessionNotFoundException();
-    }
     return session;
   }
 
