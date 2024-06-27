@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +40,9 @@ public class SessionFilter extends OncePerRequestFilter {
   private final FilterExceptionHandler filterExceptionHandler;
   private final UserDetailsServiceForSecurity userDetailsService;
 
+  @Value("${path.prometheus}")
+  public String prometheusUri;
+
   @Override
   protected void doFilterInternal(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -46,7 +50,7 @@ public class SessionFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
     try {
 
-      if (isWhiteList(request.getServletPath())) {
+      if (isWhiteList(request.getServletPath()) || prometheusUri.equals(request.getRequestURI())) {
         filterChain.doFilter(request, response);
         return;
       }
@@ -54,7 +58,7 @@ public class SessionFilter extends OncePerRequestFilter {
       //session 검사
       HttpSession session = sessionService.getSession(request);
       String userEmail = sessionService.getUserEmail(session);
-      if(sessionService.isUser(userEmail)) {
+      if (sessionService.isUser(userEmail)) {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
           UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
@@ -69,10 +73,10 @@ public class SessionFilter extends OncePerRequestFilter {
       }
       filterChain.doFilter(request, response);
     } catch (SessionNotFoundException e) {
-      filterExceptionHandler.sendExceptionMessage(response,ErrorType.SESSION_NOT_FOUND);
-    } catch(InValidUserException e){
+      filterExceptionHandler.sendExceptionMessage(response, ErrorType.SESSION_NOT_FOUND);
+    } catch (InValidUserException e) {
       filterExceptionHandler.sendExceptionMessage(response, ErrorType.SESSION_INVALID__USER);
-    } catch(ResignedUserException e){
+    } catch (ResignedUserException e) {
       filterExceptionHandler.sendExceptionMessage(response, ErrorType.SESSION_RESIGNED_USER);
     }
   }
