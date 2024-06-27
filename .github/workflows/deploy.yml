@@ -92,6 +92,15 @@ jobs:
             docker stop filebeat || true
             docker rm filebeat || true
             docker run -d --name filebeat -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
+      
+      - name: 슬랙 알림
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} 
+        if: always()
             
       - name: 배포 상태 업데이트 (성공)
         if: success()
