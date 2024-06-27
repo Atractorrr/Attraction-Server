@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.auth.service.dto.UserStateDto;
 import run.attraction.api.v1.auth.session.dto.UserDetailBySession;
-import run.attraction.api.v1.auth.session.exception.SessionIdNotFoundException;
+import run.attraction.api.v1.auth.session.exception.InValidUserException;
+import run.attraction.api.v1.auth.session.exception.ResignedUserException;
+import run.attraction.api.v1.auth.session.exception.SessionNotFoundException;
+import run.attraction.api.v1.user.User;
 import run.attraction.api.v1.user.repository.UserRepository;
 
 @Slf4j
@@ -33,9 +36,36 @@ public class SessionService {
   public UserDetailBySession getUserDetail(HttpServletRequest request){
     HttpSession session = request.getSession(false);
     if (session == null){
-      throw new SessionIdNotFoundException();
+      throw new SessionNotFoundException();
     }
     String email = (String)session.getAttribute(LOGIN_MEMBER);
     return userRepository.getUserDetailsByEmail(email);
+  }
+
+  public HttpSession getSession(HttpServletRequest request){
+    HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute(LOGIN_MEMBER) == null){
+      throw new SessionNotFoundException();
+    }
+    return session;
+  }
+
+  public String getUserEmail(HttpSession session){
+    String userEmail = (String)session.getAttribute(LOGIN_MEMBER);
+    if(userEmail==null) {
+      throw new InValidUserException();
+    }
+    return userEmail;
+  }
+
+  public boolean isUser(String email){
+    User user = userRepository.findById(email)
+        .orElseThrow(InValidUserException::new);
+
+    if (user.isDeleted()) {
+      throw new ResignedUserException();
+    }
+
+    return true;
   }
 }
