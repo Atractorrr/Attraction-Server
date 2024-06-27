@@ -27,9 +27,12 @@ public enum ErrorCode {
   FAIL_REQUEST_PARAMETER_VALIDATION(HttpStatus.BAD_REQUEST.value(), "C009", "요청 파라미터의 유효성이 맞지 않습니다."),
   BIND_ERROR(HttpStatus.BAD_REQUEST.value(), "C010", " 바인딩 에러가 발생했습니다. 파라미터를 확인해주세요."),
   ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST.value(), "C011", "illegalArgument error"),
+  NOT_FOUND(HttpStatus.NOT_FOUND.value(), "C012", "페이지를 찾을 수 없습니다."),
 
   // Session
-  SESSION_ID_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C031", "세션이 존재하지 않거나 세션 ID가 존재하지 않습니다.");
+  SESSION_NOT_FOUND(HttpStatus.UNAUTHORIZED.value(), "C031", "세션이 존재하지 않거나 세션 ID가 존재하지 않습니다."),
+  SESSION_INVALID__USER(HttpStatus.UNAUTHORIZED.value(), "C032","유효하지 않은 유저입니다."),
+  SESSION_RESIGNED_USER(HttpStatus.UNAUTHORIZED.value(), "C033", "탈퇴한 회원입니다.");
 
   private final int status;
   private final String code;
