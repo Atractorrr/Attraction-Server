@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - name: Check workflow status
-      - uses: martialonline/workflow-status@v3
+        uses: martialonline/workflow-status@v3
         id: check
 
       - name: 슬랙으로 메시지 보내기
