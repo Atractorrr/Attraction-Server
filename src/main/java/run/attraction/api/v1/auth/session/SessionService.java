@@ -55,19 +55,13 @@ public class SessionService {
       log.error("세션 NULL");
       throw new SessionNotFoundException();
     }
-    log.info("getCreationTime={}",session.getCreationTime());
-    log.info("getAttributeNames={}",session.getAttributeNames());
-    log.info("getLastAccessedTime={}",session.getLastAccessedTime());
-    log.info("isNew={}",session.isNew());
-    log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
-    log.info("getServletContext={}",session.getServletContext());
-    log.info("getId={}",session.getId());
     return session;
   }
 
   public String getUserEmail(HttpSession session){
     String userEmail = (String)session.getAttribute(LOGIN_MEMBER);
     if(userEmail==null) {
+      log.error("userEmail is NULL");
       throw new InValidUserException();
     }
     return userEmail;
