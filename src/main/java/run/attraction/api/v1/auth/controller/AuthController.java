@@ -35,13 +35,15 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
                                  HttpServletRequest request) {
-    log.info("로그인 시작");
+
+    log.info("로그인 요청 시작");
     final UserStateDto userStateDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
 
-    log.info("세션 시작");
+    log.info("세션 적용");
     sessionService.getSession(request,userStateDto);
 
-    log.info("로그인 완료");
+    log.info("로그인 요청 완료");
+
     if (userStateDto.isUserBefore()) {
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userStateDto.getEmail(),
@@ -56,8 +58,6 @@ public class AuthController {
         .shouldReissueToken(false)
         .build());
   }
-
-
 
   @PostMapping("/join/username-duplicate")
   public ResponseEntity<MessageResponse> checkNicknameDuplication(@RequestBody CheckDuplicationRequsetDto request) {

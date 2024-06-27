@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -103,4 +104,15 @@ public class GlobalExceptionHandler {
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
+  /**
+   *   404 Not Found Exception - 엔드포인트를 찾을 수 없을떄
+   */
+  @ExceptionHandler(NoHandlerFoundException.class)
+  protected ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
+    log.error("NoHandlerFoundException", e);
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_FOUND);
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+  }
+
 }

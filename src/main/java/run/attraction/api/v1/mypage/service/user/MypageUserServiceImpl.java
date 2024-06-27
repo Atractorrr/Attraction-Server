@@ -100,7 +100,5 @@ public class MypageUserServiceImpl implements MypageUserService {
   public void updateIsDeleted(String email){
     User user = userRepository.findById(email).orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저 입니다."));
     user.updateIsDeleted(true);
-
-    userDetailRepository.deleteById(email);
   }
 }
