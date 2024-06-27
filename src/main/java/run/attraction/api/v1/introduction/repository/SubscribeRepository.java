@@ -27,4 +27,9 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
           """, nativeQuery = true)
   List<Long> findNewsletterIdsByUserEmail(@Param("user_email") String userEmail);
 
+  @Query("SELECT CASE WHEN COUNT(n) > 0 THEN true ELSE false END " +
+      "FROM Subscribe s JOIN s.newsletterIds n " +
+      "WHERE s.userEmail = :userEmail " +
+      "AND n = :newsletterId")
+  boolean existsByUserEmailAndNewsletterId(@Param("userEmail") String userEmail, @Param("newsletterId") Long newsletterId);
 }
