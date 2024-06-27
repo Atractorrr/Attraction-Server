@@ -35,6 +35,7 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto,
                                  HttpServletRequest request) {
+
     log.info("로그인 요청 시작");
     final UserStateDto userStateDto = authService.login(loginRequestDto.getProvider(), loginRequestDto.getCode());
 
@@ -42,6 +43,7 @@ public class AuthController {
     sessionService.getSession(request,userStateDto);
 
     log.info("로그인 요청 완료");
+
     if (userStateDto.isUserBefore()) {
       return ResponseEntity.status(HttpStatus.CREATED).body(
           new LoginResponseDto(userStateDto.getEmail(),

@@ -21,6 +21,7 @@ public class AuthProvider {
   }
 
   public User getUserProfileByCode(String provider, final String code) {
+    log.info("유저 정보 조회");
     OAuthService oAuthService = getOAuthService(provider);
 
     final OAuthToken token = oAuthService.getToken(code);

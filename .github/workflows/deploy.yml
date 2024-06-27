@@ -31,6 +31,9 @@ jobs:
       - name: credentials.json 파일 만들기
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
 
+      - name: log4j2.xml 파일 만들기
+        run: echo '${{ secrets.LOG4J2_XML }}' > ./src/main/resources/log4j2.xml
+
       - name: 테스트 및 빌드하기
         run: ./gradlew clean build
 
@@ -89,7 +92,7 @@ jobs:
             docker stop filebeat || true
             docker rm filebeat || true
             docker run -d --name filebeat -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
-
+            
       - name: 배포 상태 업데이트 (성공)
         if: success()
         uses: chrnorm/deployment-status@releases/v2
