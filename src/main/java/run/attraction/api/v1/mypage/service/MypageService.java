@@ -1,5 +1,7 @@
 package run.attraction.api.v1.mypage.service;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.user.MypageUserService;
 
+@Timed("mypage.service")
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,16 +41,19 @@ public class MypageService {
     return new CalendarResponseDto(calendarDays);
   }
 
+  @Counted("mypage.service")
   public List<RecentArticlesDto> getRecentArticlesByEmail(String email){
     return articleService.getUserRecentArticles(email);
   }
 
   @Transactional
+  @Counted("mypage.service")
   public void updateProfileImgByEmail(String email, String profileImg){
     userService.updateProfileImg(email, profileImg);
   }
 
   @Transactional
+  @Counted("mypage.service")
   public void updateBackgroundImgByEmail(String email, String backgroundImg){
     userService.updateBackgroundImg(email, backgroundImg);
   }

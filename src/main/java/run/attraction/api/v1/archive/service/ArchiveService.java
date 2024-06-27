@@ -1,5 +1,7 @@
 package run.attraction.api.v1.archive.service;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Timed("archive.service")
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -54,6 +57,7 @@ public class ArchiveService {
   private final NewsletterEventRepository newsletterEventRepository;
   private final ReadBoxEventRepository readBoxEventRepository;
 
+  @Counted("archive.service")
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
     String DESC = "desc";
@@ -85,6 +89,7 @@ public class ArchiveService {
         .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_ARTICLE.getViewName()));
   }
 
+  @Counted("archive.service")
   @Transactional
   public void saveUserArticleProgress(String userEmail, Long articleId, int readPercentage) {
     ReadBox readBox = readBoxRepository.findByUserEmailAndArticleId(userEmail, articleId)
@@ -157,6 +162,7 @@ public class ArchiveService {
     return readBoxEventModifiedAt.plusDays(1).equals(now);
   }
 
+  @Counted("archive.service")
   @Transactional
   public NewsletterEmail addNewsletter(String userEmail, Long newsletterId) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
