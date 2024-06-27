@@ -57,15 +57,7 @@ public class SessionFilter extends OncePerRequestFilter {
 
       //session 검사
       HttpSession session = sessionService.getSession(request);
-      log.info("getCreationTime={}",session.getCreationTime());
-      log.info("getAttributeNames={}",session.getAttributeNames());
-      log.info("getLastAccessedTime={}",session.getLastAccessedTime());
-      log.info("isNew={}",session.isNew());
-      log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
-      log.info("getServletContext={}",session.getServletContext());
-      log.info("getId={}",session.getId());
       String userEmail = sessionService.getUserEmail(session);
-      log.info("userEmail={}",userEmail);
       if (sessionService.isUser(userEmail)) {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
           UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);

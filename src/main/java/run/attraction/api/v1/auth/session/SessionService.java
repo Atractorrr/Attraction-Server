@@ -24,13 +24,6 @@ public class SessionService {
   public void getSession(HttpServletRequest request, UserStateDto userStateDto){
     HttpSession session = request.getSession();
     session.setAttribute(LOGIN_MEMBER,userStateDto.getEmail());
-    log.info("getCreationTime={}",session.getCreationTime());
-    log.info("getAttributeNames={}",session.getAttributeNames());
-    log.info("getLastAccessedTime={}",session.getLastAccessedTime());
-    log.info("isNew={}",session.isNew());
-    log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
-    log.info("getServletContext={}",session.getServletContext());
-    log.info("getId={}",session.getId());
   }
 
   public void removeSession(HttpServletRequest request){
@@ -43,6 +36,7 @@ public class SessionService {
   public UserDetailBySession getUserDetail(HttpServletRequest request){
     HttpSession session = request.getSession(false);
     if (session == null){
+      log.error("세션 NULL");
       throw new SessionNotFoundException();
     }
     String email = (String)session.getAttribute(LOGIN_MEMBER);
@@ -61,7 +55,8 @@ public class SessionService {
   public String getUserEmail(HttpSession session){
     String userEmail = (String)session.getAttribute(LOGIN_MEMBER);
     if(userEmail==null) {
-      log.error("userEmail is NULL");
+      log.error("유저 이메일 NULL");
+      log.info("session.getAttributeNames = {}", session.getAttributeNames());
       throw new InValidUserException();
     }
     return userEmail;
@@ -72,6 +67,7 @@ public class SessionService {
         .orElseThrow(InValidUserException::new);
 
     if (user.isDeleted()) {
+      log.error("탈퇴한 유저입니다.");
       throw new ResignedUserException();
     }
 
