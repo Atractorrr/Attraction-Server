@@ -1,6 +1,7 @@
 package run.attraction.api.v1.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,6 +32,8 @@ public class SecurityConfig {
       "/api/v1/rank/**",
       "/favicon.ico"
       };
+  @Value("${path.monitoring}")
+  public String monitoringPath;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,10 +46,11 @@ public class SecurityConfig {
             .logoutUrl("api/v1/auth/logout")
             .deleteCookies(COOKIE_KEY))
         .httpBasic(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(req ->
-                req.requestMatchers(WHITE_LIST).permitAll()
-                    .anyRequest()
-                    .authenticated())
+        .authorizeHttpRequests(req -> {
+          req.requestMatchers(WHITE_LIST).permitAll();
+          req.requestMatchers(monitoringPath).permitAll();
+          req.anyRequest().authenticated();
+        })
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
