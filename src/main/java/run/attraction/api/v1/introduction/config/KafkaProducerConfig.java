@@ -1,4 +1,4 @@
-package run.attraction.api.v1.gmail.config;
+package run.attraction.api.v1.introduction.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +12,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.gmail.event.SubscribeVo;
+import run.attraction.api.v1.introduction.event.AutoSubscribeVo;
+import run.attraction.api.v1.gmail.config.ProducerProperties;
 
 @Configuration
-@Component("gmailKafkaProducerConfig")
+@Component("archiveKafkaProducerConfig")
 @EnableConfigurationProperties({ProducerProperties.class})
 public class KafkaProducerConfig {
   private final ProducerProperties properties;
@@ -25,12 +26,12 @@ public class KafkaProducerConfig {
   }
 
   @Bean
-  public ProducerFactory<String, SubscribeVo> subscribeProducerFactory() {
+  public ProducerFactory<String, AutoSubscribeVo> autoSubscribeProducerFactory() {
 
     Map<String, Object> props = new HashMap<>();
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.bootstrapServers());
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
     props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, properties.requestTimeoutMs());
     props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, properties.deliveryTimeoutMs());
     props.put(ProducerConfig.RETRIES_CONFIG, properties.retries());
@@ -40,10 +41,11 @@ public class KafkaProducerConfig {
     return new DefaultKafkaProducerFactory<>(props);
   }
 
-  @Bean(name = "subscribe")
-  public KafkaTemplate<String, SubscribeVo> subscribeKafkaTemplate(SubscribeProducerListener subscribeProducerListener) {
-    final KafkaTemplate<String, SubscribeVo> subscribeKafkaTemplate = new KafkaTemplate<>(subscribeProducerFactory());
-    subscribeKafkaTemplate.setProducerListener(subscribeProducerListener);
-    return subscribeKafkaTemplate;
+  @Bean(name = "auto-subscribe")
+  public KafkaTemplate<String, AutoSubscribeVo> autoSubscribeKafkaTemplate(
+    AutoSubscribeProducerListener autoSubscribeProducerListener) {
+    final KafkaTemplate<String, AutoSubscribeVo> autoSubscribeKafkaTemplate = new KafkaTemplate<>(autoSubscribeProducerFactory());
+    autoSubscribeKafkaTemplate.setProducerListener(autoSubscribeProducerListener);
+    return autoSubscribeKafkaTemplate;
   }
 }
