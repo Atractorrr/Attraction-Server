@@ -1,4 +1,4 @@
-package run.attraction.api.v1.archive;
+package run.attraction.api.v1.introduction;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

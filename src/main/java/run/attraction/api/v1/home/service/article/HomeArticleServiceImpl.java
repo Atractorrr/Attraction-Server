@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.archive.Subscribe;
+import run.attraction.api.v1.introduction.Subscribe;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
-import run.attraction.api.v1.archive.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.repository.SubscribeRepository;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 
