@@ -11,7 +11,10 @@ public record NewsletterResponse(
     String mainLink,
     String subscribeLink,
     String thumbnailUrl,
-    boolean isAutoSubscribeEnabled
+    boolean isAutoSubscribeEnabled,
+    boolean isAgreePersonalInfoCollection,
+    boolean isAgreeAdInfoReception
+
 ) {
   public static NewsletterResponse from(Newsletter newsletter) {
     return new NewsletterResponse(
@@ -22,7 +25,9 @@ public record NewsletterResponse(
         newsletter.getMainLink(),
         newsletter.getSubscribeLink(),
         newsletter.getThumbnailUrl(),
-        newsletter.isAutoSubscribeEnabled()
+        newsletter.isAutoSubscribeEnabled(),
+        newsletter.isAgreePersonalInfoCollection(),
+        newsletter.isAgreeAdInfoReception()
     );
   }
 }
