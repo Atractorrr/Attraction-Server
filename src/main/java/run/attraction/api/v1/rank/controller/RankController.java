@@ -18,7 +18,6 @@ import run.attraction.api.v1.rank.service.dto.RankDetailDto;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rank")
 public class RankController {
-
   private final RankService rankService;
 
   @GetMapping("/article")
