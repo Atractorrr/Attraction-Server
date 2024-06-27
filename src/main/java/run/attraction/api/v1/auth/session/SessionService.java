@@ -24,6 +24,13 @@ public class SessionService {
   public void getSession(HttpServletRequest request, UserStateDto userStateDto){
     HttpSession session = request.getSession();
     session.setAttribute(LOGIN_MEMBER,userStateDto.getEmail());
+    log.info("getCreationTime={}",session.getCreationTime());
+    log.info("getAttributeNames={}",session.getAttributeNames());
+    log.info("getLastAccessedTime={}",session.getLastAccessedTime());
+    log.info("isNew={}",session.isNew());
+    log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
+    log.info("getServletContext={}",session.getServletContext());
+    log.info("getId={}",session.getId());
   }
 
   public void removeSession(HttpServletRequest request){
@@ -44,6 +51,13 @@ public class SessionService {
 
   public HttpSession getSession(HttpServletRequest request){
     HttpSession session = request.getSession(false);
+    log.info("getCreationTime={}",session.getCreationTime());
+    log.info("getAttributeNames={}",session.getAttributeNames());
+    log.info("getLastAccessedTime={}",session.getLastAccessedTime());
+    log.info("isNew={}",session.isNew());
+    log.info("getMaxInactiveInterval={}",session.getMaxInactiveInterval());
+    log.info("getServletContext={}",session.getServletContext());
+    log.info("getId={}",session.getId());
     if (session == null || session.getAttribute(LOGIN_MEMBER) == null){
       throw new SessionNotFoundException();
     }
