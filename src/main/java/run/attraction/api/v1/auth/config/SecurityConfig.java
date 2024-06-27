@@ -1,6 +1,7 @@
 package run.attraction.api.v1.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,6 +33,9 @@ public class SecurityConfig {
       "/favicon.ico"
       };
 
+  @Value("${path.monitoring}")
+  public String monitoringPath;
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
@@ -47,6 +51,7 @@ public class SecurityConfig {
                 req.requestMatchers(WHITE_LIST).permitAll()
                     .anyRequest()
                     .authenticated())
+        .authorizeHttpRequests(req -> req.requestMatchers(monitoringPath).permitAll())
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
