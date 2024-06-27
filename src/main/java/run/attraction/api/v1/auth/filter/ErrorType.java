@@ -4,10 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorType {
-  NOT_VALID_TOKEN(400, "토큰이 유효하지 않습니다."),
-  EXPIRED_TOKEN(400, "만료된 토큰입니다."),
-  LOGOUT_ACCESS_TOKEN(400, "로그아웃된 Access Token 입니다."),
-  NOT_FOUND_USER(400, "사용자가 존재하지 않습니다.");
+  SESSION_NOT_FOUND(401, "세션이 존재하지 않습니다."),
+  SESSION_INVALID__USER(401,"유효하지 않은 유저입니다."),
+  SESSION_RESIGNED_USER(401, "탈퇴한 회원입니다.");
 
   private int code;
   private String message;
