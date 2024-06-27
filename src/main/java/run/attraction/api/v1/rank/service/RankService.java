@@ -1,5 +1,7 @@
 package run.attraction.api.v1.rank.service;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import run.attraction.api.v1.rank.service.calculator.ExtensiveRankCalculator;
 import run.attraction.api.v1.rank.service.dto.RankDetailDto;
 import run.attraction.api.v1.user.repository.UserRepository;
 
+@Timed("rank.service")
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,6 +27,7 @@ public class RankService {
   private final ConsistencyRankCalculator consistencyRankCalculator;
   private final UserRepository userRepository;
 
+  @Counted("rank.service")
   public List<RankDetailDto> getTop10ExtensiveRank(LocalDate date) {
     List<ExtensiveRank> ranks = extensiveRankCalculator.getExtensiveRank(date);
 
@@ -33,6 +37,7 @@ public class RankService {
     return getRankDetailDtos(ranks, userInfos, emails);
   }
 
+  @Counted("rank.service")
   public List<RankDetailDto> getTop10ConsistencyRank(LocalDate date) {
     List<ConsistencyRank> ranks = consistencyRankCalculator.getConsistencyRank(date);
 
