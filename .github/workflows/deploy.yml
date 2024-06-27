@@ -103,11 +103,11 @@ jobs:
     needs: [build, deploy]
 
     steps:
-      - name: Notification
-        if: ${{ always() }}  #성공하든 실패하든 항상 notification Job 실행
+      - name: Check workflow status
       - uses: martialonline/workflow-status@v3
         id: check
-      - name: action-slack
+
+      - name: 슬랙으로 메시지 보내기
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ steps.check.outputs.status }}
