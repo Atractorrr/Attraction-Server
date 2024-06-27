@@ -26,6 +26,7 @@ import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
+import run.attraction.api.v1.introduction.service.KafkaProducerService;
 import run.attraction.api.v1.rank.ReadBoxEvent;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
 import run.attraction.api.v1.statistics.AgeGroup;
@@ -56,6 +57,7 @@ public class ArchiveService {
   private final UserDetailRepository userDetailRepository;
   private final NewsletterEventRepository newsletterEventRepository;
   private final ReadBoxEventRepository readBoxEventRepository;
+  private final KafkaProducerService kafkaProducerService;
 
   @Counted("archive.service")
   @Transactional(readOnly = true)
@@ -177,6 +179,13 @@ public class ArchiveService {
     saveUserSubscribedNewsletterCategory(userEmail, newsletter.getCategory());
     subscribe.saveNewsletterId(newsletter.getId());
     subscribeRepository.save(subscribe);
+
+    String nickname = userDetailRepository.findNicknameByEmail(userEmail)
+        .orElseThrow(() -> new IllegalArgumentException("회원 정보에 없는 유저입니다"));
+
+    log.info("카프카 메시지 전송 시작");
+    kafkaProducerService.sendKafkaMessage(userEmail, nickname, newsletter.getSubscribeLink(), true, false);
+    log.info("카프카 메시지 전송 종료");
 
     return new NewsletterEmail(newsletter.getEmail());
   }
