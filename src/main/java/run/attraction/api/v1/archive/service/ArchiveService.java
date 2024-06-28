@@ -27,6 +27,7 @@ import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
 import run.attraction.api.v1.introduction.service.KafkaProducerService;
+import run.attraction.api.v1.introduction.utils.SubscriptionUtil;
 import run.attraction.api.v1.rank.ReadBoxEvent;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
 import run.attraction.api.v1.statistics.AgeGroup;
@@ -58,6 +59,7 @@ public class ArchiveService {
   private final NewsletterEventRepository newsletterEventRepository;
   private final ReadBoxEventRepository readBoxEventRepository;
   private final KafkaProducerService kafkaProducerService;
+  private final SubscriptionUtil subscriptionUtil;
 
   @Counted("archive.service")
   @Transactional(readOnly = true)
@@ -65,17 +67,11 @@ public class ArchiveService {
     String DESC = "desc";
     String HIDE_READ_TRUE = "true";
 
-    Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
-        .orElse(null);
+    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail, subscribeRepository, newsletterRepository);
 
-    if(subscribe == null) {
+    if(newsletterEmails.isEmpty()) {
       return new PageImpl<>(Collections.emptyList(), PageRequest.of(request.getPage(), request.getSize()), 0);
     }
-
-    List<String> newsletterEmails = subscribe.getNewsletterIds()
-        .stream()
-        .map(id -> newsletterRepository.findById(id).get().getEmail())
-        .toList();
 
     String sortDirection = request.getSort().length > 1 ? request.getSort()[1] : DESC;
     Boolean isHideReadFilter = request.getIsHideRead().equalsIgnoreCase(HIDE_READ_TRUE);
