@@ -102,20 +102,20 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} 
         if: always()
             
-      - name: 배포 상태 업데이트 (성공)
-        if: success()
-        uses: chrnorm/deployment-status@releases/v2
-        with:
-          token: '${{ github.token }}'
-          environment-url: ${{ steps.deployment.outputs.environment_url }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'success'
-
-      - name: 배포 상태 업데이트 (실패)
-        if: failure()
-        uses: chrnorm/deployment-status@v2
-        with:
-          token: '${{ github.token }}'
-          environment-url: ${{ steps.deployment.outputs.environment_url }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'failure'
+#      - name: 배포 상태 업데이트 (성공)
+#        if: success()
+#        uses: chrnorm/deployment-status@releases/v2
+#        with:
+#          token: '${{ github.token }}'
+#          environment-url: ${{ steps.deployment.outputs.environment_url }}
+#          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+#          state: 'success'
+#
+#      - name: 배포 상태 업데이트 (실패)
+#        if: failure()
+#        uses: chrnorm/deployment-status@v2
+#        with:
+#          token: '${{ github.token }}'
+#          environment-url: ${{ steps.deployment.outputs.environment_url }}
+#          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+#          state: 'failure'
