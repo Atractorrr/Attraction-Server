@@ -89,11 +89,13 @@ public class SubscriptionService {
   }
 
   public void sendKafkaMessageForSubscription(String userEmail, Newsletter newsletter) {
-    String nickname = userDetailRepository.findNicknameByEmail(userEmail)
-        .orElseThrow(() -> new IllegalArgumentException("회원정보에 없는 유저입니다"));
+    if(newsletter.isAutoSubscribeEnabled()) {
+      String nickname = userDetailRepository.findNicknameByEmail(userEmail)
+          .orElseThrow(() -> new IllegalArgumentException("회원정보에 없는 유저입니다"));
 
-    log.info("카프카 메시지 전송 시작");
-    kafkaProducerService.sendKafkaMessage(userEmail, nickname, newsletter.getSubscribeLink(), true, false);
-    log.info("카프카 메시지 전송 종료");
+      log.info("카프카 메시지 전송 시작");
+      kafkaProducerService.sendKafkaMessage(userEmail, nickname, newsletter.getSubscribeLink(), true, false);
+      log.info("카프카 메시지 전송 종료");
+    }
   }
 }
