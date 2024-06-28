@@ -1,12 +1,11 @@
 package run.attraction.api.v1.home.service.article;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.introduction.Subscribe;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.introduction.repository.SubscribeRepository;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
@@ -14,6 +13,7 @@ import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 
 import java.util.List;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
+import run.attraction.api.v1.introduction.utils.SubscriptionUtil;
 
 @Component
 @RequiredArgsConstructor
@@ -21,19 +21,14 @@ public class HomeArticleServiceImpl implements HomeArticleService {
   private final ArticleRepository articleRepository;
   private final SubscribeRepository subscribeRepository;
   private final NewsletterRepository newsletterRepository;
+  private final SubscriptionUtil subscriptionUtil;
 
   public List<ReceivedArticlesDto> getReceivedArticles(String userEmail, int size){
-    Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
-        .orElse(null);
+    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail, subscribeRepository, newsletterRepository);
 
-    if(subscribe == null) {
-      return new ArrayList<>();
+    if(newsletterEmails.isEmpty()) {
+      return Collections.emptyList();
     }
-
-    List<String> newsletterEmails = subscribe.getNewsletterIds()
-        .stream()
-        .map(id -> newsletterRepository.findById(id).get().getEmail())
-        .toList();
 
     return articleRepository.findReceivedArticlesByUserEmail(userEmail, newsletterEmails, size);
   }
