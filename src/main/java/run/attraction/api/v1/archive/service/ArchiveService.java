@@ -4,7 +4,6 @@ import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,20 +12,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.archive.ReadBox;
-import run.attraction.api.v1.introduction.Subscribe;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
-import run.attraction.api.v1.archive.dto.NewsletterEmail;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
 import run.attraction.api.v1.introduction.repository.SubscribeRepository;
-import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
-import run.attraction.api.v1.introduction.service.KafkaProducerService;
 import run.attraction.api.v1.introduction.utils.SubscriptionUtil;
 import run.attraction.api.v1.rank.ReadBoxEvent;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
@@ -43,7 +38,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Timed("archive.service")
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArchiveService {
@@ -58,7 +52,7 @@ public class ArchiveService {
   private final UserDetailRepository userDetailRepository;
   private final NewsletterEventRepository newsletterEventRepository;
   private final ReadBoxEventRepository readBoxEventRepository;
-  private final KafkaProducerService kafkaProducerService;
+
   private final SubscriptionUtil subscriptionUtil;
 
   @Counted("archive.service")
@@ -97,9 +91,7 @@ public class ArchiveService {
     readBoxRepository.save(readBox);
 
     if(readPercentage==PULL_PERCENTAGE){
-      log.info("NewsletterEvent 저장 시작 ");
       saveNewsletterEvent(userEmail, articleId);
-      log.info("ReadBoxEvent 저장 시작 ");
       updateReadBoxEvent(userEmail,LocalDate.now());
     }
   }
@@ -160,68 +152,7 @@ public class ArchiveService {
     return readBoxEventModifiedAt.plusDays(1).equals(now);
   }
 
-  @Counted("archive.service")
-  @Transactional
-  public NewsletterEmail addNewsletter(String userEmail, Long newsletterId) {
-    Newsletter newsletter = newsletterRepository.findById(newsletterId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
-    Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
-        .orElse(createSubscribe(userEmail));
-
-    if(subscribe.getNewsletterIds().contains(newsletterId)) {
-      throw new IllegalArgumentException(ErrorMessages.ALREADY_EXIST_NEWSLETTER.getViewName());
-    }
-
-    saveUserSubscribedNewsletterCategory(userEmail, newsletter.getCategory());
-    subscribe.saveNewsletterId(newsletter.getId());
-    subscribeRepository.save(subscribe);
-
-    String nickname = userDetailRepository.findNicknameByEmail(userEmail)
-        .orElseThrow(() -> new IllegalArgumentException("회원 정보에 없는 유저입니다"));
-
-    log.info("카프카 메시지 전송 시작");
-    kafkaProducerService.sendKafkaMessage(userEmail, nickname, newsletter.getSubscribeLink(), true, false);
-    log.info("카프카 메시지 전송 종료");
-
-    return new NewsletterEmail(newsletter.getEmail());
-  }
-
-  private Subscribe createSubscribe(String userEmail) {
-    return Subscribe.builder()
-        .userEmail(userEmail)
-        .newsletterIds(new ArrayList<>())
-        .build();
-  }
-
-  private void saveUserSubscribedNewsletterCategory(String userEmail, Category category) {
-    UserSubscribedNewsletterCategory userSubscribedNewsletterCategory = userSubscribedNewsletterCategoryRepository.findByUserEmail(
-        userEmail).orElseGet(() -> {
-      var newCategory = createUserSubscribedNewsletterCategory(userEmail, category);
-      userSubscribedNewsletterCategoryRepository.save(newCategory);
-      return newCategory;
-    });
-
-    if(hasCategory(userSubscribedNewsletterCategory,category)) {
-      return;
-    }
-
-    userSubscribedNewsletterCategory.getCategories().add(category);
-    userSubscribedNewsletterCategoryRepository.save(userSubscribedNewsletterCategory);
-  }
-
-  private UserSubscribedNewsletterCategory createUserSubscribedNewsletterCategory(String userEmail, Category category) {
-    return UserSubscribedNewsletterCategory.builder()
-        .userEmail(userEmail)
-        .categories(new ArrayList<>(List.of(category)))
-        .build();
-  }
-
-  private boolean hasCategory(UserSubscribedNewsletterCategory userSubscribedNewsletterCategory, Category category) {
-    return userSubscribedNewsletterCategory.getCategories().contains(category);
-  }
-
-
-  @Transactional
+  @Transactional(readOnly = true)
   public List<Newsletter> getSubscribedNewslettersByUser(String userEmail) {
     List<Long> newsletterIds = subscribeRepository.findNewsletterIdsByUserEmail(userEmail);
 
@@ -234,5 +165,4 @@ public class ArchiveService {
         .map(UserSubscribedNewsletterCategory::getCategories)
         .orElseGet(ArrayList::new);
   }
-
 }
