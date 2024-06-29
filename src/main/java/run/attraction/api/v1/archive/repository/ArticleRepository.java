@@ -13,7 +13,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
 
   @Query("""
     SELECT DISTINCT new run.attraction.api.v1.home.service.dto.search.ArticleSearchDto(
-        a.id, a.title, a.thumbnailUrl, a.contentUrl, a.contentSummary, a.readingTime, a.receivedAt,n.name,
+        a.id, a.title, a.thumbnailUrl, a.contentSummary, a.readingTime, a.receivedAt,
         new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl)
     )
     FROM Article a JOIN Newsletter n ON a.newsletterEmail = n.email
