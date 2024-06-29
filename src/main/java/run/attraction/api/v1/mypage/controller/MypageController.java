@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.auth.service.dto.join.CheckDuplicationRequsetDto;
@@ -54,8 +55,10 @@ public class MypageController {
   }
 
   @GetMapping("/{email}/articles/recent")
-  public final ApiResponse<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email) {
-    final List<RecentArticlesDto> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email);
+  public final ApiResponse<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email,
+                                                                        @RequestParam(name = "size", defaultValue = "10") int size
+  ) {
+    final List<RecentArticlesDto> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email, size);
 
     return ApiResponse.from(HttpStatus.OK, "성공", new RecentArticlesResponseDto(recentArticlesByEmail));
   }
