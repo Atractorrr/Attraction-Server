@@ -16,7 +16,7 @@ public class MypageArticleServiceImpl implements MypageArticleService {
 
   private final ArticleRepository articleRepository;
 
-  public List<RecentArticlesDto> getUserRecentArticles(String userEmail) {
-    return articleRepository.findRecentArticlesByUserEmail(userEmail);
+  public List<RecentArticlesDto> getUserRecentArticles(String userEmail, int size) {
+    return articleRepository.findRecentArticlesByUserEmail(userEmail, size);
   }
 }

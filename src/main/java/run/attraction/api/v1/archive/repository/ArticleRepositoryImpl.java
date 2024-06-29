@@ -20,15 +20,17 @@ import run.attraction.api.v1.home.service.dto.article.QReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
+import run.attraction.api.v1.introduction.QSubscribe;
 import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
-public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
+public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
   private final QArticle article = QArticle.article;
   private final QReadBox readBox = QReadBox.readBox;
   private final QNewsletter newsletter = QNewsletter.newsletter;
+  private final QSubscribe subscribe = QSubscribe.subscribe;
 
 
   LocalDate currentDate = LocalDate.now();
@@ -39,16 +41,18 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   }
 
   @Override
-  public Page<ArticleDTO> findArticlesByUserEmail(String userEmail, List<String> newsletterEmails, String category, Boolean isHideRead, String search,
-                                               Pageable pageable) {
-    BooleanExpression predicate = buildPredicate(newsletterEmails,  category, isHideRead, search);
+  public Page<ArticleDTO> findArticlesByUserEmail(String userEmail, List<String> newsletterEmails, String category,
+                                                  Boolean isHideRead, String search,
+                                                  Pageable pageable) {
+    BooleanExpression predicate = buildPredicate(newsletterEmails, category, isHideRead, search);
     List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
     Long total = getTotal(predicate);
 
     return new PageImpl<>(articles, pageable, total);
   }
 
-  private BooleanExpression buildPredicate(List<String> newsletterEmails, String category, boolean isHideRead, String search) {
+  private BooleanExpression buildPredicate(List<String> newsletterEmails, String category, boolean isHideRead,
+                                           String search) {
     BooleanExpression predicate = article.newsletterEmail.in(newsletterEmails);
 
     if (isNotNullAndNotEmpty(category)) {
@@ -120,7 +124,8 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
   }
 
   @Override
-  public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search, Pageable pageable) {
+  public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search,
+                                                   Pageable pageable) {
     BooleanExpression predicate = buildPredicateByArticleIds(articleIds, category, search);
     String userEmail = "";
     List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
@@ -148,16 +153,20 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     return predicate;
   }
 
-  public List<RecentArticlesDto> findRecentArticlesByUserEmail(String userEmail) {
+  public List<RecentArticlesDto> findRecentArticlesByUserEmail(String userEmail, int size) {
     JPAQuery<RecentArticlesDto> articles = queryFactory
         .select(new QRecentArticlesDto(this.article, readBox.readPercentage.coalesce(0), newsletter))
         .from(this.article)
         .join(readBox).on(this.article.id.eq(readBox.articleId)
             .and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
+        .join(subscribe).on(subscribe.userEmail.eq(userEmail))
         .where(readBox.modifiedAt.isNotNull()
-            .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt).between(sixDaysAgo, currentDate)))
-        .orderBy(readBox.modifiedAt.desc());
+            .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt)
+                .between(sixDaysAgo, currentDate))
+            .and(newsletter.id.in(subscribe.newsletterIds)))
+        .orderBy(readBox.modifiedAt.desc())
+        .limit(size);
 
     return articles.fetch();
   }

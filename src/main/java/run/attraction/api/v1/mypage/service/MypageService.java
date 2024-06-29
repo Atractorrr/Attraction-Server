@@ -42,8 +42,8 @@ public class MypageService {
   }
 
   @Counted("mypage.service")
-  public List<RecentArticlesDto> getRecentArticlesByEmail(String email){
-    return articleService.getUserRecentArticles(email);
+  public List<RecentArticlesDto> getRecentArticlesByEmail(String email, int size){
+    return articleService.getUserRecentArticles(email, size);
   }
 
   @Transactional
