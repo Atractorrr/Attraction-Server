@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import run.attraction.api.v1.auth.filter.SessionFilter;
+import run.attraction.api.v1.user.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -48,6 +49,8 @@ public class SecurityConfig {
         .httpBasic(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(req -> {
           req.requestMatchers(WHITE_LIST).permitAll();
+          req.requestMatchers("/swagger-ui/**").hasRole(Role.ADMIN.name());
+          req.requestMatchers("/api-docs").hasRole(Role.ADMIN.name());
           req.requestMatchers(monitoringPath).permitAll();
           req.anyRequest().authenticated();
         })
