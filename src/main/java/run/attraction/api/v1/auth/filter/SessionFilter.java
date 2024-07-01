@@ -67,6 +67,7 @@ public class SessionFilter extends OncePerRequestFilter {
               null,
               userDetails.getAuthorities());
 
+          log.info("User authorities: {}", userDetails.getAuthorities());
           authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
           SecurityContextHolder.getContext().setAuthentication(authToken);
         }
