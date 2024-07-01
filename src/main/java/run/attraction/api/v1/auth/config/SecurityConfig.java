@@ -49,8 +49,7 @@ public class SecurityConfig {
         .httpBasic(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(req -> {
           req.requestMatchers(WHITE_LIST).permitAll();
-          req.requestMatchers("/swagger-ui/**").hasRole(Role.ADMIN.name());
-          req.requestMatchers("/api-docs").hasRole(Role.ADMIN.name());
+          req.requestMatchers("/swagger","/api-docs","/swagger-ui/**").hasRole(Role.ADMIN.name());
           req.requestMatchers(monitoringPath).permitAll();
           req.anyRequest().authenticated();
         })
