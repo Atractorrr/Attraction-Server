@@ -7,11 +7,15 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
+  @Value("${swagger.production.url}")
+  private String productionServerUrl;
 
   @Bean
   public OpenAPI openAPI() {
@@ -20,9 +24,9 @@ public class SwaggerConfig {
     localServer.setUrl("http://localhost:8080");
     localServer.setDescription("Local server");
 
-    Server prodServer = new Server(); // 운영 서버 설정
-    prodServer.setUrl("https://atrserver.store");
-    prodServer.setDescription("Production server");
+    Server productionServer = new Server(); // 운영 서버 설정
+    productionServer.setUrl(productionServerUrl);
+    productionServer.setDescription("Production server");
 
     Info info = new Info()
         .title("Attraction Server API")
@@ -31,6 +35,6 @@ public class SwaggerConfig {
 
     return new OpenAPI()
         .info(info)
-        .servers(List.of(localServer, prodServer));
+        .servers(List.of(localServer, productionServer));
   }
 }
