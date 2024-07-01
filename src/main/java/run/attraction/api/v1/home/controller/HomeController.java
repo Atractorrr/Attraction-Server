@@ -1,5 +1,7 @@
 package run.attraction.api.v1.home.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +25,20 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "홈", description = "HomeController")
 public class HomeController {
 
   private final HomeService service;
 
   @GetMapping("/newsletters/categories")
+  @Operation(summary = "뉴스레터 카테고리 가져오기", description = "")
   public ResponseEntity<CategoriesResponseDto> getCategories(@RequestParam String email) {
     final List<String> categories = service.getCategoriesByEmail(email);
     return ResponseEntity.ok(new CategoriesResponseDto(categories));
   }
 
   @GetMapping("/newsletters/recommend")
+  @Operation(summary = "추천 뉴스레터 가져오기", description = "")
   public ResponseEntity<NewslettersResponseDto> getNewsletterByCategory(@Valid @RequestParam String category,
                                                    @Valid @RequestParam int size) {
     final List<NewsletterDetailDto> newsletterDetails = service.getNewsletter(category, size);
@@ -41,6 +46,7 @@ public class HomeController {
   }
 
   @GetMapping("/user/{email}/articles/received")
+  @Operation(summary = "최근 받은 아티클들 가져오기", description = "유저가 최근 받은 아티클들을 가져온다. / size로 조절 가능 (default = 10)")
   public ApiResponse<ReceivedArticlesResponseDto> getReceivedArticles(@Valid @PathVariable String email,
                                                                          @RequestParam(value = "size", defaultValue = "10") int size) {
     final List<ReceivedArticlesDto> articles = service.getReceivedArticlesByEmail(email, size);
@@ -49,6 +55,7 @@ public class HomeController {
   }
 
   @GetMapping("/search/article")
+  @Operation(summary = "아티클 검색", description = "")
   public ApiResponse<Page<ArticleSearchDto>> getArticleBySearch(@RequestParam("q") String q,
                                                                 @RequestParam("page") int page,
                                                                 @RequestParam("size") int size)
@@ -59,6 +66,7 @@ public class HomeController {
   }
 
   @GetMapping("/search/newsletter")
+  @Operation(summary = "뉴스레터 검색", description = "")
   public ApiResponse<Page<NewslettersByCategoryResponse>> getNewsletterBySearch(@RequestParam("q") String q,
                                                           @RequestParam("page") int page,
                                                           @RequestParam("size") int size)

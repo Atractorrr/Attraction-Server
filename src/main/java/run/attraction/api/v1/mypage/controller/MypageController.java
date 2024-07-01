@@ -1,5 +1,7 @@
 package run.attraction.api.v1.mypage.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailsResponseDt
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "마이 페이지", description = "MypageController")
 public class MypageController {
 
   private final MypageService mypageService;
@@ -55,9 +58,9 @@ public class MypageController {
   }
 
   @GetMapping("/{email}/articles/recent")
+  @Operation(summary = "최근 읽은 아티클들 가져오기", description = "최근 읽은 아티클들을 가져온다. / size 조절이 가능하다  (default = 10)")
   public final ApiResponse<RecentArticlesResponseDto> getRecentArticles(@PathVariable("email") String email,
-                                                                        @RequestParam(name = "size", defaultValue = "10") int size
-  ) {
+                                                                        @RequestParam(name = "size", defaultValue = "10") int size) {
     final List<RecentArticlesDto> recentArticlesByEmail = mypageService.getRecentArticlesByEmail(email, size);
 
     return ApiResponse.from(HttpStatus.OK, "성공", new RecentArticlesResponseDto(recentArticlesByEmail));
