@@ -21,7 +21,7 @@ public class SwaggerConfig {
     localServer.setDescription("Local server");
 
     Server prodServer = new Server(); // 운영 서버 설정
-    prodServer.setUrl("https://attraction.run");
+    prodServer.setUrl("https://atrserver.store");
     prodServer.setDescription("Production server");
 
     Info info = new Info()
