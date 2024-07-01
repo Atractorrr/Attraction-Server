@@ -1,5 +1,7 @@
 package run.attraction.api.v1.rank.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +19,19 @@ import run.attraction.api.v1.rank.service.dto.RankDetailDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rank")
+@Tag(name = "랭크", description = "RankController")
 public class RankController {
   private final RankService rankService;
 
   @GetMapping("/article")
+  @Operation(summary = "아티클 Top10", description = "")
   public ResponseEntity<?> getExtensiveRank(){
     final List<RankDetailDto> rankDetails = rankService.getTop10ExtensiveRank(LocalDate.now());
     return ResponseEntity.ok(new ExtensiveRankResponseDto(rankDetails));
   }
 
   @GetMapping("/streak")
+  @Operation(summary = "스트릭 Top10", description = "")
   public ResponseEntity<?> getConsistencyRank(){
     final List<RankDetailDto> rankDetails = rankService.getTop10ConsistencyRank(LocalDate.now());
     return ResponseEntity.ok(new ConsistencyRankResponseDto(rankDetails));

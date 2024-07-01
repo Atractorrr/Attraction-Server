@@ -1,5 +1,6 @@
 package run.attraction.api.v1.auth.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import run.attraction.api.v1.mypage.service.dto.MessageResponse;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "인증", description = "AuthController")
 public class AuthController {
 
   private final AuthService authService;

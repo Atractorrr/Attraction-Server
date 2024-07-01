@@ -1,5 +1,6 @@
 package run.attraction.api.v1.statistics.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/api/v1/statistics")
 @RequiredArgsConstructor
+@Tag(name = "통계", description = "StatisticsController")
 public class StatisticsController {
   private final StatisticsService statisticsService;
 
