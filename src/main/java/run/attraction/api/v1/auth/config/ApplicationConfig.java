@@ -1,5 +1,6 @@
 package run.attraction.api.v1.auth.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,7 @@ public class ApplicationConfig {
 
   private final UserDetailsService userDetailsService;
 
-  public ApplicationConfig(UserDetailsService userDetailsService) {
+  public ApplicationConfig(@Qualifier("userDetailsServiceForSecurity") UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
   }
 
