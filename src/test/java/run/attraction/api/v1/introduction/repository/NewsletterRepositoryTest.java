@@ -38,6 +38,9 @@ public class NewsletterRepositoryTest {
         .thumbnailUrl("https://test3.com")
         .uploadDays("매주 월요일")
         .nickname("뉴닉발송팀")
+        .isAgreeAdInfoReception(false)
+        .isAgreePersonalInfoCollection(true)
+        .isAutoSubscribeEnabled(true)
         .build();
 
     Newsletter newsletter2 = Newsletter.builder()
@@ -50,6 +53,9 @@ public class NewsletterRepositoryTest {
         .thumbnailUrl("https://test9.com")
         .uploadDays("매주 화요일")
         .nickname("캐릿발송팀")
+        .isAgreeAdInfoReception(false)
+        .isAgreePersonalInfoCollection(true)
+        .isAutoSubscribeEnabled(true)
         .build();
 
     Newsletter newsletter3 = Newsletter.builder()
@@ -62,6 +68,9 @@ public class NewsletterRepositoryTest {
         .thumbnailUrl("https://test3.com/thumbnail")
         .uploadDays("매주 수요일")
         .nickname("트렌드발송팀")
+        .isAgreeAdInfoReception(false)
+        .isAgreePersonalInfoCollection(true)
+        .isAutoSubscribeEnabled(true)
         .build();
 
     newsletterRepository.save(newsletter1);
