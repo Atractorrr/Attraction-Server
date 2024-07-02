@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, String> {
           u.email, 
           COALESCE(ud.nickname,""), 
           u.profileImg, 
+          u.role,
           (CASE WHEN ud.email IS NOT NULL THEN true ELSE false END),
           grt.shouldReissueToken
           )
