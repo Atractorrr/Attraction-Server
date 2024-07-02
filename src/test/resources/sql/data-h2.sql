@@ -33,7 +33,9 @@ CREATE TABLE IF NOT EXISTS newsletter
     thumbnail_url             VARCHAR(255),
     upload_days               VARCHAR(255),
     has_confirmation_email    BOOLEAN,
-    is_auto_subscribe_enabled BOOLEAN
+    is_auto_subscribe_enabled BOOLEAN,
+    is_agree_ad_info_reception BOOLEAN,
+    is_agree_personal_info_collection BOOLEAN
 );
 
 
