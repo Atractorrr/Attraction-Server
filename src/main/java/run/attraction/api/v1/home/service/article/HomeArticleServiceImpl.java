@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
-import run.attraction.api.v1.introduction.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 
@@ -19,12 +19,13 @@ import run.attraction.api.v1.introduction.utils.SubscriptionUtil;
 @RequiredArgsConstructor
 public class HomeArticleServiceImpl implements HomeArticleService {
   private final ArticleRepository articleRepository;
-  private final SubscribeRepository subscribeRepository;
+  private final SubscriptionRepository subscriptionRepository;
   private final NewsletterRepository newsletterRepository;
   private final SubscriptionUtil subscriptionUtil;
 
   public List<ReceivedArticlesDto> getReceivedArticles(String userEmail, int size){
-    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail, subscribeRepository, newsletterRepository);
+    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail,
+        subscriptionRepository, newsletterRepository);
 
     if(newsletterEmails.isEmpty()) {
       return Collections.emptyList();

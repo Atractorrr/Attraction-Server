@@ -1,5 +1,6 @@
 package run.attraction.api.v1.introduction.repository;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,8 @@ import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResp
 import java.util.List;
 
 public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
+
+  Optional<Newsletter> findById(long id);
 
   @Query("SELECT COUNT(n) FROM Newsletter n WHERE n.category = :category AND n.id <> :id")
   int countByCategoryAndIdNot(@Param("id") Long id, @Param("category") Category category);
