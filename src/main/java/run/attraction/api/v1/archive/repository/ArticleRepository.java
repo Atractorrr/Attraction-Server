@@ -30,12 +30,4 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
     WHERE a.id = :articleId
     """)
   Long findNewsletterIdByArticleId(Long articleId);
-
-  @Query(value = "SELECT a "
-      + "FROM Article a "
-      + "JOIN Newsletter n ON a.newsletterEmail = n.email "
-      + "WHERE a.newsletterEmail = :newsletterEmail "
-      + "ORDER BY a.receivedAt DESC "
-      + "LIMIT :size", nativeQuery = true)
-  List<Article> findArticlesByNewsletterEmail(String newsletterEmail, int size);
 }
