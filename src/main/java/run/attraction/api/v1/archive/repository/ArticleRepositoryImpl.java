@@ -20,7 +20,7 @@ import run.attraction.api.v1.home.service.dto.article.QReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
-import run.attraction.api.v1.introduction.QSubscribe;
+import run.attraction.api.v1.introduction.QSubscription;
 import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
@@ -30,7 +30,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
   private final QArticle article = QArticle.article;
   private final QReadBox readBox = QReadBox.readBox;
   private final QNewsletter newsletter = QNewsletter.newsletter;
-  private final QSubscribe subscribe = QSubscribe.subscribe;
+  private final QSubscription subscription = QSubscription.subscription;
 
 
   LocalDate currentDate = LocalDate.now();
@@ -160,11 +160,11 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         .join(readBox).on(this.article.id.eq(readBox.articleId)
             .and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
-        .join(subscribe).on(subscribe.userEmail.eq(userEmail))
+        .join(subscription).on(subscription.userEmail.eq(userEmail))
         .where(readBox.modifiedAt.isNotNull()
             .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt)
                 .between(sixDaysAgo, currentDate))
-            .and(newsletter.id.in(subscribe.newsletterIds)))
+            .and(newsletter.id.eq(subscription.newsletterId)))
         .orderBy(readBox.modifiedAt.desc())
         .limit(size);
 

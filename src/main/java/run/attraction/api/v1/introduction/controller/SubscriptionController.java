@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -46,5 +47,13 @@ public class SubscriptionController {
     gmailService.applyLabelAndFilter(new UserGmailDto(userEmail, newsletter.getEmail()));
 
     return ApiResponse.from(HttpStatus.OK, "성공", null);
+  }
+
+  @GetMapping("/{userEmail}/categories")
+  @Operation(summary = "유저가 구독한 카테고리 전체 가져오기", description = "유저가 구독한 모든 카테고리를 가져온다")
+  public ApiResponse<List<?>> getUserSubscribedNewsletterCategories(@PathVariable String userEmail) {
+    List<?> userSubscribedNewsletterCategories = subscriptionService.getUserSubscribedNewsletterCategories(userEmail);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", userSubscribedNewsletterCategories);
   }
 }

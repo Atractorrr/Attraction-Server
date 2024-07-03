@@ -1,43 +1,42 @@
 package run.attraction.api.v1.introduction;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import jakarta.persistence.JoinColumn;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import run.attraction.api.v1.archive.AuditableEntity;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Subscribe {
+public class Subscription extends AuditableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-
-  @ElementCollection
-  @CollectionTable(name = "newsletter_ids", joinColumns = @JoinColumn(name = "subscribe_id"))
-  @Column(nullable = false, name = "newsletter_id")
-  @Builder.Default
-  private List<Long> newsletterIds = new ArrayList<>();
+  @Column(nullable = false)
+  private Long newsletterId;
 
   @Column(nullable = false)
   private String userEmail;
 
+  private String unsubscribeUrl;
+
+  @Default
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean isDeleted = false;
+
   public void saveNewsletterId(Long newsletterId) {
-    newsletterIds.add(newsletterId);
+    this.newsletterId = newsletterId;
   }
 }

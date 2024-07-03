@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.introduction.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
@@ -30,7 +30,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
 
   private static final Logger log = LoggerFactory.getLogger(HomeNewsletterServiceImpl.class);
   private final NewsletterRepository newsletterRepository;
-  private final SubscribeRepository subscribeRepository;
+  private final SubscriptionRepository subscriptionRepository;
   private final UserDetailRepository userDetailRepository;
 
   public List<String> getDefaultCategories() {
@@ -59,7 +59,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   public List<NewsletterDetailDto> getMostNewsletterByCategory(String category, int size) {
     List<Object[]> newslettersByCategory = newsletterRepository.findByCategory(Category.valueOf(category));
     Map<Long, Newsletter> categoryNewsletterMap = getNewsletterMap(newslettersByCategory);
-    List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
+    List<Long> mostSubscribedNewsletterIds = subscriptionRepository.findMostSubscribedNewsletterIds();
 
     // 추가해야되는 상황이 발생할 수도 있어서 .collect(Collectors.toList()) 으로 생성
     List<NewsletterDetailDto> trendyNewsletters = mostSubscribedNewsletterIds.stream()
@@ -107,7 +107,7 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   }
 
   public List<NewsletterDetailDto> getMostNewsletter(int size) {
-    final List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
+    final List<Long> mostSubscribedNewsletterIds = subscriptionRepository.findMostSubscribedNewsletterIds();
 
     List<Newsletter> mostNewsletters;
     if (mostSubscribedNewsletterIds.size()>=size){

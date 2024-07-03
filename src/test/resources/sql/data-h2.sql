@@ -1,6 +1,6 @@
 -- 테이블이 이미 존재하는 경우 삭제
 DROP TABLE IF EXISTS newsletter_ids;
-DROP TABLE IF EXISTS subscribe;
+DROP TABLE IF EXISTS subscription;
 DROP TABLE IF EXISTS interests;
 DROP TABLE IF EXISTS newsletter;
 

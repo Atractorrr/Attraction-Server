@@ -1,4 +1,4 @@
-package run.attraction.api.v1.mypage.archive.service;
+package run.attraction.api.v1.mypage.service.archive;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import run.attraction.api.v1.introduction.Subscribe;
-import run.attraction.api.v1.introduction.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.Subscription;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterServiceImpl;
@@ -20,7 +20,7 @@ import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewslet
 
 public class MypageNewsletterSerivceTest {
   @Mock
-  private SubscribeRepository subscribeRepository;
+  private SubscriptionRepository subscriptionRepository;
 
   @Mock
   private NewsletterRepository newsletterRepository;
@@ -29,7 +29,8 @@ public class MypageNewsletterSerivceTest {
   private MypageNewsletterServiceImpl mypageNewsletterService;
 
   private List<Newsletter> newsletters;
-  private Subscribe subscribe;
+  private Subscription subscription1;
+  private Subscription subscription2;
 
   @BeforeEach
   void setUp() {
@@ -49,14 +50,21 @@ public class MypageNewsletterSerivceTest {
 
     newsletters = List.of(newsletter1, newsletter2);
 
-    subscribe = Subscribe.builder()
+    subscription1 = Subscription.builder()
         .id(1L)
         .userEmail("test@gmail.com")
-        .newsletterIds(List.of(newsletter1.getId(), newsletter2.getId()))
+        .newsletterId(newsletter1.getId())
         .build();
 
-    when(subscribeRepository.findByUserEmail("test@gmail.com")).thenReturn(Optional.of(subscribe));
-    when(newsletterRepository.findNewslettersByNewsletterIds(subscribe.getNewsletterIds())).thenReturn(newsletters);
+    subscription2 = Subscription.builder()
+        .id(2L)
+        .userEmail("test@gmail.com")
+        .newsletterId(newsletter2.getId())
+        .build();
+
+    when(subscriptionRepository.findByUserEmail("test@gmail.com")).thenReturn(List.of(subscription1, subscription2));
+    when(newsletterRepository.findById(newsletter1.getId())).thenReturn(Optional.of(newsletter1));
+    when(newsletterRepository.findById(newsletter2.getId())).thenReturn(Optional.of(newsletter2));
   }
 
   @Test
@@ -69,10 +77,10 @@ public class MypageNewsletterSerivceTest {
     final List<MypageNewsletterDetail> subscribes = mypageNewsletterService.getSubscribesByEmail(email);
 
     //Then
-    assertEquals(subscribes.size(),2);
-    assertEquals(subscribes.stream().map(MypageNewsletterDetail::id).toList(),List.of(1L,2L));
-    assertEquals(subscribes.stream().map(MypageNewsletterDetail::title).toList(),List.of("뉴닉","까탈로그"));
-    assertEquals(subscribes.stream().map(MypageNewsletterDetail::thumbnailUrl).toList(),List.of("뉴닉썸네일Url","까탈로그썸네일Url"));
+    assertEquals(2, subscribes.size());
+    assertEquals(List.of(1L, 2L), subscribes.stream().map(MypageNewsletterDetail::id).toList());
+    assertEquals(List.of("뉴닉", "까탈로그"), subscribes.stream().map(MypageNewsletterDetail::title).toList());
+    assertEquals(List.of("뉴닉썸네일Url", "까탈로그썸네일Url"), subscribes.stream().map(MypageNewsletterDetail::thumbnailUrl).toList());
   }
 
 }
