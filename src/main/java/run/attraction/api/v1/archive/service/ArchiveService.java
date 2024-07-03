@@ -46,7 +46,6 @@ public class ArchiveService {
   final private ReadBoxRepository readBoxRepository;
   final private NewsletterRepository newsletterRepository;
   final private SubscriptionRepository subscriptionRepository;
-  final private UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
   private final UserDetailRepository userDetailRepository;
   private final NewsletterEventRepository newsletterEventRepository;
   private final ReadBoxEventRepository readBoxEventRepository;

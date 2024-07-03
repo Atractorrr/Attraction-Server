@@ -21,6 +21,8 @@ import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.QNewsletter;
 import run.attraction.api.v1.introduction.QSubscription;
+import run.attraction.api.v1.introduction.dto.response.PreviousArticleResponse;
+import run.attraction.api.v1.introduction.dto.response.QPreviousArticleResponse;
 import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
@@ -185,4 +187,16 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
     return articles.fetch();
   }
+
+  public List<PreviousArticleResponse> findPreviousArticlesByUserEmail(String userEmail, int size) {
+    return queryFactory
+        .select(new QPreviousArticleResponse(this.article, newsletter))
+        .from(this.article)
+        .join(newsletter).on(newsletter.email.eq(userEmail))
+        .where(this.article.newsletterEmail.eq(newsletter.email))
+        .orderBy(this.article.receivedAt.desc())
+        .limit(size)
+        .fetch();
+  }
+
 }
