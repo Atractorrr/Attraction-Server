@@ -31,12 +31,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
     """)
   Long findNewsletterIdByArticleId(Long articleId);
 
-  @Query("""
-    SELECT a
-    FROM Article a
-    JOIN Newsletter n ON a.newsletterEmail = n.email
-    WHERE a.newsletterEmail = :newsletterEmail
-    ORDER BY a.receivedAt DESC
-  """)
-  List<Article> findArticlesByNewsletterEmail(String newsletterEmail);
+  @Query(value = "SELECT a "
+      + "FROM Article a "
+      + "JOIN Newsletter n ON a.newsletterEmail = n.email "
+      + "WHERE a.newsletterEmail = :newsletterEmail "
+      + "ORDER BY a.receivedAt DESC "
+      + "LIMIT :size", nativeQuery = true)
+  List<Article> findArticlesByNewsletterEmail(String newsletterEmail, int size);
 }
