@@ -36,12 +36,11 @@ public class IntroductionService {
   public List<PreviousArticleResponse> getPreviousArticles(Long newsletterId, int size) {
     Newsletter newsletter = newsletterRepository.findById(newsletterId)
         .orElseThrow(() -> new NoSuchElementException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
-    List<Article> previousArticles = articleRepository.findArticlesByNewsletterEmail(newsletter.getEmail());
+    List<Article> previousArticles = articleRepository.findArticlesByNewsletterEmail(newsletter.getEmail(), size);
 
     return previousArticles.stream()
-        .limit(size)
         .map(previousArticle -> PreviousArticleResponse.from(previousArticle, newsletter.getName()))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Transactional(readOnly = true)
