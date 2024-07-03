@@ -24,11 +24,11 @@ public record PreviousArticleResponse(
   @QueryProjection
   public PreviousArticleResponse(Article article, Newsletter newsletter) {
     this(
-         article.getId(),
+        article.getId(),
         article.getTitle(),
-        article.getThumbnailUrl(),
-        buildUrl("/thumbnail/", article.getContentUrl()),
-        buildUrl("/article/",article.getContentSummary()),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
+        article.getContentSummary(),
         article.getReadingTime() ,
         article.getReceivedAt(),
         newsletter.getName(),
