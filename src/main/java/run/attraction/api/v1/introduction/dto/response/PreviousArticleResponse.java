@@ -1,6 +1,7 @@
 package run.attraction.api.v1.introduction.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.querydsl.core.annotations.QueryProjection;
 import run.attraction.api.v1.archive.Article;
 import run.attraction.api.v1.archive.dto.NewsletterDTO;
 import run.attraction.api.v1.introduction.Newsletter;
@@ -20,6 +21,21 @@ public record PreviousArticleResponse(
     NewsletterDTO newsletter
 ) {
 
+  @QueryProjection
+  public PreviousArticleResponse(Article article, Newsletter newsletter) {
+    this(
+         article.getId(),
+        article.getTitle(),
+        article.getThumbnailUrl(),
+        article.getContentUrl(),
+        article.getContentSummary(),
+        article.getReadingTime() ,
+        article.getReceivedAt(),
+        newsletter.getName(),
+        new NewsletterDTO(newsletter)
+    );
+  }
+
   public static PreviousArticleResponse from(Article article, String newsletterName) {
     return new PreviousArticleResponse(
         article.getId(),
@@ -33,7 +49,6 @@ public record PreviousArticleResponse(
         null
     );
   }
-
   public static PreviousArticleResponse from(Article article, Newsletter newsletter) {
     return new PreviousArticleResponse(
         article.getId(),
