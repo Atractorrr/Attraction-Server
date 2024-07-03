@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
-import run.attraction.api.v1.introduction.Subscribe;
+import run.attraction.api.v1.introduction.Subscription;
 import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
-import run.attraction.api.v1.introduction.repository.SubscribeRepository;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
 
@@ -22,7 +22,7 @@ import run.attraction.api.v1.user.repository.UserDetailRepository;
 @RequiredArgsConstructor
 public class SubscriptionService {
 
-  private final SubscribeRepository subscribeRepository;
+  private final SubscriptionRepository subscriptionRepository;
   private final NewsletterRepository newsletterRepository;
   private final KafkaProducerService kafkaProducerService;
   private final UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
@@ -30,7 +30,7 @@ public class SubscriptionService {
 
   @Transactional(readOnly = true)
   public Boolean isSubscribed(String userEmail, Long newsletterId ) {
-    return subscribeRepository.existsByUserEmailAndNewsletterId(userEmail, newsletterId);
+    return subscriptionRepository.existsByUserEmailAndNewsletterId(userEmail, newsletterId);
   }
 
   @Transactional(readOnly = true)
@@ -42,22 +42,18 @@ public class SubscriptionService {
   @Counted("subscription.service")
   @Transactional
   public void subscribeNewsletter(String userEmail, Newsletter newsletter) {
-    Subscribe subscribe = subscribeRepository.findByUserEmail(userEmail)
-        .orElse(createSubscribe(userEmail));
-
-    if(subscribe.getNewsletterIds().contains(newsletter.getId())) {
+    if (subscriptionRepository.existsByUserEmailAndNewsletterId(userEmail, newsletter.getId())) {
       throw new IllegalArgumentException(ErrorMessages.ALREADY_EXIST_NEWSLETTER.getViewName());
     }
 
+    subscriptionRepository.save(subscribeNewsletterMethod(userEmail, newsletter.getId()));
     saveUserSubscribedNewsletterCategory(userEmail, newsletter.getCategory());
-    subscribe.saveNewsletterId(newsletter.getId());
-    subscribeRepository.save(subscribe);
   }
 
-  private Subscribe createSubscribe(String userEmail) {
-    return Subscribe.builder()
+  private Subscription subscribeNewsletterMethod(String userEmail, Long newsletterId) {
+    return Subscription.builder()
         .userEmail(userEmail)
-        .newsletterIds(new ArrayList<>())
+        .newsletterId(newsletterId)
         .build();
   }
 
@@ -97,5 +93,12 @@ public class SubscriptionService {
       kafkaProducerService.sendKafkaMessage(userEmail, nickname, newsletter.getSubscribeLink(), true, false);
       log.info("카프카 메시지 전송 종료");
     }
+  }
+
+  @Transactional(readOnly = true)
+  public List<?> getUserSubscribedNewsletterCategories(String userEmail) {
+    return userSubscribedNewsletterCategoryRepository.findByUserEmail(userEmail)
+        .map(UserSubscribedNewsletterCategory::getCategories)
+        .orElseGet(ArrayList::new);
   }
 }

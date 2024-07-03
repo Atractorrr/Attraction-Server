@@ -16,9 +16,7 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
-import run.attraction.api.v1.introduction.repository.SubscribeRepository;
-import run.attraction.api.v1.introduction.Newsletter;
-import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
@@ -47,7 +45,7 @@ public class ArchiveService {
   final private ArticleRepository articleRepository;
   final private ReadBoxRepository readBoxRepository;
   final private NewsletterRepository newsletterRepository;
-  final private SubscribeRepository subscribeRepository;
+  final private SubscriptionRepository subscriptionRepository;
   final private UserSubscribedNewsletterCategoryRepository userSubscribedNewsletterCategoryRepository;
   private final UserDetailRepository userDetailRepository;
   private final NewsletterEventRepository newsletterEventRepository;
@@ -61,18 +59,22 @@ public class ArchiveService {
     String DESC = "desc";
     String HIDE_READ_TRUE = "true";
 
-    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail, subscribeRepository, newsletterRepository);
+    List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail,
+        subscriptionRepository,
+        newsletterRepository);
 
-    if(newsletterEmails.isEmpty()) {
+    if (newsletterEmails.isEmpty()) {
       return new PageImpl<>(Collections.emptyList(), PageRequest.of(request.getPage(), request.getSize()), 0);
     }
 
     String sortDirection = request.getSort().length > 1 ? request.getSort()[1] : DESC;
     Boolean isHideReadFilter = request.getIsHideRead().equalsIgnoreCase(HIDE_READ_TRUE);
-    Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(DESC) ? Sort.Order.desc(request.getSort()[0]) : Sort.Order.asc(request.getSort()[0]));
+    Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(DESC) ? Sort.Order.desc(request.getSort()[0])
+        : Sort.Order.asc(request.getSort()[0]));
     Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sortObj);
 
-    return articleRepository.findArticlesByUserEmail(userEmail, newsletterEmails, request.getCategory(), isHideReadFilter, request.getQ(), pageable);
+    return articleRepository.findArticlesByUserEmail(userEmail, newsletterEmails, request.getCategory(),
+        isHideReadFilter, request.getQ(), pageable);
   }
 
   @Transactional(readOnly = true)
@@ -90,9 +92,9 @@ public class ArchiveService {
     readBox.updateReadPercentagePercentage(readPercentage);
     readBoxRepository.save(readBox);
 
-    if(readPercentage==PULL_PERCENTAGE){
+    if (readPercentage == PULL_PERCENTAGE) {
       saveNewsletterEvent(userEmail, articleId);
-      updateReadBoxEvent(userEmail,LocalDate.now());
+      updateReadBoxEvent(userEmail, LocalDate.now());
     }
   }
 
@@ -102,25 +104,25 @@ public class ArchiveService {
 
   private void saveNewsletterEvent(String userEmail, Long articleId) {
     UserDetail userDetail = userDetailRepository.findById(userEmail)
-            .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
+        .orElseThrow(() -> new NoSuchElementException("존재하지 않은 유저입니다."));
     Long newsletterId = articleRepository.findNewsletterIdByArticleId(articleId);
 
     newsletterEventRepository.save(NewsletterEvent.builder()
-            .newsletterId(newsletterId)
-            .occupation(userDetail.getOccupation())
-            .ageGroup(AgeGroup.calculateAge(userDetail.getBirthDate()))
-            .build());
+        .newsletterId(newsletterId)
+        .occupation(userDetail.getOccupation())
+        .ageGroup(AgeGroup.calculateAge(userDetail.getBirthDate()))
+        .build());
   }
 
-  private void updateReadBoxEvent(String userEmail, LocalDate date){
+  private void updateReadBoxEvent(String userEmail, LocalDate date) {
     Optional<ReadBoxEvent> readBoxEventOptional = readBoxEventRepository.findById(userEmail);
 
     readBoxEventOptional.ifPresentOrElse(
-            readBoxEvent -> updateReadBoxEvent(readBoxEvent,date),
-            () -> readBoxEventRepository.save(ReadBoxEvent.builder()
-                                                          .email(userEmail)
-                                                          .consistencyValue(1)
-                                                          .build())
+        readBoxEvent -> updateReadBoxEvent(readBoxEvent, date),
+        () -> readBoxEventRepository.save(ReadBoxEvent.builder()
+            .email(userEmail)
+            .consistencyValue(1)
+            .build())
     );
   }
 
@@ -150,19 +152,5 @@ public class ArchiveService {
 
   private boolean isPreviousDay(LocalDate readBoxEventModifiedAt, LocalDate now) {
     return readBoxEventModifiedAt.plusDays(1).equals(now);
-  }
-
-  @Transactional(readOnly = true)
-  public List<Newsletter> getSubscribedNewslettersByUser(String userEmail) {
-    List<Long> newsletterIds = subscribeRepository.findNewsletterIdsByUserEmail(userEmail);
-
-    return newsletterRepository.findNewslettersByNewsletterIds(newsletterIds);
-  }
-
-  @Transactional(readOnly = true)
-  public List<?> getUserSubscribedNewsletterCategories(String userEmail) {
-    return userSubscribedNewsletterCategoryRepository.findByUserEmail(userEmail)
-        .map(UserSubscribedNewsletterCategory::getCategories)
-        .orElseGet(ArrayList::new);
   }
 }

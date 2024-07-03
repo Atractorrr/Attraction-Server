@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.dto.response.ApiResponse;
 import run.attraction.api.v1.archive.service.ArchiveService;
-import run.attraction.api.v1.introduction.Newsletter;
 
 
 @RestController
@@ -56,22 +54,5 @@ public class ArchiveController {
     archiveService.saveUserArticleProgress(userEmail, articleId, readPercentage);
 
     return ApiResponse.from(HttpStatus.OK, "성공", null);
-  }
-
-  @GetMapping("/{userEmail}/categories")
-  @Operation(summary = "유저가 구독한 카테고리 전체 가져오기", description = "유저가 구독한 모든 카테고리를 가져온다")
-  public ApiResponse<List<?>> getUserSubscribedNewsletterCategories(@PathVariable String userEmail) {
-    List<?> userSubscribedNewsletterCategories = archiveService.getUserSubscribedNewsletterCategories(userEmail);
-
-    return ApiResponse.from(HttpStatus.OK, "성공", userSubscribedNewsletterCategories);
-  }
-
-  // DEPRECATED
-  @GetMapping("/{userEmail}/subscribe")
-  @Operation(summary = "삭제 예정 사용 금지", description = "삭제 예정")
-  public ApiResponse<List<Newsletter>> getSubscribedNewslettersByUser(@PathVariable String userEmail) {
-    List<Newsletter> subscribeNewsletters = archiveService.getSubscribedNewslettersByUser(userEmail);
-
-    return ApiResponse.from(HttpStatus.OK, "성공", subscribeNewsletters);
   }
 }
