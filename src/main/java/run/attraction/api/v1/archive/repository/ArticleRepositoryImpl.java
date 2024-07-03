@@ -165,6 +165,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
             .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt)
                 .between(sixDaysAgo, currentDate))
             .and(newsletter.id.eq(subscription.newsletterId)))
+        .where(article.receivedAt.between(sixDaysAgo, currentDate))
         .orderBy(readBox.modifiedAt.desc())
         .limit(size);
 
