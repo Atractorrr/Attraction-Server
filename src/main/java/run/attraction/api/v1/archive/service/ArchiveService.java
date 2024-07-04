@@ -2,7 +2,12 @@ package run.attraction.api.v1.archive.service;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,10 +21,9 @@ import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
 import run.attraction.api.v1.archive.repository.ArticleRepository;
 import run.attraction.api.v1.archive.repository.ReadBoxRepository;
-import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
-import run.attraction.api.v1.introduction.repository.UserSubscribedNewsletterCategoryRepository;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.utils.SubscriptionUtil;
 import run.attraction.api.v1.rank.ReadBoxEvent;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
@@ -28,12 +32,6 @@ import run.attraction.api.v1.statistics.NewsletterEvent;
 import run.attraction.api.v1.statistics.repository.NewsletterEventRepository;
 import run.attraction.api.v1.user.UserDetail;
 import run.attraction.api.v1.user.repository.UserDetailRepository;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Timed("archive.service")
 @Service
@@ -121,6 +119,8 @@ public class ArchiveService {
         () -> readBoxEventRepository.save(ReadBoxEvent.builder()
             .email(userEmail)
             .consistencyValue(1)
+            .createdAt(LocalDateTime.now())
+            .modifiedAt(LocalDateTime.now())
             .build())
     );
   }
