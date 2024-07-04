@@ -1,17 +1,15 @@
 package run.attraction.api.v1.rank.service.calculator;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import run.attraction.api.v1.rank.ConsistencyRank;
 import run.attraction.api.v1.rank.repository.ConsistencyRankRepository;
 import run.attraction.api.v1.rank.repository.ReadBoxEventRepository;
-
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -70,10 +68,7 @@ public class ConsistencyRankCalculator {
 
   private ConsistencyRank createConsistencyRank(Object[] obj, LocalDate date){
     String email = (String) obj[0];
-    int baseValue = ((Number) obj[1]).intValue();
-    LocalDate modifiedAt = ((Timestamp) obj[2]).toLocalDateTime().toLocalDate();
-
-    int value = modifiedAt.equals(date) ? baseValue - 1 : baseValue;
+    int value = ((Number) obj[1]).intValue();
 
     return ConsistencyRank.builder()
         .email(email)
