@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import run.attraction.api.v1.introduction.dto.response.QPreviousArticleResponse;
 import run.attraction.api.v1.mypage.service.dto.archive.article.QRecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 
+@Slf4j
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
@@ -36,7 +38,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
 
   LocalDate currentDate = LocalDate.now();
-  LocalDate sixDaysAgo = currentDate.minusDays(6);
+  LocalDate sevenDaysAgo = currentDate.minusDays(7);
 
   public ArticleRepositoryImpl(EntityManager em) {
     this.queryFactory = new JPAQueryFactory(em);
@@ -83,13 +85,17 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
   }
 
   private List<ArticleDTO> getArticles(BooleanExpression predicate, Pageable pageable, String userEmail) {
+
+    log.info("Current Date: " + currentDate);
+    log.info("seven Days Ago: " + sevenDaysAgo);
+
     JPAQuery<ArticleDTO> articles = queryFactory
         .select(new QArticleDTO(this.article, readBox.readPercentage.coalesce(0), newsletter))
         .from(this.article)
         .leftJoin(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
         .where(predicate)
-        .where(article.receivedAt.between(sixDaysAgo, currentDate))
+        .where(article.receivedAt.between(sevenDaysAgo, currentDate))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
 
@@ -165,9 +171,9 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         .join(subscription).on(subscription.userEmail.eq(userEmail))
         .where(readBox.modifiedAt.isNotNull()
             .and(Expressions.dateTemplate(LocalDate.class, "DATE({0})", readBox.modifiedAt)
-                .between(sixDaysAgo, currentDate))
+                .between(sevenDaysAgo, currentDate))
             .and(newsletter.id.eq(subscription.newsletterId)))
-        .where(article.receivedAt.between(sixDaysAgo, currentDate))
+        .where(article.receivedAt.between(sevenDaysAgo, currentDate))
         .orderBy(readBox.modifiedAt.desc())
         .limit(size);
 
@@ -181,7 +187,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         .leftJoin(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
         .join(newsletter).on(this.article.newsletterEmail.eq(newsletter.email))
         .where(article.newsletterEmail.in(newsletterEmails))
-        .where(article.receivedAt.between(sixDaysAgo, currentDate))
+        .where(article.receivedAt.between(sevenDaysAgo, currentDate))
         .orderBy(article.receivedAt.desc())
         .limit(size);
 
