@@ -79,6 +79,7 @@ public class MypageController {
   }
 
   @GetMapping("/{email}/subscribe-list")
+  @Operation(summary = "구독한 뉴스레터들 가져오기", description = "구독한 뉴스레터 전부를 가져온다")
   public final ResponseEntity<SubscribeResponseDto> getSubscribes(@PathVariable("email") String email) {
     final List<MypageNewsletterDetail> subscribeByEmail = mypageService.getSubscribeByEmail(email);
     return ResponseEntity.ok(new SubscribeResponseDto(subscribeByEmail));
