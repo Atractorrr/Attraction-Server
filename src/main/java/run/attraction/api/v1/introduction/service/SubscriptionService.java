@@ -1,8 +1,8 @@
 package run.attraction.api.v1.introduction.service;
 
 import io.micrometer.core.annotation.Counted;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,30 +58,25 @@ public class SubscriptionService {
   }
 
   private void saveUserSubscribedNewsletterCategory(String userEmail, Category category) {
-    UserSubscribedNewsletterCategory userSubscribedNewsletterCategory = userSubscribedNewsletterCategoryRepository.findByUserEmail(
-        userEmail).orElseGet(() -> {
-      var newCategory = createUserSubscribedNewsletterCategory(userEmail, category);
-      userSubscribedNewsletterCategoryRepository.save(newCategory);
-      return newCategory;
-    });
+    Optional<UserSubscribedNewsletterCategory> userSubscribedNewsletterCategory = userSubscribedNewsletterCategoryRepository.findByUserEmailAndCategory(
+        userEmail, category);
 
-    if(hasCategory(userSubscribedNewsletterCategory,category)) {
-      return;
+    if(userSubscribedNewsletterCategory.isPresent()) {
+      userSubscribedNewsletterCategory.get().increaseCategoryCount();
+
+      userSubscribedNewsletterCategoryRepository.save(userSubscribedNewsletterCategory.get());
+    }else{
+      var newCategorySubscribedByUser = createUserSubscribedNewsletterCategory(userEmail, category);
+
+      userSubscribedNewsletterCategoryRepository.save(newCategorySubscribedByUser);
     }
-
-    userSubscribedNewsletterCategory.getCategories().add(category);
-    userSubscribedNewsletterCategoryRepository.save(userSubscribedNewsletterCategory);
   }
 
   private UserSubscribedNewsletterCategory createUserSubscribedNewsletterCategory(String userEmail, Category category) {
     return UserSubscribedNewsletterCategory.builder()
         .userEmail(userEmail)
-        .categories(new ArrayList<>(List.of(category)))
+        .category(category)
         .build();
-  }
-
-  private boolean hasCategory(UserSubscribedNewsletterCategory userSubscribedNewsletterCategory, Category category) {
-    return userSubscribedNewsletterCategory.getCategories().contains(category);
   }
 
   public void sendKafkaMessageForSubscription(String userEmail, Newsletter newsletter) {
@@ -96,9 +91,29 @@ public class SubscriptionService {
   }
 
   @Transactional(readOnly = true)
-  public List<?> getUserSubscribedNewsletterCategories(String userEmail) {
+  public List<Category> getUserSubscribedNewsletterCategories(String userEmail) {
     return userSubscribedNewsletterCategoryRepository.findByUserEmail(userEmail)
-        .map(UserSubscribedNewsletterCategory::getCategories)
-        .orElseGet(ArrayList::new);
+        .stream()
+        .map(UserSubscribedNewsletterCategory::getCategory)
+        .toList();
+  }
+
+  public void unsubscribeNewsletter(String userEmail, Long newsletterId) {
+    Subscription subscription = subscriptionRepository.findByUserEmailAndNewsletterId(userEmail,
+        newsletterId).orElseThrow(() -> new IllegalArgumentException("구독 정보가 없는 뉴스레터 입니다"));
+
+    subscription.unsubscribeNewsletter();
+    subscriptionRepository.save(subscription);
+    unsubscribeNewsletterCategory(userEmail, newsletterId);
+  }
+
+  private void unsubscribeNewsletterCategory(String userEmail, Long newsletterId) {
+    Newsletter newsletter = newsletterRepository.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.NOT_EXIST_NEWSLETTER.getViewName()));
+    var userSubscribedNewsletterCategory = userSubscribedNewsletterCategoryRepository.findByUserEmailAndCategory(
+        userEmail, newsletter.getCategory()).orElseThrow(() -> new IllegalArgumentException("구독 기록이 없는 뉴스레터의 카테고리입니다"));
+
+    userSubscribedNewsletterCategory.decreaseCategoryCount();
+    userSubscribedNewsletterCategoryRepository.save(userSubscribedNewsletterCategory);
   }
 }

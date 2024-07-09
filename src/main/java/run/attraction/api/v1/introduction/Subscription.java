@@ -39,4 +39,8 @@ public class Subscription extends AuditableEntity {
   public void saveNewsletterId(Long newsletterId) {
     this.newsletterId = newsletterId;
   }
+
+  public void unsubscribeNewsletter() {
+    isDeleted = true;
+  }
 }
