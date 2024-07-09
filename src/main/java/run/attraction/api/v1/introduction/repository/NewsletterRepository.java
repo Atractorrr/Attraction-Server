@@ -43,5 +43,4 @@ public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
     WHERE (n.name LIKE %:search%) AND n.isDeleted = false
     """)
   Page<NewslettersByCategoryResponse> findNewsletterBySearch(String search, Pageable pageable);
-
 }

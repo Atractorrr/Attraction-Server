@@ -19,7 +19,7 @@ public class MypageNewsletterServiceImpl implements MypageNewsletterService {
 
   @Override
   public List<MypageNewsletterDetail> getSubscribesByEmail(String email) {
-    final List<Subscription> subscriptions = subscriptionRepository.findByUserEmail(email);
+    final List<Subscription> subscriptions = subscriptionRepository.findByUserEmailAndIsDeleted(email);
 
     if(subscriptions.isEmpty()) {
       return List.of();

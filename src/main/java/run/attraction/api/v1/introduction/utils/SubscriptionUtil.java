@@ -12,7 +12,7 @@ public class SubscriptionUtil {
   public List<String> getNewsletterEmailsSubscribedByUser (String userEmail,
                                                            SubscriptionRepository subscriptionRepository,
                                                            NewsletterRepository newsletterRepository) {
-    List<Long> newsletterIds = subscriptionRepository.findNewsletterIdsByUserEmail(userEmail);
+    List<Long> newsletterIds = subscriptionRepository.findNewsletterIdsByUserEmailWithoutIsDeleted(userEmail);
 
     if (newsletterIds.isEmpty()) {
       return List.of();  // 비어 있는 경우 빈 리스트 반환
