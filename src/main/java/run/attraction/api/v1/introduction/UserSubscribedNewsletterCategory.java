@@ -3,12 +3,10 @@ package run.attraction.api.v1.introduction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import run.attraction.api.v1.archive.AuditableEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -24,8 +22,21 @@ public class UserSubscribedNewsletterCategory extends AuditableEntity {
   @Column(nullable = false)
   String userEmail;
 
-  @ElementCollection
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  @Builder.Default
-  List<Category> categories = new ArrayList<>();
+  Category category;
+
+  @Column(nullable = false)
+  @Default
+  int categoryCount = 0;
+
+  public void increaseCategoryCount() {
+    this.categoryCount++;
+  }
+
+  public void decreaseCategoryCount() {
+    if (this.categoryCount > 0) {
+      this.categoryCount--;
+    }
+  }
 }

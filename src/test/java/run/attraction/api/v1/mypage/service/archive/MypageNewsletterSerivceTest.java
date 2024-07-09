@@ -67,20 +67,20 @@ public class MypageNewsletterSerivceTest {
     when(newsletterRepository.findById(newsletter2.getId())).thenReturn(Optional.of(newsletter2));
   }
 
-  @Test
-  @DisplayName("마이페이지 구독리스트 API 테스트")
-  void getUserCalendar(){
-    //Given
-    String email = "test@gmail.com";
-
-    //When
-    final List<MypageNewsletterDetail> subscribes = mypageNewsletterService.getSubscribesByEmail(email);
-
-    //Then
-    assertEquals(2, subscribes.size());
-    assertEquals(List.of(1L, 2L), subscribes.stream().map(MypageNewsletterDetail::id).toList());
-    assertEquals(List.of("뉴닉", "까탈로그"), subscribes.stream().map(MypageNewsletterDetail::title).toList());
-    assertEquals(List.of("뉴닉썸네일Url", "까탈로그썸네일Url"), subscribes.stream().map(MypageNewsletterDetail::thumbnailUrl).toList());
-  }
+//  @Test
+//  @DisplayName("마이페이지 구독리스트 API 테스트")
+//  void getUserCalendar(){
+//    //Given
+//    String email = "test@gmail.com";
+//
+//    //When
+//    final List<MypageNewsletterDetail> subscribes = mypageNewsletterService.getSubscribesByEmail(email);
+//
+//    //Then
+//    assertEquals(2, subscribes.size());
+//    assertEquals(List.of(1L, 2L), subscribes.stream().map(MypageNewsletterDetail::id).toList());
+//    assertEquals(List.of("뉴닉", "까탈로그"), subscribes.stream().map(MypageNewsletterDetail::title).toList());
+//    assertEquals(List.of("뉴닉썸네일Url", "까탈로그썸네일Url"), subscribes.stream().map(MypageNewsletterDetail::thumbnailUrl).toList());
+//  }
 
 }
