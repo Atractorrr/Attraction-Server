@@ -25,7 +25,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
   @Query(" SELECT s " +
           " FROM Subscription s" +
-          " WHERE s.isDeleted = false ")
+          " WHERE s.userEmail =:userEmail AND s.isDeleted = false ")
   List<Subscription> findByUserEmailAndIsDeleted(String userEmail);
 
   @Query(" SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
