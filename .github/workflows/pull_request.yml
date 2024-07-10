@@ -29,5 +29,4 @@ jobs:
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
 
       - name: 빌드하기 및 테스트 하기
-        
         run: ./gradlew clean build
