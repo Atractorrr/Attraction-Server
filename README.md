@@ -88,6 +88,19 @@
 - [코드 컨벤션](https://google.github.io/styleguide/javaguide.html)
 <br>
 
+## Database diagrams
+<p align="center">
+  <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/f51f0ca7-7884-4092-9936-c9b5362d84fa">
+</p>
+<br>
+
+## Test Code
+<p align="center">
+  <p>테스트 커버리지: 27%</p>
+  <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/712d9da8-3b0d-440f-9785-af78d5f4568c">
+</p>
+<br>
+
 ## 프로젝트 구조
 ```markdown
 ├── java
