@@ -1,4 +1,4 @@
-<img width="1434" alt="image" src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/8a9550a7-0aab-4686-aeea-7c21246fd5a4"># Attraction-Server
+# Attraction-Server
 <p align="center">
   <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/79695279-bc00-4be4-b119-2c7ef4acad47" width=800 height=500>
 </p>
@@ -29,13 +29,28 @@
 | Light mode | Dark mode |
 | :------: |  :------: |
 | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/899e9029-32af-43d0-bbd6-8f0a00583ef1" height=250 width=700> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/dda825ab-73a7-4e0e-8f0f-1186a1ede05f" height=250 width=700> | 
-
 <br>
+
 - 뉴스레터 보관함
-<img width="1430" alt="image" src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/5ef1565f-08a1-4001-8976-b952adea8854">
 
+| 전체 화면 | 필터 | 읽은 아티클 숨김 |
+| :------: |  :------: |  :------: |
+| <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/5ef1565f-08a1-4001-8976-b952adea8854" height=250 width=700> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/2b428b25-6ee8-4bb7-819a-0b53e476fa3a" height=250 width=700> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/df6896ed-2953-4715-8b82-1bcbcd1d4b66" height=250 width=700> |
+<br>
 
-  
+- 아티클 상세보기
+
+| 상세보기 | 북마크 추가하기 |
+| :------: |  :------: |
+| <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/68f137d0-50a8-4658-aaf3-fe139184a528" height=250 width=500> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/1303a2e3-7d2e-4c89-bf70-20581de29b0e" height=250 width=500> |
+<br>
+
+- 나머지 페이지
+
+| 마이페이지 | 북마크한 아티클 | 랭킹 |
+| :------: |  :------: |  :------: |
+| <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/509e0ac2-2136-4418-9dcc-784346e0f10d" height=250 width=400> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/ad07ebbc-0876-40ee-9be6-85224eef18e7" height=250 width=500> | <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/4611be4d-f3a7-4241-8967-221dd886165e" height=300 width=280> |
+<br>
 
 ## 역할 분담
 
