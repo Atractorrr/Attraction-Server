@@ -12,7 +12,7 @@
 <P>개발기간 : 2024-04 ~ 진행중</P>
 <br>
 
-## 팀원 구성
+## 👬팀원 구성
 
 <div align="center">
 
@@ -75,7 +75,7 @@
 
 <br>
 
-## 개발 환경
+## 📚개발 환경
 
 - Back-end : Java, Kotlin, Spring Boot, Kafka, MariaDB
 - 버전 및 이슈관리 : Github, Jira
@@ -88,20 +88,27 @@
 - [코드 컨벤션](https://google.github.io/styleguide/javaguide.html)
 <br>
 
-## Database diagrams
+## 🔫Database diagrams
 <p align="center">
   <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/f51f0ca7-7884-4092-9936-c9b5362d84fa">
 </p>
 <br>
 
-## Test Code
+## 🚀Architecture
 <p align="center">
-  <p>테스트 커버리지: 27%</p>
+  <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/0f5fa7a8-9a8c-4bd1-9c9c-9510aed599b7">
+</p>
+<br>
+
+
+## 💻Test Code
+<p align="center">
+  <p>테스트 커버리지: 27%(2024/07/11)</p>
   <img src="https://github.com/Atractorrr/Attraction-Server/assets/110734817/712d9da8-3b0d-440f-9785-af78d5f4568c">
 </p>
 <br>
 
-## 프로젝트 구조
+## 📌프로젝트 구조
 ```markdown
 ├── java
 │   └── run
