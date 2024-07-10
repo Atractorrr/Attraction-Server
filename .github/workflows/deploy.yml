@@ -25,8 +25,14 @@ jobs:
       - name: application.yml 파일 만들기
         run: echo '${{ secrets.APPLICATION_PROPERTIES }}' > ./src/main/resources/application.yml
 
+      - name: application-test.yml 파일 만들기
+        run: echo '${{ secrets.APPLICATION_TEST_PROPERTIES }}' > ./src/main/resources/application-test.yml
+
       - name: credentials.json 파일 만들기
         run: echo '${{ secrets.CREDENTIAL_JSON }}' > ./src/main/resources/credentials.json
+
+      - name: log4j2.xml 파일 만들기
+        run: echo '${{ secrets.LOG4J2_XML }}' > ./src/main/resources/log4j2.xml
 
       - name: 테스트 및 빌드하기
         run: ./gradlew clean build
@@ -80,22 +86,36 @@ jobs:
             docker run -d --name redis-server -p 6379:6379 redis:latest
             
             # Spring Boot 애플리케이션 컨테이너 실행
-            docker run -d --name attraction-api-server --link redis-server:redis -p 8080:8080 ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
-
-      - name: 배포 상태 업데이트 (성공)
-        if: success()
-        uses: chrnorm/deployment-status@releases/v2
+            docker run -d --name attraction-api-server --link redis-server:redis -e TZ=Asia/Seoul -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
+            
+             # filebeat 실행
+            docker stop filebeat || true
+            docker rm filebeat || true
+            docker run -d --name filebeat -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
+      
+      - name: 슬랙 알림
+        uses: 8398a7/action-slack@v3
         with:
-          token: '${{ github.token }}'
-          environment-url: ${{ steps.deployment.outputs.environment_url }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'success'
-
-      - name: 배포 상태 업데이트 (실패)
-        if: failure()
-        uses: chrnorm/deployment-status@v2
-        with:
-          token: '${{ github.token }}'
-          environment-url: ${{ steps.deployment.outputs.environment_url }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'failure'
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} 
+        if: always()
+            
+#      - name: 배포 상태 업데이트 (성공)
+#        if: success()
+#        uses: chrnorm/deployment-status@releases/v2
+#        with:
+#          token: '${{ github.token }}'
+#          environment-url: ${{ steps.deployment.outputs.environment_url }}
+#          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+#          state: 'success'
+#
+#      - name: 배포 상태 업데이트 (실패)
+#        if: failure()
+#        uses: chrnorm/deployment-status@v2
+#        with:
+#          token: '${{ github.token }}'
+#          environment-url: ${{ steps.deployment.outputs.environment_url }}
+#          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+#          state: 'failure'

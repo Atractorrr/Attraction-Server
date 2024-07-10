@@ -1,13 +1,20 @@
 package run.attraction.api.v1.introduction.repository;
 
-import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+
+import java.util.List;
 
 public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
+
+  Optional<Newsletter> findById(long id);
 
   @Query("SELECT COUNT(n) FROM Newsletter n WHERE n.category = :category AND n.id <> :id")
   int countByCategoryAndIdNot(@Param("id") Long id, @Param("category") Category category);
@@ -27,4 +34,13 @@ public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
 
   @Query ("SELECT n FROM Newsletter n WHERE n.id IN :newsletterIds")
   List<Newsletter> findNewslettersByNewsletterIds(@Param("newsletterIds") List<Long> newsletterIds);
+
+  @Query("""
+    SELECT new run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse(
+       n.id, n.thumbnailUrl, n.name, n.description
+    )
+    FROM Newsletter n
+    WHERE (n.name LIKE %:search%) AND n.isDeleted = false
+    """)
+  Page<NewslettersByCategoryResponse> findNewsletterBySearch(String search, Pageable pageable);
 }

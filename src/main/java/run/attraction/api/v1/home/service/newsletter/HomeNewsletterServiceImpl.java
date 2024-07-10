@@ -1,33 +1,36 @@
 package run.attraction.api.v1.home.service.newsletter;
 
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
+import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
+import run.attraction.api.v1.introduction.Category;
+import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+import run.attraction.api.v1.introduction.repository.NewsletterRepository;
+import run.attraction.api.v1.user.Interest;
+import run.attraction.api.v1.user.UserDetail;
+import run.attraction.api.v1.user.repository.UserDetailRepository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import run.attraction.api.v1.archive.repository.SubscribeRepository;
-import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
-import run.attraction.api.v1.introduction.Category;
-import run.attraction.api.v1.introduction.Newsletter;
-import run.attraction.api.v1.introduction.repository.NewsletterRepository;
-import run.attraction.api.v1.user.Interest;
-import run.attraction.api.v1.user.UserDetail;
-import run.attraction.api.v1.user.repository.UserDetailRepository;
-import run.attraction.api.v1.user.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
 public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
 
   private static final Logger log = LoggerFactory.getLogger(HomeNewsletterServiceImpl.class);
-  private final UserRepository userRepository;
   private final NewsletterRepository newsletterRepository;
-  private final SubscribeRepository subscribeRepository;
+  private final SubscriptionRepository subscriptionRepository;
   private final UserDetailRepository userDetailRepository;
 
   public List<String> getDefaultCategories() {
@@ -54,11 +57,9 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   }
 
   public List<NewsletterDetailDto> getMostNewsletterByCategory(String category, int size) {
-    log.info("카테고리로 뉴스레터 검색");
     List<Object[]> newslettersByCategory = newsletterRepository.findByCategory(Category.valueOf(category));
     Map<Long, Newsletter> categoryNewsletterMap = getNewsletterMap(newslettersByCategory);
-    log.info("가장 많이 구독한 뉴스레터 id 조회");
-    List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
+    List<Long> mostSubscribedNewsletterIds = subscriptionRepository.findMostSubscribedNewsletterIds();
 
     // 추가해야되는 상황이 발생할 수도 있어서 .collect(Collectors.toList()) 으로 생성
     List<NewsletterDetailDto> trendyNewsletters = mostSubscribedNewsletterIds.stream()
@@ -69,7 +70,6 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
         .collect(Collectors.toList());
 
     if (trendyNewsletters.size()<size){
-      log.info("조회 결과가 {}보다 적어 추가로 뉴스레터를 넣습니다.",size);
       addExtraTrendyNewsletters(size, categoryNewsletterMap, trendyNewsletters);
     }
     return trendyNewsletters;
@@ -107,25 +107,24 @@ public class HomeNewsletterServiceImpl implements  HomeNewsletterService {
   }
 
   public List<NewsletterDetailDto> getMostNewsletter(int size) {
-    log.info("가장 많이 구독한 뉴스레터 id 조회");
-    final List<Long> mostSubscribedNewsletterIds = subscribeRepository.findMostSubscribedNewsletterIds();
+    final List<Long> mostSubscribedNewsletterIds = subscriptionRepository.findMostSubscribedNewsletterIds();
 
     List<Newsletter> mostNewsletters;
-    log.info("id로 뉴스레터 조회");
     if (mostSubscribedNewsletterIds.size()>=size){
       mostNewsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds.subList(0, size));
-      log.info("mostNewsletters.size = {}", mostNewsletters.size());
     }else{
       final List<Newsletter> newsletters = newsletterRepository.findNewslettersByNewsletterIds(mostSubscribedNewsletterIds);
-      log.info("newsletters.size = {}", newsletters.size());
-      log.info("가장 많이 구독한 구독한 뉴스레터 조회 결과가 {}보다 적어 랜덤으로 추가합니다.",size);
       final List<Newsletter> newsletterRandom = newsletterRepository.findNewsletterRandom(mostSubscribedNewsletterIds, size - mostSubscribedNewsletterIds.size());
-      log.info("newsletterRandom.size = {}", newsletterRandom.size());
       mostNewsletters = Stream.concat(newsletters.stream(), newsletterRandom.stream()).toList();
     }
 
     return mostNewsletters.stream()
         .map(this::getNewsletterDetailDto)
         .toList();
+  }
+
+  public Page<NewslettersByCategoryResponse> getNewsletterBySearch(String search, int page, int size){
+    Pageable pageable = PageRequest.of(page,size);
+    return newsletterRepository.findNewsletterBySearch(search, pageable);
   }
 }

@@ -20,13 +20,17 @@ public record ArticleDTO(
     this(
         article.getId(),
         article.getTitle(),
-        article.getThumbnailUrl(),
-        article.getContentUrl(),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getReadingTime(),
         article.getReceivedAt(),
         readPercentage,
         new NewsletterDTO(newsletter)
     );
+  }
+
+  private static String buildUrl(String type, String path) {
+    return type + path;
   }
 }
 

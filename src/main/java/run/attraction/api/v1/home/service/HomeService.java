@@ -1,15 +1,18 @@
 package run.attraction.api.v1.home.service;
 
-import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.home.service.article.HomeArticleService;
-import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
+import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.newsletter.NewsletterDetailDto;
+import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
 import run.attraction.api.v1.home.service.newsletter.HomeNewsletterService;
+import run.attraction.api.v1.introduction.dto.response.NewslettersByCategoryResponse;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,10 +25,8 @@ public class HomeService {
 
   public List<String> getCategoriesByEmail(String email) {
     if (email.isEmpty()||(!newsletterService.hasUserDetail(email))) {
-      log.info("email값이 없습니다. 고정된 카테고리를 반환합니다.");
       return newsletterService.getDefaultCategories();
     }
-    log.info("유저의 관심사와 관련된 카테고리를 반환합니다.");
     return newsletterService.getUserCategories(email);
   }
 
@@ -36,12 +37,15 @@ public class HomeService {
     return newsletterService.getMostNewsletterByCategory(category, size);
   }
 
-  public List<ArticleDetailDto> getReceivedArticlesByEmail(String email){
-    LocalDate endDate = LocalDate.now();
-    LocalDate startDate = endDate.minusDays(6);
-    log.info("조회 범위");
-    log.info("startDate = {}",startDate);
-    log.info("endDate = {}",endDate);
-    return articleService.getReceivedArticles(email,startDate,endDate);
+  public List<ReceivedArticlesDto> getReceivedArticlesByEmail(String email, int size){
+    return articleService.getReceivedArticles(email, size);
+  }
+
+  public Page<ArticleSearchDto> getArticleSearchResult(String search, int page, int size){
+    return articleService.getArticleBySearch(search, page, size);
+  }
+
+  public Page<NewslettersByCategoryResponse> getNewsletterSearchResult(String search, int page, int size) {
+    return newsletterService.getNewsletterBySearch(search, page, size);
   }
 }

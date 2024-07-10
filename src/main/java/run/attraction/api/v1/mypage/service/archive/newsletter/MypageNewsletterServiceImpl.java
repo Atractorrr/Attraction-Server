@@ -1,35 +1,40 @@
 package run.attraction.api.v1.mypage.service.archive.newsletter;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import run.attraction.api.v1.archive.Subscribe;
-import run.attraction.api.v1.archive.repository.SubscribeRepository;
 import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.Subscription;
+import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 
 @Component
 @RequiredArgsConstructor
 public class MypageNewsletterServiceImpl implements MypageNewsletterService {
-  private final SubscribeRepository subscribeRepository;
+  private final SubscriptionRepository subscriptionRepository;
   private final NewsletterRepository newsletterRepository;
 
   @Override
   public List<MypageNewsletterDetail> getSubscribesByEmail(String email) {
-    final Optional<Subscribe> subscribe = subscribeRepository.findByUserEmail(email);
-    return subscribe
-        .map(sub -> {
-          List<Newsletter> newsletters = newsletterRepository.findNewslettersByNewsletterIds(sub.getNewsletterIds());
-          return newsletters.stream()
-              .map(newsletter -> new MypageNewsletterDetail(
-                  newsletter.getId(),
-                  newsletter.getThumbnailUrl(),
-                  newsletter.getName()))
-              .toList();
+    final List<Subscription> subscriptions = subscriptionRepository.findByUserEmailAndIsDeleted(email);
+
+    if(subscriptions.isEmpty()) {
+      return List.of();
+    }
+
+    return subscriptions.stream()
+        .map(subscription -> newsletterRepository.findById(subscription.getNewsletterId()))
+        .filter(Optional::isPresent)
+        .map(optionalNewsletter -> {
+          Newsletter newsletter = optionalNewsletter.get();
+          return new MypageNewsletterDetail(
+              newsletter.getId(),
+              newsletter.getThumbnailUrl(),
+              newsletter.getName());
         })
-        .orElseGet(ArrayList::new);
+        .toList();
   }
 }

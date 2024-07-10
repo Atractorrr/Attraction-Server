@@ -2,6 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 group = 'run'
@@ -11,9 +16,50 @@ java {
     sourceCompatibility = '21'
 }
 
+test {
+    finalizedBy jacocoTestReport // 테스트 종료후 항상 리포트 생성
+}
+
+jacocoTestReport {
+    dependsOn test // 리포트 생성을 위해서는 test가 먼저 완료되어야 함
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+
+        // QueryDSL Q클래스 제외
+        def Qdomains = []
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it,
+                        exclude: [
+                                '**/*Application*',
+                                '**/*Exception*',
+                                '**/dto/**',
+                        ] + Qdomains)
+            }))
+        }
+
+        xml.destination file("${layout.buildDirectory.get()}/jacoco/index.xml")
+        html.destination file("${layout.buildDirectory.get()}/jacoco/index.html")
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+    all {
+        //logback과의 충돌 방지
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }
 
@@ -64,6 +110,21 @@ dependencies {
     implementation 'com.google.api-client:google-api-client:2.0.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
     implementation 'com.google.apis:google-api-services-gmail:v1-rev20220404-2.0.0'
+
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka:3.2.0'
+
+    // 프로메테우스
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    //test
+    testRuntimeOnly 'com.h2database:h2'
+
+    //swagger - https://springdoc.org/
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }
 
 tasks.withType(JavaCompile).configureEach {

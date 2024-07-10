@@ -9,7 +9,7 @@ import run.attraction.api.v1.auth.provider.google.GoogleOAuthService;
 import java.util.Arrays;
 import java.util.List;
 import run.attraction.api.v1.auth.provider.oauth.OAuthService;
-import run.attraction.api.v1.auth.token.repository.GoogleRefreshTokenRepository;
+import run.attraction.api.v1.gmail.repository.GoogleRefreshTokenRepository;
 
 @Configuration
 @RequiredArgsConstructor

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public record ReceivedArticlesResponseDto(
-    List<ArticleDetailDto> mainPageArticles
+    List<ReceivedArticlesDto> mainPageArticles
 ){
   public ReceivedArticlesResponseDto {
     Objects.requireNonNull(mainPageArticles);

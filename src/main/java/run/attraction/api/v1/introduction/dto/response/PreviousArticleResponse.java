@@ -1,8 +1,14 @@
 package run.attraction.api.v1.introduction.dto.response;
 
-import java.time.LocalDate;
-import run.attraction.api.v1.archive.AdminArticle;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.querydsl.core.annotations.QueryProjection;
+import run.attraction.api.v1.archive.Article;
+import run.attraction.api.v1.archive.dto.NewsletterDTO;
+import run.attraction.api.v1.introduction.Newsletter;
 
+import java.time.LocalDate;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record PreviousArticleResponse(
     Long id,
     String title,
@@ -11,18 +17,53 @@ public record PreviousArticleResponse(
     String contentSummary,
     int readingTime,
     LocalDate receivedAt,
-    String newsletterName
+    String newsletterName,
+    NewsletterDTO newsletter
 ) {
-  public static PreviousArticleResponse from(AdminArticle article, String newsletterName) {
+
+  @QueryProjection
+  public PreviousArticleResponse(Article article, Newsletter newsletter) {
+    this(
+        article.getId(),
+        article.getTitle(),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
+        article.getContentSummary(),
+        article.getReadingTime() ,
+        article.getReceivedAt(),
+        newsletter.getName(),
+        new NewsletterDTO(newsletter)
+    );
+  }
+
+  public static PreviousArticleResponse from(Article article, String newsletterName) {
     return new PreviousArticleResponse(
         article.getId(),
         article.getTitle(),
-        article.getThumbnailUrl(),
-        article.getContentUrl(),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
         article.getContentSummary(),
         article.getReadingTime(),
         article.getReceivedAt(),
-        newsletterName
+        newsletterName,
+        null
     );
+  }
+  public static PreviousArticleResponse from(Article article, Newsletter newsletter) {
+    return new PreviousArticleResponse(
+        article.getId(),
+        article.getTitle(),
+        buildUrl("/thumbnail/", article.getThumbnailUrl()),
+        buildUrl("/article/", article.getContentUrl()),
+        article.getContentSummary(),
+        article.getReadingTime(),
+        article.getReceivedAt(),
+        null,
+        new NewsletterDTO(newsletter)
+    );
+  }
+
+  private static String buildUrl(String type, String path) {
+    return type + path;
   }
 }

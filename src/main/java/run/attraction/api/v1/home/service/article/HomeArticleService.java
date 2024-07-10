@@ -1,9 +1,12 @@
 package run.attraction.api.v1.home.service.article;
 
-import java.time.LocalDate;
+import org.springframework.data.domain.Page;
+import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
+import run.attraction.api.v1.home.service.dto.search.ArticleSearchDto;
+
 import java.util.List;
-import run.attraction.api.v1.home.service.dto.article.ArticleDetailDto;
 
 public interface HomeArticleService {
-  List<ArticleDetailDto> getReceivedArticles(String email, LocalDate startDate, LocalDate endDate);
+  List<ReceivedArticlesDto> getReceivedArticles(String email, int size);
+  Page<ArticleSearchDto> getArticleBySearch(String search, int page, int size);
 }

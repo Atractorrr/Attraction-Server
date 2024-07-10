@@ -1,5 +1,7 @@
 package run.attraction.api.v1.mypage.service;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import run.attraction.api.v1.mypage.service.archive.article.MypageArticleService;
 import run.attraction.api.v1.mypage.service.archive.newsletter.MypageNewsletterService;
 import run.attraction.api.v1.mypage.service.calendar.MypageCalendarService;
-import run.attraction.api.v1.mypage.service.dto.archive.article.MypageArticle;
+import run.attraction.api.v1.mypage.service.dto.archive.article.RecentArticlesDto;
 import run.attraction.api.v1.mypage.service.dto.archive.newsletter.MypageNewsletterDetail;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarDay;
 import run.attraction.api.v1.mypage.service.dto.calendar.CalendarResponseDto;
-import run.attraction.api.v1.mypage.service.dto.userDetail.UpdateUserDetailDto;
 import run.attraction.api.v1.mypage.service.dto.userDetail.UserDetailDto;
 import run.attraction.api.v1.mypage.service.user.MypageUserService;
 
+@Timed("mypage.service")
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,27 +41,45 @@ public class MypageService {
     return new CalendarResponseDto(calendarDays);
   }
 
-  public List<MypageArticle> getRecentArticlesByEmail(String email){
-    return articleService.getUserRecentArticles(email);
+  @Counted("mypage.service")
+  public List<RecentArticlesDto> getRecentArticlesByEmail(String email, int size){
+    return articleService.getUserRecentArticles(email, size);
   }
 
   @Transactional
+  @Counted("mypage.service")
   public void updateProfileImgByEmail(String email, String profileImg){
     userService.updateProfileImg(email, profileImg);
   }
 
   @Transactional
+  @Counted("mypage.service")
   public void updateBackgroundImgByEmail(String email, String backgroundImg){
     userService.updateBackgroundImg(email, backgroundImg);
   }
 
-  public List<MypageNewsletterDetail> getSubscribeByEmail(String email){
-    return newsletterService.getSubscribesByEmail(email);
+  @Transactional
+  public void updateNicknameByEmail(String email, String nickname){
+    userService.updateNickname(email, nickname);
   }
 
-  @Transactional(timeout = 1000)
-  public void updateUserDetails(UpdateUserDetailDto updateUserDetailDto){
-    userService.updateUserDetail(updateUserDetailDto);
+  @Transactional
+  public void updateUserExpirationByEmail(String email, Integer expiration){
+    userService.updateUserExpiration(email, expiration);
+  }
+
+  @Transactional
+  public void updateInterestByEmail(String email, List<String> interest){
+    userService.updateInterest(email, interest);
+  }
+
+  @Transactional
+  public void updateOccupationByEmail(String email, String occupation){
+    userService.updateOccupation(email, occupation);
+  }
+
+  public List<MypageNewsletterDetail> getSubscribeByEmail(String email){
+    return newsletterService.getSubscribesByEmail(email);
   }
 
   @Transactional
@@ -67,4 +87,8 @@ public class MypageService {
     return userService.checkNicknameDuplication(nickname);
   }
 
+  @Transactional
+  public void resignByEmail(String email){
+    userService.updateIsDeleted(email);
+  }
 }

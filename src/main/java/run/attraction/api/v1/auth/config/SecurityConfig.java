@@ -1,17 +1,20 @@
 package run.attraction.api.v1.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import run.attraction.api.v1.auth.filter.SessionFilter;
+import run.attraction.api.v1.user.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -19,8 +22,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
   private final AuthenticationProvider authenticationProvider;
-//  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final SessionFilter sessionFilter;
 
+  private static final String COOKIE_KEY = "JSESSIONID";
+  private static final String[] WHITE_LIST = {
+      "/api/v1/auth/login",
+      "/api/v1/auth/google",
+      "/api/v1/newsletters/**",
+      "/api/v1/search/**",
+      "/api/v1/rank/**",
+      "/favicon.ico"
+      };
+  @Value("${path.monitoring}")
+  public String monitoringPath;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,18 +43,18 @@ public class SecurityConfig {
         .cors(configurer ->
             configurer.configurationSource(corsConfigurationSource()))
         .formLogin(AbstractHttpConfigurer::disable)
+        .logout(logout -> logout
+            .logoutUrl("api/v1/auth/logout")
+            .deleteCookies(COOKIE_KEY))
         .httpBasic(AbstractHttpConfigurer::disable)
-        .sessionManagement(session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(req ->
-            // auth 관련 요청은 모두 허가
-//            req.requestMatchers("/api/v1/auth/**").permitAll()
-//                .anyRequest().authenticated()
-
-            //테스트를 위해 모두 허가
-            req.anyRequest().permitAll())
-//        .authenticationProvider(authenticationProvider)
-//        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .authorizeHttpRequests(req -> {
+          req.requestMatchers(WHITE_LIST).permitAll();
+          req.requestMatchers("/swagger","/api-docs","/swagger-ui/**").hasRole(Role.ADMIN.name());
+          req.requestMatchers(monitoringPath).permitAll();
+          req.anyRequest().authenticated();
+        })
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 
@@ -57,4 +71,5 @@ public class SecurityConfig {
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
+
 }
