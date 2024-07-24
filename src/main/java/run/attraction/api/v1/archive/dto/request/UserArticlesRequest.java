@@ -14,4 +14,5 @@ public class UserArticlesRequest {
   private String isHideRead = "false";
   private String category;
   private String q; // search query
+  private String newsletterId;
 }
