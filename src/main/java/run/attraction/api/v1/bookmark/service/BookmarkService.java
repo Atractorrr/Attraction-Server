@@ -33,10 +33,7 @@ public class BookmarkService {
     Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(DESC) ? Sort.Order.desc(request.getSort()[0]) : Sort.Order.asc(request.getSort()[0]));
     Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sortObj);
 
-    return articleRepository.findArticlesByArticleIds(bookmarkArticleIds,
-                                                      request.getCategory(),
-                                                      request.getQ(),
-                                                      pageable);
+    return articleRepository.findArticlesByArticleIds(bookmarkArticleIds, request, pageable);
   }
 
   @Transactional
