@@ -18,6 +18,7 @@ import run.attraction.api.v1.archive.QReadBox;
 import run.attraction.api.v1.archive.dto.ArticleDTO;
 import run.attraction.api.v1.archive.dto.QArticleDTO;
 import run.attraction.api.v1.archive.dto.request.UserArticlesRequest;
+import run.attraction.api.v1.bookmark.dto.BookmarkArticleRequest;
 import run.attraction.api.v1.home.service.dto.article.QReceivedArticlesDto;
 import run.attraction.api.v1.home.service.dto.article.ReceivedArticlesDto;
 import run.attraction.api.v1.introduction.Category;
@@ -143,9 +144,8 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
   }
 
   @Override
-  public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, String category, String search,
-                                                   Pageable pageable) {
-    BooleanExpression predicate = buildPredicateByArticleIds(articleIds, category, search);
+  public Page<ArticleDTO> findArticlesByArticleIds(List<Long> articleIds, BookmarkArticleRequest request, Pageable pageable) {
+    BooleanExpression predicate = buildPredicateByArticleIds(articleIds, request.getCategory(), request.getQ(), request.getNewsletterId());
     String userEmail = "";
     List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
     Long total = getTotal(predicate);
@@ -153,15 +153,21 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     return new PageImpl<>(articles, pageable, total);
   }
 
-  private BooleanExpression buildPredicateByArticleIds(List<Long> articleIds, String category, String search) {
+  private BooleanExpression buildPredicateByArticleIds(List<Long> articleIds, String category, String search, String newsletterId) {
 
     BooleanExpression predicate = article.id.in(articleIds);
 
-    if (isNotNullAndNotEmpty(category)) {
+    if (isNotNullAndNotEmpty(category) && isNullOrEmpty(newsletterId)) {
       predicate = predicate.and(article.newsletterEmail.in(
           JPAExpressions.select(newsletter.email)
               .from(newsletter)
               .where(newsletter.category.eq(Category.valueOf(category)))
+      ));
+    } else if (isNotNullAndNotEmpty(newsletterId) && isNullOrEmpty(category)) {
+      predicate = predicate.and(article.newsletterEmail.in(
+          JPAExpressions.select(newsletter.email)
+              .from(newsletter)
+              .where(newsletter.id.eq(Long.valueOf(newsletterId)))
       ));
     }
 

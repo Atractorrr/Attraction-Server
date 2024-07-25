@@ -13,4 +13,5 @@ public class BookmarkArticleRequest {
   private String[] sort = {"receivedAt", "desc"};
   private String category;
   private String q; // search query
+  private String newsletterId;
 }
