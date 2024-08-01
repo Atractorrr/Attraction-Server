@@ -1,6 +1,6 @@
 package run.attraction.api.v1.gmail.event;
 
-import io.jsonwebtoken.lang.Assert;
+import org.springframework.util.Assert;
 
 public record SubscribeVo(
     String newsletterEmail,
