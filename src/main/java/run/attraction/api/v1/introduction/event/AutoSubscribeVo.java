@@ -1,6 +1,6 @@
 package run.attraction.api.v1.introduction.event;
 
-import io.jsonwebtoken.lang.Assert;
+import org.springframework.util.Assert;
 
 public record AutoSubscribeVo(
     String userEmail,
