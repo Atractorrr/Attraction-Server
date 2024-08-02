@@ -100,10 +100,7 @@ public class SubscriptionService {
   }
 
   public List<SubscribedNewsletterResponse> getUserSubscribedNewsletters(String userEmail) {
-    List<Long> subscribedNewslettersByUser = subscriptionRepository.findByUserEmail(userEmail)
-        .stream()
-        .map(Subscription::getNewsletterId)
-        .toList();
+    List<Long> subscribedNewslettersByUser = subscriptionRepository.findNewsletterIdsByUserEmailWithoutIsDeleted(userEmail);
     List<Newsletter> newsletters = newsletterRepository.findAllById(subscribedNewslettersByUser);
 
     return newsletters
