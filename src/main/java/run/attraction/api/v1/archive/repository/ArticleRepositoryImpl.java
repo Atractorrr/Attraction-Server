@@ -49,7 +49,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
     BooleanExpression predicate = buildPredicate(newsletterEmails, request);
     List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
-    Long total = getTotal(predicate);
+    Long total = getTotal(predicate, userEmail);
 
     return new PageImpl<>(articles, pageable, total);
   }
@@ -122,12 +122,15 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         : article.receivedAt.desc());
   }
 
-  private Long getTotal(BooleanExpression predicate) {
+  private Long getTotal(BooleanExpression predicate, String userEmail) {
     return Optional.ofNullable(
         queryFactory
             .select(article.count())
             .from(article)
+            .leftJoin(readBox).on(this.article.id.eq(readBox.articleId).and(readBox.userEmail.eq(userEmail)))
+            .join(newsletter).on(article.newsletterEmail.eq(newsletter.email))
             .where(predicate)
+            .where(article.receivedAt.between(getSevenDaysAgo(), getCurrentDate()))
             .fetchOne()
     ).orElse(0L);
   }
@@ -148,7 +151,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     BooleanExpression predicate = buildPredicateByArticleIds(articleIds, request.getCategory(), request.getQ(), request.getNewsletterId());
     String userEmail = "";
     List<ArticleDTO> articles = getArticles(predicate, pageable, userEmail);
-    Long total = getTotal(predicate);
+    Long total = getTotal(predicate, userEmail);
 
     return new PageImpl<>(articles, pageable, total);
   }
