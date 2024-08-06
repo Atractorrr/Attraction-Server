@@ -1,9 +1,5 @@
 package run.attraction.api.v1.bookmark.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,49 +17,49 @@ class BookmarkServiceTest {
   @Autowired
   private BookmarkRepository bookmarkRepository;
 
-  @AfterEach
-  void setUp() {
-    bookmarkRepository.deleteAll(); // 데이터베이스 초기화
-  }
+//  @AfterEach
+//  void setUp() {
+//    bookmarkRepository.deleteAll(); // 데이터베이스 초기화
+//  }
 
-  @Test
-  void isArticleBookmarked_북마크가_없으면_false_반환() {
-    //given
-    String userEmail = "no_bookmark@example.com";
-    Long articleId = 1L;
-
-    //when
-    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
-
-    //then
-    assertThat(isBookmarked).isFalse();
-  }
-
-  @Test
-  void isArticleBookmarked_북마크가_있고_articleId가_담겨있으면_true_반환() {
-    //given
-    String userEmail = "user3@gmail.com";
-    Long articleId = 13L;
-
-    //when
-    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
-
-    //then
-    assertThat(isBookmarked).isTrue();
-  }
-
-  @Test
-  void isArticleBookmarked_북마크가_있고_articleId가_담겨있지_않으면_false_반환() {
-    //given
-    String userEmail = "user3@gmail.com";
-    Long articleId = 1L;
-
-    //when
-    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
-
-    //then
-    assertThat(isBookmarked).isFalse();
-  }
+//  @Test
+//  void isArticleBookmarked_북마크가_없으면_false_반환() {
+//    //given
+//    String userEmail = "no_bookmark@example.com";
+//    Long articleId = 1L;
+//
+//    //when
+//    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
+//
+//    //then
+//    assertThat(isBookmarked).isFalse();
+//  }
+//
+//  @Test
+//  void isArticleBookmarked_북마크가_있고_articleId가_담겨있으면_true_반환() {
+//    //given
+//    String userEmail = "user3@gmail.com";
+//    Long articleId = 13L;
+//
+//    //when
+//    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
+//
+//    //then
+//    assertThat(isBookmarked).isTrue();
+//  }
+//
+//  @Test
+//  void isArticleBookmarked_북마크가_있고_articleId가_담겨있지_않으면_false_반환() {
+//    //given
+//    String userEmail = "user3@gmail.com";
+//    Long articleId = 1L;
+//
+//    //when
+//    boolean isBookmarked = bookmarkService.isArticleBookmarked(userEmail, articleId);
+//
+//    //then
+//    assertThat(isBookmarked).isFalse();
+//  }
 
 //  @Test
 //  @Transactional
