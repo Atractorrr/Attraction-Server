@@ -120,6 +120,9 @@ dependencies {
 
     //swagger - https://springdoc.org/
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // Session(Redis)
+    implementation 'org.springframework.session:spring-session-data-redis'
 }
 
 tasks.withType(JavaCompile).configureEach {
