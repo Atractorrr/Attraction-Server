@@ -26,7 +26,6 @@ import run.attraction.api.v1.user.service.UserDetailsServiceForSecurity;
 @Component
 @RequiredArgsConstructor
 public class SessionFilter extends OncePerRequestFilter {
-  public static final String LOGIN_MEMBER = "LOGIN_MEMBER";
   private static final List<String> WHITE_LIST = List.of(
       "/api/v1/auth/login",
       "/api/v1/auth/google",
