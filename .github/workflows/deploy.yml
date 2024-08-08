@@ -76,6 +76,9 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
+            // 네트워크 생성
+            docker network create api_network || true
+            
             docker stop attraction-api-server || true  
             docker rm attraction-api-server || true
             docker pull ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
@@ -83,15 +86,15 @@ jobs:
             # Redis 컨테이너 실행
             docker stop redis-server || true
             docker rm redis-server || true
-            docker run -d --name redis-server -p 6379:6379 redis:latest
+            docker run -d --name redis-server --network api_network -p 6379:6379 redis:latest
             
             # Spring Boot 애플리케이션 컨테이너 실행
-            docker run -d --name attraction-api-server --link redis-server:redis -e TZ=Asia/Seoul -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
+            docker run -d --name attraction-api-server --network api_network --link redis-server:redis -e TZ=Asia/Seoul -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ steps.ecr-login.outputs.registry }}/attraction-api-server:latest
             
              # filebeat 실행
             docker stop filebeat || true
             docker rm filebeat || true
-            docker run -d --name filebeat -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
+            docker run -d --name filebeat --network api_network -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
       
       - name: 슬랙 알림
         uses: 8398a7/action-slack@v3
