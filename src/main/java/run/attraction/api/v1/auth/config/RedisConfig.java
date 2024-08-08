@@ -32,30 +32,30 @@ public class RedisConfig {
     return new LettuceConnectionFactory(host, port);
   }
 
-  @Bean
-  public RedisTemplate<String,Object> redisTemplate() {
-    final RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
-    redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
-    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-    redisTemplate.setHashValueSerializer(RedisSerializer.java());
-    redisTemplate.setConnectionFactory(redisConnectionFactory());
-    return redisTemplate;
-  }
-
-  private ObjectMapper objectMapper() {
-    PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
-        .builder()
-        .allowIfSubType(Object.class)
-        .build();
-
-    return new ObjectMapper()
-        .findAndRegisterModules()
-        .enable(SerializationFeature.INDENT_OUTPUT)
-        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false)
-        .registerModule(new JavaTimeModule())
-        .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
-  }
+//  @Bean
+//  public RedisTemplate<String,Object> redisTemplate() {
+//    final RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+//    redisTemplate.setKeySerializer(new StringRedisSerializer());
+//    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+//    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+//    redisTemplate.setHashValueSerializer(RedisSerializer.java());
+//    redisTemplate.setConnectionFactory(redisConnectionFactory());
+//    return redisTemplate;
+//  }
+//
+//  private ObjectMapper objectMapper() {
+//    PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
+//        .builder()
+//        .allowIfSubType(Object.class)
+//        .build();
+//
+//    return new ObjectMapper()
+//        .findAndRegisterModules()
+//        .enable(SerializationFeature.INDENT_OUTPUT)
+//        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+//        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false)
+//        .registerModule(new JavaTimeModule())
+//        .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
+//  }
 }
 
