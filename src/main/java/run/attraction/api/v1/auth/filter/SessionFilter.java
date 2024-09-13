@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import run.attraction.api.v1.auth.session.SessionService;
 import run.attraction.api.v1.auth.session.exception.InValidUserException;
@@ -23,7 +22,6 @@ import run.attraction.api.v1.auth.session.exception.SessionNotFoundException;
 import run.attraction.api.v1.user.service.UserDetailsServiceForSecurity;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class SessionFilter extends OncePerRequestFilter {
   private static final List<String> WHITE_LIST = List.of(
