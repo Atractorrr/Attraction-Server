@@ -80,11 +80,6 @@ jobs:
             
             # Spring Boot 애플리케이션 컨테이너 실행
             docker run -d --name attraction-api-server --link redis-server:redis -e TZ=Asia/Seoul -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ secrets.DOCKERHUB_USERNAME }}/attraction-api-server:latest
-            
-             # filebeat 실행
-            docker stop filebeat || true
-            docker rm filebeat || true
-            docker run -d --name filebeat -v "$HOME/workspace/logs:/usr/share/filebeat/logs" -v "$HOME/workspace/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml" docker.elastic.co/beats/filebeat:8.14.1
 
       - name: 슬랙 알림
         uses: 8398a7/action-slack@v3
