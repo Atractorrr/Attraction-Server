@@ -30,3 +30,11 @@ jobs:
 
       - name: 빌드하기 및 테스트 하기
         run: ./gradlew clean build
+
+#      임시추가
+      - name: Upload Test Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: build/reports/tests/test
