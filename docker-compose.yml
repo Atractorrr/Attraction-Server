@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  redis-server:
+    image: redis:latest
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  attraction-api-server:
+    image: ${DOCKERHUB_USERNAME}/attraction-api-server:latest
+    container_name: attraction-api-server
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /home/ec2-user/workspace/logs:/logs
+    depends_on:
+      - redis-server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
