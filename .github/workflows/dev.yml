@@ -69,17 +69,9 @@ jobs:
           key: ${{ secrets.DEV_EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop attraction-api-server || true  
-            docker rm attraction-api-server || true
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/attraction-api-server:latest
-            
-            # Redis 컨테이너 실행
-            docker stop redis-server || true
-            docker rm redis-server || true
-            docker run -d --name redis-server -p 6379:6379 redis:latest
-            
-            # Spring Boot 애플리케이션 컨테이너 실행
-            docker run -d --name attraction-api-server --link redis-server:redis -e TZ=Asia/Seoul -p 8080:8080 -v /home/ec2-user/workspace/logs:/logs ${{ secrets.DOCKERHUB_USERNAME }}/attraction-api-server:latest
+            docker-compose down || true  # 기존 컨테이너 중지 및 제거
+            docker-compose pull           # 최신 이미지를 가져옴
+            docker-compose up -d 
 
       - name: 슬랙 알림
         uses: 8398a7/action-slack@v3
