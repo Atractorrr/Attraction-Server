@@ -74,7 +74,8 @@ jobs:
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             # docker-compose 명령 실행
             docker-compose down || true  
-            docker-compose pull           
+            docker-compose pull
+            docker-compose up -d
 
       - name: 슬랙 알림
         uses: 8398a7/action-slack@v3
