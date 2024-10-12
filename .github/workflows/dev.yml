@@ -70,7 +70,8 @@ jobs:
           script_stop: true
           script: |
             cd /home/ec2-user/app
-            wget https://raw.githubusercontent.com/Atractorrr/Attraction-Server/dev/docker-compose.yml
+            wget -O docker-compose.yml https://raw.githubusercontent.com/Atractorrr/Attraction-Server/dev/docker-compose.yml
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             # docker-compose 명령 실행
             docker-compose down || true  
             docker-compose pull           
