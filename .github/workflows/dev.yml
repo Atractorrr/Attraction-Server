@@ -69,9 +69,11 @@ jobs:
           key: ${{ secrets.DEV_EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker-compose down || true  # 기존 컨테이너 중지 및 제거
-            docker-compose pull           # 최신 이미지를 가져옴
-            docker-compose up -d 
+            cd /home/ec2-user/app
+            wget https://raw.githubusercontent.com/Atractorrr/Attraction-Server/dev/docker-compose.yml
+            # docker-compose 명령 실행
+            docker-compose down || true  
+            docker-compose pull           
 
       - name: 슬랙 알림
         uses: 8398a7/action-slack@v3
