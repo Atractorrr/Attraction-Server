@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS newsletter
     nickname                  VARCHAR(255),
     subscribe_link            VARCHAR(255),
     thumbnail_url             VARCHAR(255),
+    prev_article_list_url     VARCHAR(255),
     upload_days               VARCHAR(255),
     has_confirmation_email    BOOLEAN,
     is_auto_subscribe_enabled BOOLEAN,
