@@ -9,7 +9,9 @@ public record NewsletterDTO(
     Long id,
     String name,
     Category category,
-    String thumbnailUrl
+    String thumbnailUrl,
+    String homepageUrl,
+    String prevArticleListUrl
 ) {
   @QueryProjection
   public NewsletterDTO(Newsletter newsletter) {
@@ -17,7 +19,9 @@ public record NewsletterDTO(
         newsletter.getId(),
         newsletter.getName(),
         newsletter.getCategory(),
-        newsletter.getThumbnailUrl()
+        newsletter.getThumbnailUrl(),
+        newsletter.getHomepageUrl(),
+        newsletter.getPrevArticleListUrl()
     );
   }
 
@@ -26,7 +30,9 @@ public record NewsletterDTO(
         newsletter.getId(),
         newsletter.getName(),
         newsletter.getCategory(),
-        newsletter.getThumbnailUrl()
+        newsletter.getThumbnailUrl(),
+        newsletter.getHomepageUrl(),
+        newsletter.getPrevArticleListUrl()
     );
   }
 }
