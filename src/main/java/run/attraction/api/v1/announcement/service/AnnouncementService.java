@@ -1,5 +1,6 @@
 package run.attraction.api.v1.announcement.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +20,17 @@ import run.attraction.api.v1.announcement.repository.AnnouncementRepository;
 @RequiredArgsConstructor
 public class AnnouncementService {
 
+    private static final int PINNED_LIMIT = 3;
+
     private final AnnouncementRepository announcementRepository;
 
     @Transactional
     public void createPost(final PostCreateRequestDTO request) {
-        PostCategory category = PostCategory.valueOf(request.postCategory().toUpperCase());
+        if (request.isPinned()) {
+            checkPinnedPostCount();
+        }
 
+        PostCategory category = PostCategory.valueOf(request.postCategory().toUpperCase());
         Post post = Post.builder()
                 .title(request.title())
                 .content(request.content())
@@ -33,6 +39,12 @@ public class AnnouncementService {
                 .build();
 
         announcementRepository.save(post);
+    }
+
+    private void checkPinnedPostCount() {
+        if (announcementRepository.countPinnedPosts() >= PINNED_LIMIT) {
+            throw new IllegalArgumentException("고정글은 " + PINNED_LIMIT + "개를 초과할 수 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -54,11 +66,16 @@ public class AnnouncementService {
     }
 
     @Transactional
-    public void updatePostById(final Long postId, final UpdatePostRequestDTO post) {
+    public void updatePostById(final Long postId, final UpdatePostRequestDTO request) {
         final Post beforePost = announcementRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
 
-        beforePost.update(post.title(), post.content(), PostCategory.findByName(post.postCategory()), post.isPinned());
+        if (request.isPinned()) {
+            checkPinnedPostCount();
+        }
+
+        beforePost.update(request.title(), request.content(), PostCategory.findByName(request.postCategory()),
+                request.isPinned());
         announcementRepository.save(beforePost);
     }
 
@@ -70,10 +87,10 @@ public class AnnouncementService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSummaryDTO> findPinnedPosts(Pageable pageable) {
-        final Page<Post> posts = announcementRepository.findAllWithPinned(pageable);
+    public List<PostSummaryDTO> findPinnedPosts() {
+        final List<Post> posts = announcementRepository.findAllWithPinned();
 
-        return posts.map(PostSummaryDTO::new);
+        return posts.stream().map(PostSummaryDTO::new).toList();
     }
 
     @Transactional(readOnly = true)

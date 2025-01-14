@@ -3,6 +3,7 @@ package run.attraction.api.v1.announcement.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,12 +83,8 @@ public class AnnouncementController {
 
     @GetMapping("/pinned")
     @Operation(summary = "고정된 모든 게시물 가져오기", description = "고정된 모든 게시물을 가져오는 로직입니다.")
-    public ApiResponse<Page<PostSummaryDTO>> getPinnedPosts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        final Page<PostSummaryDTO> posts = announcementService.findPinnedPosts(pageable);
+    public ApiResponse<List<PostSummaryDTO>> getPinnedPosts() {
+        final List<PostSummaryDTO> posts = announcementService.findPinnedPosts();
 
         return ApiResponse.from(HttpStatus.OK, "성공", posts);
     }

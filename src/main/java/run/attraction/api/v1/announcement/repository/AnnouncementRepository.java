@@ -1,5 +1,6 @@
 package run.attraction.api.v1.announcement.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +43,7 @@ public interface AnnouncementRepository extends JpaRepository<Post, Long> {
             WHERE p.isPinned = true
             ORDER BY p.createdAt DESC 
             """)
-    Page<Post> findAllWithPinned(Pageable pageable);
+    List<Post> findAllWithPinned();
 
     @Query("""
             SELECT p
@@ -57,4 +58,11 @@ public interface AnnouncementRepository extends JpaRepository<Post, Long> {
             ORDER BY p.createdAt DESC
             """)
     Page<Post> findPostsBySearchQuery(Pageable pageable, String searchType, String searchQuery);
+
+    @Query("""
+            SELECT COUNT(p)
+            FROM Post p
+            WHERE p.isPinned = true
+            """)
+    int countPinnedPosts();
 }
