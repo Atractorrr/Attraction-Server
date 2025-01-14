@@ -4,7 +4,7 @@ import java.util.Objects;
 import run.attraction.api.v1.announcement.Post;
 
 public record RelatedDTO(
-        RelatedPostDTO previous,
+        RelatedPostDTO prev,
         RelatedPostDTO next
 ) {
     public RelatedDTO(Post previousPost, Post nextPost) {
