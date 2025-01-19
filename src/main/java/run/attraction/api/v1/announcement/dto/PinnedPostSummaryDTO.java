@@ -14,7 +14,7 @@ public record PinnedPostSummaryDTO(
         this(
                 post.getId(),
                 post.getTitle(),
-                post.getPostCategory().getName(),
+                post.getPostCategory().name(),
                 post.getCreatedAt(),
                 post.getViewCount()
         );
