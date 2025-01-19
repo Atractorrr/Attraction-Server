@@ -7,8 +7,8 @@ public record PostSearchRequest(
         Integer size
 ) {
     public PostSearchRequest {
-        if (page == null || page < 0) {
-            page = 0;
+        if (page == null || page < 1) {
+            page = 1;
         }
         if (size == null || size <= 0) {
             size = 3;
