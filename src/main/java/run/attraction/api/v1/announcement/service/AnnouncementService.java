@@ -74,13 +74,21 @@ public class AnnouncementService {
             checkPinnedPostCount();
         }
 
-        beforePost.update(request.title(), request.content(), PostCategory.valueOf(request.postCategory()),
+        beforePost.update(request.title(), request.content(), PostCategory.find(request.postCategory()),
                 request.isPinned());
         announcementRepository.save(beforePost);
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSummaryDTO> findPosts(Pageable pageable) {
+    public Page<PostSummaryDTO> findPosts(Pageable pageable, String category) {
+        if (category != null) {
+            final PostCategory postCategory = PostCategory.find(category);
+            final Page<Post> postsByPostCategory = announcementRepository.findPostsByPostCategory(pageable,
+                    postCategory);
+
+            return postsByPostCategory.map(PostSummaryDTO::new);
+        }
+
         final Page<Post> posts = announcementRepository.findAllWithoutPinned(pageable);
 
         return posts.map(PostSummaryDTO::new);
