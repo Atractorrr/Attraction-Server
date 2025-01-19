@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import run.attraction.api.v1.announcement.Post;
+import run.attraction.api.v1.announcement.PostCategory;
 
 public interface AnnouncementRepository extends JpaRepository<Post, Long> {
 
@@ -65,4 +66,13 @@ public interface AnnouncementRepository extends JpaRepository<Post, Long> {
             WHERE p.isPinned = true
             """)
     int countPinnedPosts();
+
+
+    @Query("""
+            SELECT p 
+            FROM Post p 
+            WHERE p.postCategory = :postCategory
+            AND p.isPinned = false
+            """)
+    Page<Post> findPostsByPostCategory(Pageable pageable, PostCategory postCategory);
 }

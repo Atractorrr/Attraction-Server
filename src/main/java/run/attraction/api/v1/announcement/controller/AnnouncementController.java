@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import run.attraction.api.v1.announcement.PostCategory;
+import run.attraction.api.v1.announcement.dto.CustomPageDTO;
 import run.attraction.api.v1.announcement.dto.PostDTO;
 import run.attraction.api.v1.announcement.dto.PostSummaryDTO;
 import run.attraction.api.v1.announcement.dto.request.PostCreateRequestDTO;
@@ -71,14 +73,17 @@ public class AnnouncementController {
 
     @GetMapping
     @Operation(summary = "고정되지 않은 모든 게시물 가져오기", description = "고정되지 않은 모든 게시물을 가져오는 로직입니다.")
-    public ApiResponse<Page<PostSummaryDTO>> getPosts(
+    public ApiResponse<CustomPageDTO<PostSummaryDTO>> getPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String category
+
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        final Page<PostSummaryDTO> posts = announcementService.findPosts(pageable);
+        final Page<PostSummaryDTO> posts = announcementService.findPosts(pageable, category);
+        CustomPageDTO<PostSummaryDTO> customPage = new CustomPageDTO<>(posts, PostCategory.find(category));
 
-        return ApiResponse.from(HttpStatus.OK, "성공", posts);
+        return ApiResponse.from(HttpStatus.OK, "성공", customPage);
     }
 
     @GetMapping("/pinned")

@@ -16,9 +16,9 @@ public enum PostCategory {
         this.name = name;
     }
 
-    public static PostCategory findByName(final String name) {
+    public static PostCategory find(final String name) {
         return Arrays.stream(PostCategory.values())
-                .filter(postCategory -> postCategory.getName().equals(name))
+                .filter(postCategory -> postCategory.name().equals(name.toUpperCase()))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 카테고리입니다."));
     }
