@@ -74,7 +74,7 @@ public class AnnouncementService {
             checkPinnedPostCount();
         }
 
-        beforePost.update(request.title(), request.content(), PostCategory.findByName(request.postCategory()),
+        beforePost.update(request.title(), request.content(), PostCategory.valueOf(request.postCategory()),
                 request.isPinned());
         announcementRepository.save(beforePost);
     }

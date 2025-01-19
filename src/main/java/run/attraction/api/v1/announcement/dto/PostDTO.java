@@ -19,7 +19,7 @@ public record PostDTO(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getPostCategory().getName(),
+                post.getPostCategory().name(),
                 post.getCreatedAt(),
                 post.getModifiedAt(),
                 post.getViewCount(),
