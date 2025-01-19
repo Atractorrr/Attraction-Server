@@ -22,7 +22,7 @@ public record CustomPageDTO<T>(
                 page.isFirst(),
                 page.isLast(),
                 page.getSize(),
-                page.getNumber(),
+                page.getNumber() + 1,
                 category,
                 page.getContent()
         );

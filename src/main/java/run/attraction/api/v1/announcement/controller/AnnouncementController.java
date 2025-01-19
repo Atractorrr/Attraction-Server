@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import run.attraction.api.v1.announcement.PostCategory;
 import run.attraction.api.v1.announcement.dto.CustomPageDTO;
+import run.attraction.api.v1.announcement.dto.OneBasedPage;
 import run.attraction.api.v1.announcement.dto.PostDTO;
 import run.attraction.api.v1.announcement.dto.PostSummaryDTO;
 import run.attraction.api.v1.announcement.dto.request.PostCreateRequestDTO;
@@ -74,16 +76,31 @@ public class AnnouncementController {
     @GetMapping
     @Operation(summary = "고정되지 않은 모든 게시물 가져오기", description = "고정되지 않은 모든 게시물을 가져오는 로직입니다.")
     public ApiResponse<CustomPageDTO<PostSummaryDTO>> getPosts(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String category
 
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = createPageable(page, size);
         final Page<PostSummaryDTO> posts = announcementService.findPosts(pageable, category);
-        CustomPageDTO<PostSummaryDTO> customPage = new CustomPageDTO<>(posts, PostCategory.find(category));
+        CustomPageDTO<PostSummaryDTO> customPage = new CustomPageDTO<>(posts, resolvePostCategory(category));
 
         return ApiResponse.from(HttpStatus.OK, "성공", customPage);
+    }
+
+    private Pageable createPageable(int page, int size) {
+        if (page < 1) {
+            throw new IllegalArgumentException("페이지 번호는 1 이상이어야 합니다.");
+        }
+
+        return PageRequest.of(page - 1, size);
+    }
+
+    private PostCategory resolvePostCategory(String category) {
+        if (Objects.isNull(category)) {
+            return null;
+        }
+        return PostCategory.find(category);
     }
 
     @GetMapping("/pinned")
@@ -96,11 +113,11 @@ public class AnnouncementController {
 
     @GetMapping("/search")
     @Operation(summary = "게시물 검색", description = "검색 타입(제목/내용/제목+내용)에 맞는 게시물을 검색해주는 로직")
-    public ApiResponse<Page<PostSummaryDTO>> searchPosts(@ModelAttribute PostSearchRequest request
+    public ApiResponse<OneBasedPage<PostSummaryDTO>> searchPosts(@ModelAttribute PostSearchRequest request
     ) {
         Pageable pageable = PageRequest.of(request.page(), request.size());
         final Page<PostSummaryDTO> posts = announcementService.findPostsBySearchQuery(pageable, request);
 
-        return ApiResponse.from(HttpStatus.OK, "성공", posts);
+        return ApiResponse.from(HttpStatus.OK, "성공", OneBasedPage.of(posts));
     }
 }
