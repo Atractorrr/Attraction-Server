@@ -47,6 +47,9 @@ public class Newsletter extends AuditableEntity {
   @Column(nullable = false)
   private String subscribeLink;
 
+  @Column
+  private String prevArticleListUrl;
+
   @Column(nullable = false)
   private String thumbnailUrl;
 
@@ -71,4 +74,8 @@ public class Newsletter extends AuditableEntity {
   @Default
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isDeleted = false;
+
+  public String getHomepageUrl() {
+    return this.mainLink;
+  }
 }

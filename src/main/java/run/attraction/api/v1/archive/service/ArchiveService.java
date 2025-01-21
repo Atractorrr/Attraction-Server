@@ -54,7 +54,6 @@ public class ArchiveService {
   @Transactional(readOnly = true)
   public Page<ArticleDTO> findArticlesByUserId(String userEmail, UserArticlesRequest request) {
     String DESC = "desc";
-    String HIDE_READ_TRUE = "true";
 
     List<String> newsletterEmails = subscriptionUtil.getNewsletterEmailsSubscribedByUser(userEmail,
         subscriptionRepository,
@@ -65,13 +64,11 @@ public class ArchiveService {
     }
 
     String sortDirection = request.getSort().length > 1 ? request.getSort()[1] : DESC;
-    Boolean isHideReadFilter = request.getIsHideRead().equalsIgnoreCase(HIDE_READ_TRUE);
     Sort sortObj = Sort.by(sortDirection.equalsIgnoreCase(DESC) ? Sort.Order.desc(request.getSort()[0])
         : Sort.Order.asc(request.getSort()[0]));
     Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sortObj);
 
-    return articleRepository.findArticlesByUserEmail(userEmail, newsletterEmails, request.getCategory(),
-        isHideReadFilter, request.getQ(), pageable);
+    return articleRepository.findArticlesByUserEmail(userEmail, newsletterEmails, request, pageable);
   }
 
   @Transactional(readOnly = true)

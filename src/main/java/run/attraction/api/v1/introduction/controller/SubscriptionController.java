@@ -19,6 +19,7 @@ import run.attraction.api.v1.gmail.dto.UserGmailDto;
 import run.attraction.api.v1.gmail.service.GmailService;
 import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
+import run.attraction.api.v1.introduction.dto.response.SubscribedNewsletterResponse;
 import run.attraction.api.v1.introduction.service.SubscriptionService;
 
 @RestController
@@ -66,5 +67,13 @@ public class SubscriptionController {
         userEmail);
 
     return ApiResponse.from(HttpStatus.OK, "성공", userSubscribedNewsletterCategories);
+  }
+
+  @GetMapping("/{userEmail}/newsletters")
+  @Operation(summary = "유저가 구독한 뉴스레터 전체 가져오기", description = "유저가 구독한 모든 뉴스레터를 가져온다")
+  public ApiResponse<List<SubscribedNewsletterResponse>> getUserSubscribedNewsletters(@PathVariable String userEmail) {
+    List<SubscribedNewsletterResponse> userSubscribedNewsletters = subscriptionService.getUserSubscribedNewsletters(userEmail);
+
+    return ApiResponse.from(HttpStatus.OK, "성공", userSubscribedNewsletters);
   }
 }

@@ -14,7 +14,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
   @Query("""
     SELECT DISTINCT new run.attraction.api.v1.home.service.dto.search.ArticleSearchDto(
         a.id, a.title, a.thumbnailUrl, a.contentSummary, a.readingTime, a.receivedAt,
-        new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl)
+        new run.attraction.api.v1.archive.dto.NewsletterDTO(n.id, n.name, n.category, n.thumbnailUrl, n.mainLink, n.prevArticleListUrl)
     )
     FROM Article a JOIN Newsletter n ON a.newsletterEmail = n.email
     WHERE (a.title LIKE %:search%) 

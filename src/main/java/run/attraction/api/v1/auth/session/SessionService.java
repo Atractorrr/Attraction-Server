@@ -36,6 +36,7 @@ public class SessionService {
   public UserDetailBySession getUserDetail(HttpServletRequest request){
     HttpSession session = request.getSession(false);
     if (session == null){
+      log.error("세션 NULL");
       throw new SessionNotFoundException();
     }
     String email = (String)session.getAttribute(LOGIN_MEMBER);
@@ -45,6 +46,7 @@ public class SessionService {
   public HttpSession getSession(HttpServletRequest request){
     HttpSession session = request.getSession(false);
     if (session == null || session.getAttribute(LOGIN_MEMBER) == null){
+      log.error("세션 NULL");
       throw new SessionNotFoundException();
     }
     return session;
@@ -53,6 +55,8 @@ public class SessionService {
   public String getUserEmail(HttpSession session){
     String userEmail = (String)session.getAttribute(LOGIN_MEMBER);
     if(userEmail==null) {
+      log.error("유저 이메일 NULL");
+      log.info("session.getAttributeNames = {}", session.getAttributeNames());
       throw new InValidUserException();
     }
     return userEmail;
@@ -63,6 +67,7 @@ public class SessionService {
         .orElseThrow(InValidUserException::new);
 
     if (user.isDeleted()) {
+      log.error("탈퇴한 유저입니다.");
       throw new ResignedUserException();
     }
 

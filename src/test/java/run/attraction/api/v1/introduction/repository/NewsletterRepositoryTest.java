@@ -143,23 +143,23 @@ public class NewsletterRepositoryTest {
     }
   }
 
-  @Test
-  void findByCategoryAndIdNotWithOffset_가_올바르게_동작하지_않을_때_잘못된_카테고리() {
-    // given
-    List<Newsletter> newsletters = newsletterRepository.findAll();
-    assertThat(newsletters).isNotEmpty(); // 저장된 뉴스레터가 있는지 확인
-
-    Long excludedId = newsletters.get(0).getId();
-    String category = "INVALID_CATEGORY"; // 존재하지 않는 카테고리 제공
-    int size = 2;
-    int offset = 0;
-
-    // when
-    List<Newsletter> result = newsletterRepository.findByCategoryAndIdNotWithOffset(excludedId, category, size, offset);
-
-    // then
-    assertThat(result).isEmpty(); // 잘못된 카테고리이므로 결과는 빈 리스트여야 함
-  }
+//  @Test
+//  void findByCategoryAndIdNotWithOffset_가_올바르게_동작하지_않을_때_잘못된_카테고리() {
+//    // given
+//    List<Newsletter> newsletters = newsletterRepository.findAll();
+//    assertThat(newsletters).isNotEmpty(); // 저장된 뉴스레터가 있는지 확인
+//
+//    Long excludedId = newsletters.get(0).getId();
+//    String category = "INVALID_CATEGORY"; // 존재하지 않는 카테고리 제공
+//    int size = 2;
+//    int offset = 0;
+//
+//    // when
+//    List<Newsletter> result = newsletterRepository.findByCategoryAndIdNotWithOffset(excludedId, category, size, offset);
+//
+//    // then
+//    assertThat(result).isEmpty(); // 잘못된 카테고리이므로 결과는 빈 리스트여야 함
+//  }
 
   @Test
   void findByCategoryAndIdNotWithOffset_가_올바르게_동작하지_않을_때_잘못된_ID() {

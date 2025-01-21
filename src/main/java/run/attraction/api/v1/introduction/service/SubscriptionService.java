@@ -11,6 +11,7 @@ import run.attraction.api.v1.introduction.Category;
 import run.attraction.api.v1.introduction.Newsletter;
 import run.attraction.api.v1.introduction.Subscription;
 import run.attraction.api.v1.introduction.UserSubscribedNewsletterCategory;
+import run.attraction.api.v1.introduction.dto.response.SubscribedNewsletterResponse;
 import run.attraction.api.v1.introduction.exception.ErrorMessages;
 import run.attraction.api.v1.introduction.repository.NewsletterRepository;
 import run.attraction.api.v1.introduction.repository.SubscriptionRepository;
@@ -95,6 +96,16 @@ public class SubscriptionService {
     return userSubscribedNewsletterCategoryRepository.findByUserEmail(userEmail)
         .stream()
         .map(UserSubscribedNewsletterCategory::getCategory)
+        .toList();
+  }
+
+  public List<SubscribedNewsletterResponse> getUserSubscribedNewsletters(String userEmail) {
+    List<Long> subscribedNewslettersByUser = subscriptionRepository.findNewsletterIdsByUserEmailWithoutIsDeleted(userEmail);
+    List<Newsletter> newsletters = newsletterRepository.findAllById(subscribedNewslettersByUser);
+
+    return newsletters
+        .stream()
+        .map(SubscribedNewsletterResponse::new)
         .toList();
   }
 
